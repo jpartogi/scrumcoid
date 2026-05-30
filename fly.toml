@@ -1,117 +1,62 @@
-# fly.toml app configuration file generated for scrumcoid
+# fly.toml app configuration file for scrumcoid
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
 
-app = "scrumcoid"           # <-- CHANGE THIS to your Fly app name
-primary_region = "sin"      # Change to your preferred region (e.g. iad, ams, lhr, sin)
+app = 'scrumcoid'
+primary_region = 'sin'
+console_command = '/rails/bin/rails console'
 
 [build]
-  # Uses the Dockerfile in the repo root
+
+[deploy]
+  release_command = './bin/rails db:prepare'
 
 [env]
-  RAILS_ENV = "production"
-  RAILS_LOG_LEVEL = "info"
-  # APP_HOST is used for mailer links, Devise, and email domain.
-  # Update this after you add a custom domain.
-  APP_HOST = "scrumcoid.fly.dev"
+  APP_HOST = 'scrumcoid.fly.dev'
+  MAILER_FROM = 'no-reply@scrumcoid.fly.dev'
+  RAILS_ENV = 'production'
+  RAILS_LOG_LEVEL = 'info'
+  RAILS_MAX_THREADS = '5'
+  RAILS_SERVE_STATIC_FILES = 'true'
 
-  # From address used in emails (password resets, etc.)
-  MAILER_FROM = "no-reply@scrumcoid.fly.dev"
+  # Critical for Thruster + Fly routing (matches nusacatering working setup)
+  HTTP_PORT = '8080'
+  TARGET_PORT = '3000'
 
-  # Solid Queue execution mode:
-  # - true  → runs inside the web Puma process (simple single-machine deploys)
-  # - false → requires a dedicated worker process (see [processes] section below)
-  SOLID_QUEUE_IN_PUMA = "true"
+  # Solid Queue runs inside the web process
+  SOLID_QUEUE_IN_PUMA = 'true'
+
+[[mounts]]
+  source = 'storage'
+  destination = '/rails/storage'
 
 [http_service]
-  internal_port = 80
+  internal_port = 8080
   force_https = true
-  auto_stop_machines = "stop"
+  auto_stop_machines = false
   auto_start_machines = true
-  min_machines_running = 0
-  processes = ["app"]
+  min_machines_running = 1
+  processes = ['app']
 
   [http_service.concurrency]
-    type = "requests"
+    type = 'requests'
     hard_limit = 250
     soft_limit = 200
 
-[[http_service.checks]]
-  interval = "15s"
-  timeout = "5s"
-  grace_period = "10s"
-  method = "GET"
-  path = "/up"
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '20s'
+    method = 'GET'
+    path = '/up'
+    protocol = 'http'
+    tls_skip_verify = false
+
+    [http_service.checks.headers]
+      X-Forwarded-Proto = 'https'
 
 [[vm]]
-  size = "shared-cpu-1x"
-  memory = "1gb"
-
-# Persistent volume for Active Storage (course logos etc.)
-# IMPORTANT: You must create the volume before first deploy:
-#   fly volumes create storage --size 1 --app scrumcoid
-#
-# This mounts at /rails/storage (matches what the app expects).
-[mounts]
-  source = "storage"
-  destination = "/rails/storage"
-
-# Release command runs before new version is deployed (great for migrations)
-[deploy]
-  release_command = "./bin/rails db:prepare"
-
-# =============================================================================
-# PROCESS CONFIGURATION (Web + Optional Worker)
-# =============================================================================
-
-# Simple mode (default): Everything runs in one process.
-# The [http_service] above already restricts HTTP to the "app" process.
-
-# --- Dedicated Worker Mode (recommended once you have background jobs) ---
-# Uncomment the block below. Then set SOLID_QUEUE_IN_PUMA=false via secrets or [env].
-
-# [processes]
-#   app    = ""                                    # Web process (serves HTTP)
-#   worker = "bundle exec rake solid_queue:start"  # Background job processor
-
-# When using processes, restrict the HTTP service to only the web machines:
-# [[services]]
-#   internal_port = 80
-#   protocol = "tcp"
-#   processes = ["app"]   # ← Only "app" machines receive traffic
-#
-#   [[services.ports]]
-#     port = 80
-#     handlers = ["http"]
-#   [[services.ports]]
-#     port = 443
-#     handlers = ["tls", "http"]
-#
-#   [services.concurrency]
-#     type = "requests"
-#     hard_limit = 250
-#     soft_limit = 200
-
-# Note: With dedicated workers you can give the worker machines more CPU/memory
-# using `fly machine update` or by setting different [[vm]] sizes per process group.
-
-# =============================================================================
-# CONSOLE & DEBUGGING
-# =============================================================================
-
-# fly ssh console -C "bin/rails console"
-# fly ssh console -C "bin/rails dbconsole"
-# fly ssh console -C "bundle exec rake solid_queue:start"   # manual worker
-
-# =============================================================================
-# SCALING NOTES
-# =============================================================================
-
-# Start simple with 1 machine running both web + queue.
-# Later:
-#   1. Set SOLID_QUEUE_IN_PUMA=false
-#   2. Uncomment the [processes] section above
-#   3. Deploy
-#   4. Scale workers independently: fly scale count app=2 worker=1
-
+  size = 'shared-cpu-1x'
+  memory = '1gb'
+  cpus = 1
+  memory_mb = 1024
