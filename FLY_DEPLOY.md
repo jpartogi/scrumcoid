@@ -1,9 +1,9 @@
-# Fly.io Deployment Guide (Legacy Postgres + Mailtrap)
+# Fly.io Deployment Guide (Legacy Postgres + Brevo)
 
 This app is configured for Fly.io using:
 
 - **Legacy Postgres app**: `scrumcoid-db` (your production database)
-- Mailtrap for transactional email (password resets via Devise)
+- Brevo SMTP for transactional email (password resets via Devise)
 - Single database for Solid Cache + Solid Queue + Solid Cable
 - Thruster + Puma (via the existing Dockerfile)
 - Optional object storage via Tigris or Cloudflare R2
@@ -17,7 +17,7 @@ This app is configured for Fly.io using:
 ## Prerequisites
 
 - [Fly CLI](https://fly.io/docs/hands-on/install-flyctl/) installed and logged in (`fly auth login`)
-- A Mailtrap account (https://mailtrap.io) — create an inbox and note the SMTP credentials
+- A Brevo account (https://www.brevo.com) — verify your sending domain and generate an SMTP key
 
 ## 1. Launch the Fly App
 
@@ -61,16 +61,16 @@ fly volumes create storage --app scrumcoid --size 1 --region sjc
 
 The `fly.toml` already has the mount configured at `/rails/storage`.
 
-## 5. Set Mailtrap Secrets
+## 5. Set Brevo SMTP Secrets
 
-Get your SMTP credentials from Mailtrap (Inbox → SMTP settings).
-
-Use `live.smtp.mailtrap.io` for real inboxes or `sandbox.smtp.mailtrap.io` for testing.
+Get your SMTP credentials from Brevo (**Settings → SMTP & API → SMTP**).
 
 ```bash
 fly secrets set \
-  MAILTRAP_USERNAME="your_username" \
-  MAILTRAP_PASSWORD="your_password" \
+  BREVO_HOST="smtp-relay.brevo.com" \
+  BREVO_PORT="587" \
+  BREVO_USERNAME="your_brevo_smtp_login" \
+  BREVO_PASSWORD="your_brevo_smtp_key" \
   --app scrumcoid
 ```
 
@@ -87,14 +87,16 @@ Then set the secrets from it (example):
 
 ```bash
 fly secrets set \
-  MAILTRAP_USERNAME="$(grep MAILTRAP_USERNAME .env.fly | cut -d= -f2)" \
-  MAILTRAP_PASSWORD="$(grep MAILTRAP_PASSWORD .env.fly | cut -d= -f2)" \
+  BREVO_HOST="$(grep BREVO_HOST .env.fly | cut -d= -f2)" \
+  BREVO_PORT="$(grep BREVO_PORT .env.fly | cut -d= -f2)" \
+  BREVO_USERNAME="$(grep BREVO_USERNAME .env.fly | cut -d= -f2)" \
+  BREVO_PASSWORD="$(grep BREVO_PASSWORD .env.fly | cut -d= -f2)" \
   APP_HOST="$(grep APP_HOST .env.fly | cut -d= -f2)" \
   MAILER_FROM="$(grep MAILER_FROM .env.fly | cut -d= -f2)" \
   --app scrumcoid
 ```
 
-## 6. (Optional but Recommended) Custom Domain + Verified Sender in Mailtrap
+## 6. (Optional but Recommended) Custom Domain + Verified Sender in Brevo
 
 This greatly improves email deliverability for password resets.
 
@@ -104,7 +106,7 @@ This greatly improves email deliverability for password resets.
    fly certs create www.yourdomain.com --app scrumcoid
    ```
 
-2. In Mailtrap, go to your inbox → **Domain Verification** (or Sending Domains) and verify `yourdomain.com`.
+2. In Brevo, go to **Senders, domains, IPs → Domains** and verify `yourdomain.com`.
 
 3. Update the runtime secrets:
    ```bash
@@ -185,11 +187,11 @@ fly sftp get /rails/storage/... local-backup/ --app scrumcoid
 
 For serious production, consider moving to S3-compatible storage using **Tigris** (Fly's native storage) or Cloudflare R2. See the "Object Storage (Tigris / R2)" section below.
 
-### Mailtrap Limits
+### Brevo Limits
 
-Mailtrap has sending limits on free/sandbox plans. For real customer emails in production, either:
+Brevo has sending limits on free plans. For real customer emails in production, either:
 
-- Upgrade Mailtrap, or
+- Upgrade Brevo, or
 - Switch to a real transactional provider (Resend, Postmark, SendGrid, Amazon SES, etc.) by updating the SMTP settings in `config/environments/production.rb`.
 
 ### Custom Domain + SSL
@@ -298,7 +300,7 @@ It will:
 - Provision a legacy Postgres database
 - Attach the database
 - Create the required volume
-- Prompt for Mailtrap credentials
+- Prompt for Brevo SMTP credentials
 - Optionally set custom domain settings
 - Optionally trigger the first deploy
 
@@ -320,9 +322,9 @@ Check that `RAILS_MASTER_KEY` is available. During first deploy Fly should copy 
 The volume was not attached at deploy time, or the machine restarted without the volume. Check `fly volumes list`.
 
 **Emails not sending?**
-- Verify `MAILTRAP_USERNAME` / `MAILTRAP_PASSWORD` are set (`fly secrets list`)
+- Verify `BREVO_USERNAME` / `BREVO_PASSWORD` are set (`fly secrets list`)
 - Check logs for SMTP errors
-- Make sure `APP_HOST` matches the domain in your Mailtrap inbox settings (for SPF/DKIM if using custom domain)
+- Make sure `APP_HOST` matches the domain verified in Brevo (for SPF/DKIM if using custom domain)
 
 **Migrations failing?**
 Connect to the DB and check that the user has `CREATE DATABASE` rights if you ever re-enable multi-DB mode. With the current single-DB setup this should not happen.
@@ -341,7 +343,7 @@ Connect to the DB and check that the user has `CREATE DATABASE` rights if you ev
 - [ ] `fly postgres create --name scrumcoid-db` (or verify it exists)
 - [ ] `fly postgres attach scrumcoid-db --app scrumcoid`
 - [ ] `fly volumes create storage`
-- [ ] `fly secrets set` for Mailtrap + domain settings
+- [ ] `fly secrets set` for Brevo SMTP + domain settings
 - [ ] (Optional) Set up GitHub Actions: Add `FLY_API_TOKEN` secret to your repo
 - [ ] `fly deploy` (or let the script do it)
 - [ ] Test password reset emails

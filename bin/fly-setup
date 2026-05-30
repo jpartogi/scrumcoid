@@ -10,7 +10,7 @@
 #
 # Requirements:
 #   - flyctl installed and authenticated (`fly auth login`)
-#   - A Mailtrap account (https://mailtrap.io)
+#   - A Brevo account (https://www.brevo.com)
 
 set -e
 
@@ -54,7 +54,7 @@ echo "  1. Launch Fly app '$APP_NAME' (if it doesn't exist)"
 echo "  2. Create/verify legacy Postgres database '$DB_NAME' (your production DB)"
 echo "  3. Attach the database"
 echo "  4. Create a 1GB volume for Active Storage"
-echo "  5. Prompt for Mailtrap secrets"
+echo "  5. Prompt for Brevo SMTP secrets"
 echo "  6. Optionally deploy"
 echo
 read -p "Continue? (y/N) " -n 1 -r
@@ -108,24 +108,26 @@ else
   echo "✅ Volume created"
 fi
 
-# --- 8. Mailtrap secrets ---
+# --- 8. Brevo SMTP secrets ---
 echo
-echo "📧 Mailtrap configuration"
-echo "   Get your SMTP credentials from: https://mailtrap.io (Inbox → SMTP)"
-echo
-
-read -p "Mailtrap Username: " MAILTRAP_USER
-read -s -p "Mailtrap Password: " MAILTRAP_PASS
+echo "📧 Brevo SMTP configuration"
+echo "   Get your SMTP credentials from: https://app.brevo.com/settings/keys/smtp"
 echo
 
-if [[ -n "$MAILTRAP_USER" && -n "$MAILTRAP_PASS" ]]; then
+read -p "Brevo SMTP Login: " BREVO_USER
+read -s -p "Brevo SMTP Key: " BREVO_PASS
+echo
+
+if [[ -n "$BREVO_USER" && -n "$BREVO_PASS" ]]; then
   flyctl secrets set \
-    MAILTRAP_USERNAME="$MAILTRAP_USER" \
-    MAILTRAP_PASSWORD="$MAILTRAP_PASS" \
+    BREVO_HOST="smtp-relay.brevo.com" \
+    BREVO_PORT="587" \
+    BREVO_USERNAME="$BREVO_USER" \
+    BREVO_PASSWORD="$BREVO_PASS" \
     --app "$APP_NAME"
-  echo "✅ Mailtrap secrets set"
+  echo "✅ Brevo SMTP secrets set"
 else
-  echo "⚠️  Skipped Mailtrap secrets (you can set them later with 'fly secrets set')"
+  echo "⚠️  Skipped Brevo SMTP secrets (you can set them later with 'fly secrets set')"
 fi
 
 # --- 9. Optional: Custom domain / from address ---

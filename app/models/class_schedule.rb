@@ -5,18 +5,15 @@ class ClassSchedule < ApplicationRecord
 
   belongs_to :course
   has_many :enrollments, dependent: :destroy
-  has_many :class_schedule_prices, dependent: :destroy
   has_many :students, through: :enrollments, source: :user
-
-  accepts_nested_attributes_for :class_schedule_prices, allow_destroy: true, reject_if: :all_blank
 
   before_validation :set_default_timezone
 
   validates :starts_at, :ends_at, :location, :registration_deadline, :timezone, presence: true
   validates :capacity, numericality: { greater_than: 0 }
+  validates :venue_name, :venue_address, presence: true, unless: :online?
   validate :timezone_must_be_valid
   validate :ends_after_start
-  validate :at_least_one_price
 
   scope :upcoming, -> { where("starts_at >= ?", Time.current).order(:starts_at) }
   scope :available, -> { published.upcoming.where("registration_deadline >= ?", Time.current) }
@@ -42,14 +39,11 @@ class ClassSchedule < ApplicationRecord
   end
 
   def price_for(currency)
-    preferred_currency = currency.to_s.upcase
-    class_schedule_prices.find { |price| price.currency == preferred_currency } ||
-      class_schedule_prices.find { |price| price.currency == CurrencyResolver::DEFAULT_CURRENCY } ||
-      class_schedule_prices.first
+    course&.price_for(currency)
   end
 
   def display_price_for(currency)
-    price_for(currency)&.display_amount || "Price unavailable"
+    course&.display_price_for(currency) || "Price unavailable"
   end
 
   def time_zone
@@ -66,12 +60,6 @@ class ClassSchedule < ApplicationRecord
     return if timezone.blank? || time_zone.present?
 
     errors.add(:timezone, "must be a valid time zone")
-  end
-
-  def at_least_one_price
-    return if class_schedule_prices.reject(&:marked_for_destruction?).any?
-
-    errors.add(:class_schedule_prices, "must include at least one price")
   end
 
   def ends_after_start

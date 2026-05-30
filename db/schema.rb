@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_002000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_30_151052) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,16 +72,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_002000) do
     t.index ["status", "published_at"], name: "index_blog_posts_on_status_and_published_at"
   end
 
-  create_table "class_schedule_prices", force: :cascade do |t|
-    t.float "amount", null: false
-    t.bigint "class_schedule_id", null: false
-    t.datetime "created_at", null: false
-    t.string "currency", null: false
-    t.datetime "updated_at", null: false
-    t.index ["class_schedule_id", "currency"], name: "index_class_schedule_prices_on_class_schedule_id_and_currency", unique: true
-    t.index ["class_schedule_id"], name: "index_class_schedule_prices_on_class_schedule_id"
-  end
-
   create_table "class_schedules", force: :cascade do |t|
     t.integer "capacity", default: 20, null: false
     t.bigint "course_id", null: false
@@ -94,6 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_002000) do
     t.integer "status", default: 0, null: false
     t.string "timezone", default: "Australia/Brisbane", null: false
     t.datetime "updated_at", null: false
+    t.string "venue_address"
+    t.string "venue_name"
     t.index ["course_id"], name: "index_class_schedules_on_course_id"
     t.index ["starts_at"], name: "index_class_schedules_on_starts_at"
     t.index ["status"], name: "index_class_schedules_on_status"
@@ -313,7 +305,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_002000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "class_schedule_prices", "class_schedules"
   add_foreign_key "class_schedules", "courses"
   add_foreign_key "course_prices", "courses"
   add_foreign_key "enrollments", "class_schedules"

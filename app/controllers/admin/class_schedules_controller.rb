@@ -4,7 +4,7 @@ class Admin::ClassSchedulesController < ApplicationController
   before_action :set_class_schedule, only: [ :show, :edit, :update, :destroy, :publish, :unpublish ]
 
   def index
-    @class_schedules = ClassSchedule.includes(:course, :enrollments, :class_schedule_prices).order(:starts_at)
+    @class_schedules = ClassSchedule.includes(:course, :enrollments).order(:starts_at)
   end
 
   def show
@@ -22,11 +22,9 @@ class Admin::ClassSchedulesController < ApplicationController
       capacity: 20,
       online: true
     )
-    @class_schedule.class_schedule_prices.build(currency: CurrencyResolver::DEFAULT_CURRENCY)
   end
 
   def edit
-    @class_schedule.class_schedule_prices.build if @class_schedule.class_schedule_prices.empty?
   end
 
   def create
@@ -70,8 +68,7 @@ class Admin::ClassSchedulesController < ApplicationController
 
   def class_schedule_params
     params.require(:class_schedule).permit(:course_id, :starts_at, :ends_at, :location, :online,
-      :registration_deadline, :timezone, :capacity, :status,
-      class_schedule_prices_attributes: [ :id, :currency, :amount, :_destroy ])
+      :registration_deadline, :timezone, :capacity, :status, :venue_name, :venue_address)
   end
 
   def normalized_class_schedule_params

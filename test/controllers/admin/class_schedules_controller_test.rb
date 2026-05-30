@@ -16,10 +16,8 @@ class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
           online: false,
           capacity: 20,
           status: "published",
-          class_schedule_prices_attributes: {
-            "0" => { currency: "USD", amount: 1295.00 },
-            "1" => { currency: "EUR", amount: 1195.00 }
-          }
+          venue_name: "Brisbane Convention Centre",
+          venue_address: "Glenelg St, South Brisbane QLD 4101"
         }
       }
     end
@@ -29,6 +27,7 @@ class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Australia/Brisbane", schedule.timezone
     assert_equal Time.find_zone("Australia/Brisbane").parse("2026-06-01 09:00"), schedule.starts_at
     assert_equal Time.find_zone("Australia/Brisbane").parse("2026-06-01 17:00"), schedule.ends_at
-    assert_equal [ "EUR", "USD" ], schedule.class_schedule_prices.pluck(:currency).sort
+    assert_equal "Brisbane Convention Centre", schedule.venue_name
+    assert_equal "Glenelg St, South Brisbane QLD 4101", schedule.venue_address
   end
 end

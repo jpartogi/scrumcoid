@@ -58,14 +58,14 @@ class Admin::CoursesControllerTest < ActionDispatch::IntegrationTest
           status: course.status,
           course_prices_attributes: {
             "0" => { id: course_prices(:usd).id, currency: "USD", amount: 1295.00 },
-            "1" => { currency: "EUR", amount: 1195.00 }
+            "1" => { currency: "GBP", amount: 1195.00 }
           }
         }
       }
     end
 
     assert_redirected_to admin_course_path(course)
-    assert_includes course.course_prices.pluck(:currency), "EUR"
+    assert_includes course.course_prices.pluck(:currency), "GBP"
   end
 
   test "admin can upload course logo" do

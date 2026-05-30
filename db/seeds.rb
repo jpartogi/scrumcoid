@@ -46,11 +46,11 @@ end
 
 # Class Schedules
 [
-  [course_psm, 21.days.from_now, "Live Online via Zoom", true, "Asia/Jakarta"],
-  [course_psm, 45.days.from_now, "Jakarta, Indonesia", false, "Asia/Jakarta"],
-  [course_pspo, 30.days.from_now, "Live Online via Zoom", true, "Asia/Jakarta"],
-  [course_psd, 60.days.from_now, "Bandung, Indonesia", false, "Asia/Jakarta"]
-].each do |course, starts_at, location, online, timezone|
+  [course_psm, 21.days.from_now, "Live Online via Zoom", true, "Asia/Jakarta", nil, nil],
+  [course_psm, 45.days.from_now, "Jakarta, Indonesia", false, "Asia/Jakarta", "Hotel Santika Premiere Slipi", "Jl. Aipda KS Tubun No.7, Jakarta"],
+  [course_pspo, 30.days.from_now, "Live Online via Zoom", true, "Asia/Jakarta", nil, nil],
+  [course_psd, 60.days.from_now, "Bandung, Indonesia", false, "Asia/Jakarta", "Sheraton Bandung Hotel & Towers", "Jl. Ir. H. Juanda No.390, Bandung"]
+].each do |course, starts_at, location, online, timezone, venue_name, venue_address|
   ClassSchedule.find_or_create_by!(course: course, starts_at: starts_at.change(hour: 9, min: 0, sec: 0)) do |schedule|
     schedule.ends_at = starts_at.change(hour: 17, min: 0, sec: 0)
     schedule.location = location
@@ -59,12 +59,8 @@ end
     schedule.capacity = 25
     schedule.registration_deadline = starts_at.change(hour: 17, min: 0, sec: 0) - 5.days
     schedule.status = :published
-    
-    # Build prices here to pass validation
-    schedule.class_schedule_prices.build(currency: "IDR", amount: 8500000.00)
-    schedule.class_schedule_prices.build(currency: "USD", amount: 595.00)
-    schedule.class_schedule_prices.build(currency: "AUD", amount: 900.00)
-    schedule.class_schedule_prices.build(currency: "EUR", amount: 550.00)
+    schedule.venue_name = venue_name
+    schedule.venue_address = venue_address
   end
 end
 

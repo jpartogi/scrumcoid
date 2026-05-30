@@ -29,6 +29,6 @@ class EnrollmentsController < ApplicationController
   private
 
   def set_class_schedule
-    @class_schedule = ClassSchedule.includes(:class_schedule_prices, :course).find(params[:class_schedule_id])
+    @class_schedule = ClassSchedule.includes(course: :course_prices).find(params[:class_schedule_id])
   end
 end

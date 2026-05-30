@@ -71,7 +71,7 @@ Rails.application.configure do
   config.solid_queue.preserve_finished_jobs = false
   config.solid_queue.clear_finished_jobs_after = 1.week
 
-  # Mailer configuration for Fly.io + Mailtrap
+  # Mailer configuration for Fly.io + Brevo
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 
@@ -82,15 +82,14 @@ Rails.application.configure do
     protocol: "https"
   }
 
-  # Mailtrap SMTP (set MAILTRAP_USERNAME + MAILTRAP_PASSWORD via `fly secrets set`)
-  # Use "live.smtp.mailtrap.io" for production inboxes or "sandbox.smtp.mailtrap.io" for testing.
-  if ENV["MAILTRAP_USERNAME"].present?
+  # Brevo SMTP (set BREVO_USERNAME + BREVO_PASSWORD via `fly secrets set`)
+  if ENV["BREVO_USERNAME"].present?
     config.action_mailer.smtp_settings = {
-      address: ENV.fetch("MAILTRAP_HOST", "live.smtp.mailtrap.io"),
-      port: ENV.fetch("MAILTRAP_PORT", 587).to_i,
+      address: ENV.fetch("BREVO_HOST", "smtp-relay.brevo.com"),
+      port: ENV.fetch("BREVO_PORT", 587).to_i,
       domain: app_host.split(":").first, # strip port if present
-      user_name: ENV["MAILTRAP_USERNAME"],
-      password: ENV["MAILTRAP_PASSWORD"],
+      user_name: ENV["BREVO_USERNAME"],
+      password: ENV["BREVO_PASSWORD"],
       authentication: :plain,
       enable_starttls_auto: true
     }

@@ -7,3 +7,8 @@ aud:
   course: ai_essentials
   amount: 1950.0
   currency: AUD
+
+eur:
+  course: ai_essentials
+  amount: 1195.0
+  currency: EUR
