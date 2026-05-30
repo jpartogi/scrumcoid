@@ -68,22 +68,82 @@ end
   end
 end
 
-# Blog Posts in Bahasa Indonesia
-BlogPost.find_or_create_by!(slug: "panduan-praktis-memulai-scrum-di-indonesia") do |post|
-  post.title = "Panduan Praktis Memulai Scrum di Indonesia"
-  post.excerpt = "Banyak tim di Indonesia menghadapi tantangan budaya saat mengadopsi Scrum. Berikut adalah langkah praktis untuk mengatasinya secara efektif."
-  post.body = "Mengadopsi Scrum di Indonesia seringkali menuntut perubahan pola pikir dari manajemen hierarkis tradisional menuju kolaborasi mandiri dan keterbukaan. Mulailah dengan transparansi penuh atas pekerjaan, adakan retrospektif berkala dengan jujur, dan dorong akuntabilitas tim tanpa rasa takut salah.\n\nFokuslah pada nilai-nilai dasar Scrum seperti keterbukaan dan keberanian untuk melakukan perbaikan berkelanjutan di setiap Sprint."
-  post.status = :published
-  post.published_at = 3.days.ago
+# Blog Posts in Bahasa Indonesia from JSON
+require 'json'
+require 'nokogiri'
+
+def extract_excerpt(item)
+  raw_excerpt = item['excerpt'].to_s.strip
+  if raw_excerpt.present?
+    excerpt_text = ActionController::Base.helpers.strip_tags(raw_excerpt)
+    return excerpt_text.strip if excerpt_text.present?
+  end
+
+  body_doc = Nokogiri::HTML::DocumentFragment.parse(item['body'])
+  subtitle_node = body_doc.at_css('.article-subtitle')
+  if subtitle_node
+    excerpt_text = subtitle_node.text.strip
+    return excerpt_text if excerpt_text.present?
+  end
+
+  body_doc.css('p').each do |p|
+    p_text = p.text.strip
+    if p_text.present? && p_text.size > 20
+      return p_text.truncate(200)
+    end
+  end
+
+  "Mengenali pola kepemilikan produk yang disukai dan yang sering disalahpahami."
 end
 
-BlogPost.find_or_create_by!(slug: "meningkatkan-kolaborasi-tim-scrum-jarak-jauh") do |post|
-  post.title = "Meningkatkan Kolaborasi Tim Scrum Jarak Jauh"
-  post.excerpt = "Panduan praktis menjaga keterlibatan, keselarasan, dan transparansi tim Scrum yang bekerja dari rumah (WFH) secara efisien."
-  post.body = "Kerja jarak jauh menuntut disiplin tinggi dalam komunikasi dan transparansi. Gunakan papan digital visual untuk memperbarui status pekerjaan, pertahaman Daily Scrum yang konsisten dan interaktif tepat waktu, serta buat kesepakatan tim (Working Agreements) yang jelas mengenai jam kerja kolaboratif.\n\nPastikan Sprint Retrospective tetap diadakan untuk menilai efektivitas kolaborasi virtual tim Anda."
-  post.status = :published
-  post.published_at = 1.day.ago
+def preprocess_body(html_content)
+  doc = Nokogiri::HTML::DocumentFragment.parse(html_content)
+  
+  doc.css('img').each do |img|
+    data_src = img['data-src'] || img['src']
+    if data_src.present?
+      if data_src.include?('squarespace-cdn.com') && !data_src.include?('format=')
+        data_src = "#{data_src}?format=1000w"
+      end
+      img['src'] = data_src
+      img.remove_attribute('data-src')
+      img['class'] = [img['class'], 'img-fluid', 'rounded', 'my-4'].compact.join(' ')
+      img['style'] = "max-width: 100%; height: auto; display: block; margin-left: auto; margin-right: auto;"
+    end
+  end
+
+  doc.css('a').each do |a|
+    href = a['href']
+    if href.present?
+      if href =~ %r{https?://(?:www\.)?scrum\.co\.id/blog/([^/]+)}
+        a['href'] = "/blog/#{$1}"
+      elsif href =~ %r{https?://(?:www\.)?scrum\.co\.id/scrum-training/([^/]+)}
+        a['href'] = "/courses/#{$1}"
+      elsif href == "http://www.scrum.co.id" || href == "https://www.scrum.co.id" || href == "/"
+        a['href'] = "/"
+      end
+    end
+  end
+
+  doc.to_html
 end
+
+json_file = Rails.root.join("db", "seeds", "blog_posts.json")
+if File.exist?(json_file)
+  data = JSON.parse(File.read(json_file))
+  BlogPost.destroy_all
+  data['items'].each do |item|
+    BlogPost.create!(
+      title: item['title'],
+      slug: item['urlId'],
+      excerpt: extract_excerpt(item),
+      body: preprocess_body(item['body']),
+      published_at: Time.at(item['publishOn'] / 1000.0),
+      status: :published
+    )
+  end
+end
+
 
 # About Page in Bahasa Indonesia
 AboutPage.current.update!(

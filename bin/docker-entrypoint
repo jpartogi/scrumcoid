@@ -1,7 +1,8 @@
 #!/bin/bash -e
 
-# Run db:prepare before starting the web server (works for both rails server and puma)
-if [[ "${@}" == *"rails server"* ]] || [[ "${@}" == *"puma"* ]]; then
+# If we are starting the web server, run db:prepare first.
+# This works with the Thruster-wrapped `rails server` command.
+if [[ "${@}" == *"rails server"* ]]; then
   ./bin/rails db:prepare
 fi
 
