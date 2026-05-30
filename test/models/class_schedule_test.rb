@@ -35,13 +35,13 @@ class ClassScheduleTest < ActiveSupport::TestCase
   test "displays preferred schedule price by currency" do
     schedule = class_schedules(:open_online)
 
-    assert_equal "EUR 1195.00", schedule.display_price_for("EUR")
+    assert_equal "EUR 1,195.00", schedule.display_price_for("EUR")
   end
 
   test "falls back to usd schedule price" do
     schedule = class_schedules(:open_online)
 
-    assert_equal "USD 1295.00", schedule.display_price_for("JPY")
+    assert_equal "USD 1,295.00", schedule.display_price_for("JPY")
   end
 
   test "requires venue_name and venue_address when offline" do

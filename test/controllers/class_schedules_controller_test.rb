@@ -5,14 +5,14 @@ class ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     get class_schedules_path, headers: { "CF-IPCountry" => "DE" }
 
     assert_response :success
-    assert_match "EUR 1195.00", response.body
+    assert_match "EUR 1,195.00", response.body
   end
 
   test "falls back to usd schedule price when visitor currency is unavailable" do
     get class_schedules_path, headers: { "CF-IPCountry" => "JP" }
 
     assert_response :success
-    assert_match "USD 1295.00", response.body
+    assert_match "USD 1,295.00", response.body
   end
 
   test "register form uses normal browser navigation for stripe redirect" do

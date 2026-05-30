@@ -25,7 +25,7 @@ class CoursePrice < ApplicationRecord
   end
 
   def display_amount
-    "#{currency.upcase} #{format('%.2f', amount.to_f)}"
+    "#{currency.upcase} #{ActiveSupport::NumberHelper.number_to_delimited(format('%.2f', amount.to_f))}"
   end
 
   private
