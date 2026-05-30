@@ -1,0 +1,102 @@
+<%= form_with model: [:admin, class_schedule], class: "space-y-6" do |form| %>
+  <% if class_schedule.errors.any? %>
+    <div class="rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+      <span><%= class_schedule.errors.full_messages.to_sentence %></span>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :course_id, "Course Association", class: "block text-sm font-bold text-slate-700" %>
+    <%= form.collection_select :course_id, Course.order(:title), :id, :title, {}, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :starts_at, "Starts At", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.datetime_field :starts_at, value: class_schedule_time_field_value(class_schedule, :starts_at), class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+    
+    <div>
+      <%= form.label :ends_at, "Ends At", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.datetime_field :ends_at, value: class_schedule_time_field_value(class_schedule, :ends_at), class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :timezone, "Schedule Timezone", class: "block text-sm font-bold text-slate-700" %>
+    <%= form.select :timezone, options_for_select(ActiveSupport::TimeZone.all.map { |zone| [zone.to_s, zone.tzinfo.name] }, class_schedule.timezone), {}, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    <p class="text-xs text-slate-400 font-medium mt-1">Used as the schedule's source timezone; visitors will see the time converted to their computer timezone.</p>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :location, "Location / Facility", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.text_field :location, placeholder: "e.g., Suite 200, Sydney CBD", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+    
+    <div>
+      <%= form.label :capacity, "Attendee Capacity", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.number_field :capacity, placeholder: "e.g., 20", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+  </div>
+
+  <!-- Custom Checkbox component -->
+  <div class="relative flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 shadow-sm max-w-xs">
+    <div class="flex h-6 items-center">
+      <%= form.check_box :online, class: "h-4.5 w-4.5 rounded border-slate-300 text-teal-600 focus:ring-teal-600/20" %>
+    </div>
+    <div class="ml-3 text-sm leading-6">
+      <%= form.label :online, "Online Class", class: "font-bold text-slate-700 select-none cursor-pointer" %>
+      <p class="text-xs text-slate-400 font-medium">Class is conducted virtually.</p>
+    </div>
+  </div>
+
+  <!-- Pricing Panel -->
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4" data-controller="nested-prices">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Configure Local Prices</h2>
+        <p class="text-xs font-medium text-slate-400 mt-1">Add custom overrides per currency; falls back to default course pricing.</p>
+      </div>
+      <button type="button" data-action="nested-prices#add" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-400 shadow-sm transition-all cursor-pointer">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Add Price Row
+      </button>
+    </div>
+
+    <div class="space-y-4" data-nested-prices-target="rows">
+      <%= form.fields_for :class_schedule_prices do |price_form| %>
+        <%= render "class_schedule_price_fields", price_form: price_form %>
+      <% end %>
+    </div>
+
+    <template data-nested-prices-target="template">
+      <%= form.fields_for :class_schedule_prices, ClassSchedulePrice.new, child_index: "NEW_RECORD" do |price_form| %>
+        <%= render "class_schedule_price_fields", price_form: price_form %>
+      <% end %>
+    </template>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :registration_deadline, "Registration Deadline", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.datetime_field :registration_deadline, value: class_schedule_time_field_value(class_schedule, :registration_deadline), class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+    
+    <div>
+      <%= form.label :status, class: "block text-sm font-bold text-slate-700" %>
+      <%= form.select :status, ClassSchedule.statuses.keys.map { |k| [k.capitalize, k] }, {}, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+    <%= form.submit class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>
+    <%= link_to "Cancel", class_schedule.persisted? ? admin_class_schedule_path(class_schedule) : admin_class_schedules_path, class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+  </div>
+<% end %>

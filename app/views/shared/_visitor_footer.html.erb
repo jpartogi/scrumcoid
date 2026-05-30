@@ -1,0 +1,15 @@
+<footer class="bg-slate-900">
+  <div class="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
+    <div class="flex justify-center space-x-6 md:order-2">
+      <%= link_to "Kursus", courses_path, class: "text-sm font-bold leading-6 text-slate-400 hover:text-white transition-colors" %>
+      <%= link_to "Jadwal", class_schedules_path, class: "text-sm font-bold leading-6 text-slate-400 hover:text-white transition-colors" %>
+      <%= link_to "Blog", blog_posts_path, class: "text-sm font-bold leading-6 text-slate-400 hover:text-white transition-colors" %>
+      <%= link_to "Kontak", new_contact_path, class: "text-sm font-bold leading-6 text-slate-400 hover:text-white transition-colors" %>
+    </div>
+    <div class="mt-8 md:order-1 md:mt-0">
+      <p class="text-center text-xs leading-5 text-slate-400">
+        &copy; <%= Time.current.year %> scrum.co.id. Pelatihan Scrum Profesional.
+      </p>
+    </div>
+  </div>
+</footer>

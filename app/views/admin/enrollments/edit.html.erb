@@ -1,0 +1,72 @@
+<section class="px-8 py-10 max-w-3xl mx-auto space-y-6">
+  <!-- Back Action Header -->
+  <div class="flex items-center gap-3 border-b border-slate-200 pb-5">
+    <%= link_to admin_enrollment_path(@enrollment), class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Edit Student Registration</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Modify registration status and edit guest credentials.</p>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm space-y-6">
+    <%= form_with model: @enrollment, url: admin_enrollment_path(@enrollment), method: :patch, class: "space-y-6" do |form| %>
+      <% if @enrollment.errors.any? %>
+        <div class="rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span><%= @enrollment.errors.full_messages.to_sentence %></span>
+        </div>
+      <% end %>
+
+      <!-- Check Enrollment Association Type -->
+      <% if @enrollment.user.present? %>
+        <div class="rounded-xl border border-slate-250 bg-slate-50 p-4 space-y-4 shadow-sm">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Account-Linked Student details</p>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest leading-none">Full Name</p>
+              <p class="mt-1 text-sm font-bold text-slate-800"><%= @enrollment.user.name %></p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest leading-none">Email Address</p>
+              <p class="mt-1 text-sm font-bold text-slate-800"><%= @enrollment.user.email %></p>
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-400 font-medium">This registration is linked to a registered User account. Profile credentials can be edited in user account settings.</p>
+        </div>
+      <% else %>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <%= form.label :visitor_name, "Student Name", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.text_field :visitor_name, placeholder: "e.g., Jane Doe", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+          
+          <div>
+            <%= form.label :visitor_email, "Email Address", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.email_field :visitor_email, placeholder: "e.g., jane@example.com", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Registration Status -->
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <%= form.label :status, "Registration Status", class: "block text-sm font-bold text-slate-700" %>
+          <%= form.select :status, Enrollment.statuses.keys.map { |k| [k.capitalize, k] }, {}, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+        <%= form.submit "Update Registration", class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>
+        <%= link_to "Cancel", admin_enrollment_path(@enrollment), class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+      </div>
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+unread:
+  name: Taylor Student
+  email: taylor@example.com
+  company: Example Co
+  subject: Private AI Essentials workshop
+  message: We would like to discuss a private class for our product team.
+  status: 0
+
+read:
+  name: Jordan Leader
+  email: jordan@example.com
+  company: Leaders Inc
+  subject: Public class question
+  message: Is the next class suitable for Product Owners?
+  status: 1

@@ -1,0 +1,65 @@
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
+amazon:
+   service: S3
+   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
+   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
+   region: us-east-1
+   bucket: your_own_bucket-<%= Rails.env %>
+
+# =============================================================================
+# Fly.io Tigris (Recommended for Fly deployments)
+# =============================================================================
+# Fly has native S3-compatible object storage called Tigris.
+# Enable it with: fly storage create --app your-app
+#
+# After enabling, Fly automatically provides these environment variables:
+#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL_S3, BUCKET_NAME
+#
+# To use it, set in production: ACTIVE_STORAGE_SERVICE=tigris
+tigris:
+  service: S3
+  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+  region: auto
+  bucket: <%= ENV["BUCKET_NAME"] || "scrumcoid-#{Rails.env}" %>
+  endpoint: <%= ENV["AWS_ENDPOINT_URL_S3"] %>
+  force_path_style: true
+
+# =============================================================================
+# Cloudflare R2 (Great alternative)
+# =============================================================================
+# Create a bucket in Cloudflare R2, then generate API tokens.
+# Store credentials securely (preferably via Fly secrets or Rails credentials).
+#
+# Recommended env vars:
+#   R2_ACCESS_KEY_ID
+#   R2_SECRET_ACCESS_KEY
+#   R2_ACCOUNT_ID
+#   R2_BUCKET
+r2:
+  service: S3
+  access_key_id: <%= ENV["R2_ACCESS_KEY_ID"] || Rails.application.credentials.dig(:r2, :access_key_id) %>
+  secret_access_key: <%= ENV["R2_SECRET_ACCESS_KEY"] || Rails.application.credentials.dig(:r2, :secret_access_key) %>
+  region: auto
+  bucket: <%= ENV["R2_BUCKET"] || "scrumcoid-#{Rails.env}" %>
+  endpoint: https://<%= ENV["R2_ACCOUNT_ID"] || Rails.application.credentials.dig(:r2, :account_id) %>.r2.cloudflarestorage.com
+
+# Remember not to checkin your GCS keyfile to a repository
+# google:
+#   service: GCS
+#   project: your_project
+#   credentials: <%= Rails.root.join("path/to/gcs.keyfile") %>
+#   bucket: your_own_bucket-<%= Rails.env %>
+
+# mirror:
+#   service: Mirror
+#   primary: local
+#   mirrors: [ amazon, google, microsoft ]

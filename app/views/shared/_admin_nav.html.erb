@@ -1,0 +1,18 @@
+<div class="border-b border-slate-200 bg-white">
+  <div id="admin-nav-content" class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4 text-sm font-semibold text-slate-700">
+    <nav class="flex flex-wrap gap-4">
+      <%= link_to "Admin dashboard", admin_root_path, class: "hover:text-teal-700" %>
+      <%= link_to "Courses", admin_courses_path, class: "hover:text-teal-700" %>
+      <%= link_to "Class schedules", admin_class_schedules_path, class: "hover:text-teal-700" %>
+      <%= link_to "Blog posts", admin_blog_posts_path, class: "hover:text-teal-700" %>
+      <%= link_to "About page", edit_admin_about_page_path, class: "hover:text-teal-700" %>
+      <%= link_to "Contact messages", admin_contact_messages_path, class: "hover:text-teal-700" %>
+    </nav>
+    <% if current_user.present? %>
+      <div class="flex flex-wrap items-center gap-4">
+        <p class="text-sm font-medium text-slate-600"><%= current_user.name.presence || current_user.email %></p>
+        <%= link_to "Account settings", edit_user_registration_path, class: "hover:text-teal-700" %>
+      </div>
+    <% end %>
+  </div>
+</div>

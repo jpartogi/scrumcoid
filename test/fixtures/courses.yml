@@ -1,0 +1,13 @@
+ai_essentials:
+  title: Scrum.org AI Essentials
+  slug: scrum-org-ai-essentials
+  excerpt: Practical AI training for Scrum teams.
+  description: Practical AI training for Scrum teams.
+  status: 1
+
+draft_course:
+  title: Private Draft Course
+  slug: private-draft-course
+  excerpt: Draft excerpt.
+  description: Draft course.
+  status: 0

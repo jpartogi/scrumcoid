@@ -1,0 +1,60 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Page Header -->
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Contact Messages</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Review contact inquiries, mark them as read, or archive resolved messages.</p>
+    </div>
+  </div>
+
+  <!-- Table Container Card -->
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+    <% if @contact_messages.any? %>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+              <th class="px-6 py-4">Sender Details</th>
+              <th class="px-6 py-4">Subject</th>
+              <th class="px-6 py-4">Received At</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% @contact_messages.each do |message| %>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4">
+                  <p class="font-semibold text-slate-900 leading-tight"><%= message.name %></p>
+                  <p class="text-xs text-slate-400 font-medium mt-1"><%= message.email %></p>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-slate-700">
+                    <%= link_to message.subject, admin_contact_message_path(message), class: "hover:text-indigo-600 transition-colors" %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-slate-600 font-medium">
+                  <%= message.created_at.to_fs(:long) %>
+                </td>
+                <td class="px-6 py-4">
+                  <%= render "shared/status_badge", status: message.status %>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <%= link_to "View Message", admin_contact_message_path(message), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-6 py-16 text-center text-slate-400">
+        <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25" />
+        </svg>
+        <p class="mt-4 font-semibold text-base">Inbox is empty</p>
+        <p class="text-xs text-slate-400 mt-1">No contact inquiries have been received yet.</p>
+      </div>
+    <% end %>
+  </div>
+</section>

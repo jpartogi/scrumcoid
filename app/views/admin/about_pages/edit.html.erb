@@ -1,0 +1,51 @@
+<section class="px-8 py-10 max-w-3xl mx-auto space-y-6">
+  <!-- Back Action Header -->
+  <div class="flex items-center gap-3 border-b border-slate-200 pb-5">
+    <%= link_to admin_root_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Edit about page</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Update your professional profile summary and bio displayed on the public site.</p>
+    </div>
+  </div>
+
+  <!-- Form Body Card -->
+  <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <%= form_with model: @about_page, url: admin_about_page_path, class: "space-y-6" do |form| %>
+      <% if @about_page.errors.any? %>
+        <div class="rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span><%= @about_page.errors.full_messages.to_sentence %></span>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :title, class: "block text-sm font-bold text-slate-700" %>
+        <%= form.text_field :title, placeholder: "e.g., Professional Scrum Trainer & Agile Coach", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+      </div>
+
+      <div>
+        <%= form.label :summary, class: "block text-sm font-bold text-slate-700" %>
+        <%= form.text_area :summary, rows: 4, placeholder: "A compelling summary preview explaining your services and credentials...", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+      </div>
+
+      <div>
+        <%= form.label :body, class: "block text-sm font-bold text-slate-700" %>
+        <div class="mt-1.5 block rounded-lg border border-slate-300 bg-white shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-teal-600/10 focus-within:border-teal-600 transition-all">
+          <%= form.rich_text_area :body, class: "rich-text-editor-tall p-3 min-h-[18rem] focus:outline-none" %>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+        <%= form.submit "Save About Page", class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>
+        <%= link_to "Cancel", admin_root_path, class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+      </div>
+    <% end %>
+  </div>
+</section>

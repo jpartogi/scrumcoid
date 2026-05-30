@@ -1,0 +1,133 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between border-b border-slate-200 pb-5">
+    <div class="flex items-center gap-3">
+      <%= link_to :back, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      <% end %>
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Account Settings</h1>
+        <p class="text-sm font-medium text-slate-500 mt-1">Manage your administrative credentials and profile configurations.</p>
+      </div>
+    </div>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <!-- Error Explanations Card -->
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <!-- Split Grid Layout -->
+    <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
+      
+      <!-- Left Column: Form Fields Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Security & Profile Details</h2>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Full Name -->
+          <div>
+            <%= f.label :name, class: "block text-sm font-bold text-slate-700" %>
+            <%= f.text_field :name, autocomplete: "name", placeholder: "e.g., Alex Johnson", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+
+          <!-- Email Address -->
+          <div>
+            <%= f.label :email, class: "block text-sm font-bold text-slate-700" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "e.g., alex@scrumcoid.example", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+        </div>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div class="rounded-xl border border-amber-100 bg-amber-50/70 p-4 text-xs font-semibold text-amber-800 shadow-inner flex items-center gap-2">
+            <svg class="h-4.5 w-4.5 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            <span>Currently waiting confirmation for: <strong class="text-amber-900"><%= resource.unconfirmed_email %></strong></span>
+          </div>
+        <% end %>
+
+        <div class="grid gap-6 md:grid-cols-2 border-t border-slate-100 pt-6">
+          <!-- New Password -->
+          <div>
+            <div class="flex items-center justify-between">
+              <%= f.label :password, "New Password", class: "block text-sm font-bold text-slate-700" %>
+              <span class="text-xs text-slate-400 font-medium italic">Leave blank if unchanged</span>
+            </div>
+            <%= f.password_field :password, autocomplete: "new-password", placeholder: "••••••••", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+            <% if @minimum_password_length %>
+              <p class="mt-1 text-[10px] font-semibold text-slate-400"><%= @minimum_password_length %> characters minimum</p>
+            <% end %>
+          </div>
+
+          <!-- New Password Confirmation -->
+          <div>
+            <%= f.label :password_confirmation, "Confirm New Password", class: "block text-sm font-bold text-slate-700" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "••••••••", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+        </div>
+
+        <!-- Current Password Guard -->
+        <div class="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-5 space-y-3.5 border-dashed">
+          <div class="flex items-start gap-3">
+            <div class="h-9 w-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-700 flex items-center justify-center shrink-0">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
+            </div>
+            <div>
+              <%= f.label :current_password, "Verify Current Password", class: "block text-sm font-bold text-slate-900" %>
+              <p class="text-xs text-slate-500 font-medium leading-normal mt-0.5">We need your current password to authorize and commit any profile configurations securely.</p>
+            </div>
+          </div>
+          <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "Type current password here to authenticate...", class: "w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+        </div>
+
+        <!-- Action Operations -->
+        <div class="flex justify-end gap-3 pt-6 border-t border-slate-100">
+          <%= link_to "Cancel", :back, class: "rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" %>
+          <%= f.submit "Save Configurations", class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all shadow-sm cursor-pointer" %>
+        </div>
+      </div>
+
+      <!-- Right Column: Sidebar Accounts Stats & Danger Zone -->
+      <div class="space-y-6">
+        <!-- Account Properties Info Card -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2.5">Account Properties</p>
+          <dl class="grid gap-3.5 text-xs text-slate-700">
+            <div>
+              <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Access Level</dt>
+              <dd class="mt-1 font-semibold">
+                <% if resource.admin? %>
+                  <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10">
+                    Administrator
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-bold text-slate-600 ring-1 ring-inset ring-slate-500/10">
+                    Student
+                  </span>
+                <% end %>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Registered On</dt>
+              <dd class="mt-1 text-slate-600 font-semibold"><%= resource.created_at.to_fs(:long) %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Danger Zone Card -->
+        <div class="rounded-2xl border border-rose-200 bg-white p-5 shadow-sm space-y-4">
+          <p class="text-xs font-bold text-rose-600 uppercase tracking-widest border-b border-rose-100 pb-2.5">Danger Zone</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Cancelling your account will permanently delete all access logs, configurations, and course credentials.</p>
+          <%= button_to registration_path(resource_name), data: { confirm: "Are you sure you want to permanently delete your account?", turbo_confirm: "Are you sure you want to permanently delete your account?" }, method: :delete, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm text-center" do %>
+            Delete Account
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
+</section>

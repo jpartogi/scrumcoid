@@ -1,0 +1,104 @@
+Build a clean, professional Ruby on Rails website for a Professional Scrum Trainer who mainly teach Scrum.org AI Essentials course.
+
+Use:
+- Ruby on Rails
+- PostgreSQL
+- Devise for authentication
+- Role-based access control with at least:
+  - admin
+  - student
+- Tailwind CSS for styling
+
+Core website sections:
+1. Public homepage
+   - Professional introduction
+   - Brief explanation of Scrum training services
+   - Featured upcoming courses
+   - Recent blog posts
+   - Clear call-to-action to view courses
+
+2. Courses
+   Course offered by the website / company   
+      - title
+      - description
+      - learning objectives
+      - price (there can be many prices with different currency)
+      - class schedule
+
+3. Class Schedule
+   - Public class schedule listing page
+   - Public class schedule detail page
+   - Each class schedule should include:
+     - date and time
+     - location or online format
+     - price
+     - registration deadline
+     - published/unpublished status
+
+3. Student registration
+   - Students can sign up and log in using Devise
+   - Students can register for available class schedule
+   - Prevent duplicate registrations
+   - Prevent registration when a class schedule is full or closed
+   - Student dashboard should show:
+     - registered class schedule
+     - class schedule status
+     - upcoming class schedule dates
+
+4. Admin panel
+   - Admin dashboard
+   - Admin can create, edit, publish, unpublish, and delete courses and class schedules
+   - Admin can view registered students for each course
+   - Admin can see registration counts and remaining seats
+   - Admin can manage blog posts
+
+5. Blog
+   - Public blog index page
+   - Public blog post detail page
+   - Admin can create, edit, publish, unpublish, and delete blog posts
+   - Blog fields:
+     - title
+     - slug
+     - excerpt
+     - body
+     - published_at
+     - status
+
+6. Design
+   - Clean, modern, professional look
+   - Suitable for a corporate trainer and educator
+   - Strong typography
+   - Generous spacing
+   - Clear navigation
+   - Responsive layout for desktop and mobile
+
+7. Data model suggestions
+   - User
+   - Course
+   - Class Schedule
+   - Enrollment
+   - BlogPost
+   - Optional: Category or Tag for blog posts
+
+8. Authorization
+   - Students can only access their own dashboard and enrollments
+   - Admin-only access for admin panel
+   - Use a simple, maintainable authorization approach
+
+9. Engineering quality
+   - Follow Rails conventions
+   - Add validations, associations, scopes where appropriate
+   - Add routes, controllers, models, views, migrations, and seeds
+   - Add model and request/system tests for the most important workflows
+   - Run tests and fix failures before finishing
+
+Please:
+1. First inspect the existing repository structure.
+2. Propose a concise implementation plan.
+3. Then implement the application step by step.
+4. At the end, summarize:
+   - files changed
+   - database schema created
+   - major features implemented
+   - commands to run locally
+   - tests executed and their results

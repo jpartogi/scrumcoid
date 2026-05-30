@@ -1,0 +1,15 @@
+published_post:
+  title: AI in Scrum
+  slug: ai-in-scrum
+  excerpt: Practical AI guidance.
+  body: Long form article body.
+  published_at: <%= 2.days.ago %>
+  status: 1
+
+draft_post:
+  title: Draft Article
+  slug: draft-article
+  excerpt: Hidden draft.
+  body: Draft body.
+  published_at:
+  status: 0

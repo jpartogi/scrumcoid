@@ -1,0 +1,78 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Back Link & Action Header -->
+  <div class="flex items-center justify-between border-b border-slate-200 pb-5">
+    <div class="flex items-center gap-3">
+      <%= link_to admin_blog_posts_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      <% end %>
+      <div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1 class="text-3xl font-extrabold tracking-tight text-slate-900"><%= @blog_post.title %></h1>
+          <% if @blog_post.published? %>
+            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">Published</span>
+          <% else %>
+            <span class="inline-flex items-center rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-bold text-slate-500 ring-1 ring-inset ring-slate-500/10">Draft</span>
+          <% end %>
+        </div>
+        <p class="text-xs text-slate-400 font-medium mt-1">Blog Post Content</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Split Grid -->
+  <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
+    <!-- Left Column: Content Cards -->
+    <div class="space-y-8">
+      <!-- Excerpt Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Excerpt Summary</h2>
+        <p class="mt-4 text-base text-slate-600 leading-relaxed font-medium"><%= @blog_post.excerpt %></p>
+      </div>
+
+      <!-- Description Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Body Content</h2>
+        <div class="mt-4 text-sm text-slate-700 leading-relaxed prose max-w-none">
+          <%= @blog_post.body %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Sidebar metadata & Actions -->
+    <div class="space-y-6">
+      <!-- Blog Post Meta Details Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Post properties</p>
+        <dl class="grid gap-3 text-xs text-slate-700">
+          <div>
+            <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Slug path</dt>
+            <dd class="mt-1 text-slate-600 font-semibold"><%= @blog_post.slug %></dd>
+          </div>
+          <div>
+            <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Published At</dt>
+            <dd class="mt-1 text-slate-600 font-semibold"><%= @blog_post.published_at&.to_date&.to_fs(:long) || "Not published" %></dd>
+          </div>
+          <div>
+            <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Status</dt>
+            <dd class="mt-1 text-slate-600 font-semibold"><%= @blog_post.status.capitalize %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Operations Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Operations</p>
+        
+        <%= link_to edit_admin_blog_post_path(@blog_post), class: "flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
+          Edit Content
+        <% end %>
+
+        <%= button_to @blog_post.published? ? "Unpublish Post" : "Publish Post", @blog_post.published? ? unpublish_admin_blog_post_path(@blog_post) : publish_admin_blog_post_path(@blog_post), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+        
+        <%= button_to "Delete Post", admin_blog_post_path(@blog_post), method: :delete, data: { confirm: "Are you sure you want to delete this blog post?" }, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+      </div>
+    </div>
+  </div>
+</section>

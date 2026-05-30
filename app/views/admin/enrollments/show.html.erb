@@ -1,0 +1,135 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Back Link & Action Header -->
+  <div class="flex items-center justify-between border-b border-slate-200 pb-5">
+    <div class="flex items-center gap-3">
+      <%= link_to admin_class_schedule_path(@enrollment.class_schedule), class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      <% end %>
+      <div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Student Registration</h1>
+          <% if @enrollment.active? %>
+            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">Active</span>
+          <% else %>
+            <span class="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-bold text-rose-700 ring-1 ring-inset ring-rose-500/20">Cancelled</span>
+          <% end %>
+        </div>
+        <p class="text-sm font-medium text-slate-500 mt-1"> Roster record for <%= @enrollment.class_schedule.course.title %></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Split Grid -->
+  <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
+    <!-- Left Column: Content Cards -->
+    <div class="space-y-8">
+      <!-- Student Profile Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Student Profile</h2>
+        
+        <div class="mt-6 grid gap-6 sm:grid-cols-2">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Full Name</p>
+            <p class="mt-1 text-base font-semibold text-slate-900"><%= @enrollment.attendee_name %></p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Email Address</p>
+            <p class="mt-1 text-base font-semibold text-slate-900">
+              <%= mail_to @enrollment.attendee_email, @enrollment.attendee_email, class: "text-indigo-600 hover:underline hover:text-indigo-500 transition-colors" %>
+            </p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Registration Type</p>
+            <% if @enrollment.user.present? %>
+              <p class="mt-1 text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+                <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Registered User Account
+              </p>
+            <% else %>
+              <p class="mt-1 text-sm font-semibold text-slate-500 flex items-center gap-1.5">
+                <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                Guest Registration
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Associated Class Schedule Details -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Associated Class Event</h2>
+        
+        <div class="mt-6 grid gap-6 sm:grid-cols-2">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Course Name</p>
+            <p class="mt-1 text-sm font-semibold text-slate-900 hover:text-indigo-600">
+              <%= link_to @enrollment.class_schedule.course.title, admin_course_path(@enrollment.class_schedule.course) %>
+            </p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Class Date / Time</p>
+            <p class="mt-1 text-sm font-semibold text-slate-900 leading-tight">
+              <%= local_class_time(@enrollment.class_schedule, format: :range) %>
+            </p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Location Format</p>
+            <p class="mt-1 text-sm font-semibold text-slate-900">
+              <%= @enrollment.class_schedule.online? ? "Live online virtually" : @enrollment.class_schedule.location %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Sidebar metadata & Actions -->
+    <div class="space-y-6">
+      <!-- Roster Meta Details Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Booking properties</p>
+        <dl class="grid gap-3 text-xs text-slate-700">
+          <div>
+            <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Registered On</dt>
+            <dd class="mt-1 text-slate-600 font-semibold"><%= @enrollment.created_at.to_fs(:long) %></dd>
+          </div>
+          <div>
+            <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Paid Amount</dt>
+            <dd class="mt-1 text-slate-600 font-semibold">
+              <% if @enrollment.amount_paid_cents.present? %>
+                <%= number_to_currency(@enrollment.amount_paid_cents / 100.0, unit: @enrollment.currency.to_s.upcase + " ") %>
+              <% else %>
+                <span class="text-slate-400 font-medium">Pending or Manual booking</span>
+              <% end %></dd>
+          </div>
+          <% if @enrollment.stripe_checkout_session_id.present? %>
+            <div>
+              <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Stripe Checkout ID</dt>
+              <dd class="mt-1 text-slate-400 font-mono text-[9px] break-all select-all"><%= @enrollment.stripe_checkout_session_id %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+
+      <!-- Operations Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Operations</p>
+        
+        <%= link_to edit_admin_enrollment_path(@enrollment), class: "flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
+          Edit Registration
+        <% end %>
+
+        <% if @enrollment.active? %>
+          <%= button_to "Cancel Registration", admin_enrollment_path(@enrollment, enrollment: { status: "cancelled" }), method: :patch, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+        <% else %>
+          <%= button_to "Restore Registration", admin_enrollment_path(@enrollment, enrollment: { status: "active" }), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

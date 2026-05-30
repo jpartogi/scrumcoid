@@ -1,0 +1,136 @@
+<section class="relative isolate overflow-hidden bg-slate-950 py-16 sm:py-20">
+  <!-- Spotlight backgrounds -->
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] from-indigo-950/40 via-slate-950 to-slate-950" aria-hidden="true"></div>
+  <div class="absolute -left-20 -top-20 -z-10 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" aria-hidden="true"></div>
+
+  <div class="mx-auto max-w-5xl px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+      <div class="relative shrink-0 w-20 h-20 rounded-2xl bg-slate-900/80 border border-slate-800 p-4 shadow-xl flex items-center justify-center backdrop-blur-md">
+        <div class="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent opacity-60"></div>
+        <% if @class_schedule.course.logo.attached? %>
+          <%= image_tag @class_schedule.course.logo, alt: "#{@class_schedule.course.title} logo", class: "h-full w-full object-contain relative z-10" %>
+        <% else %>
+          <div class="text-indigo-400 relative z-10">
+            <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-indigo-400 ring-1 ring-inset ring-indigo-500/30">
+            Sesi Kelas Langsung
+          </span>
+          <% if @class_schedule.available_for_registration? %>
+            <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-inset ring-emerald-500/30">
+              Pendaftaran Dibuka
+            </span>
+          <% else %>
+            <span class="inline-flex items-center rounded-full bg-slate-800 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-slate-400 ring-1 ring-inset ring-slate-700">
+              Ditutup
+            </span>
+          <% end %>
+        </div>
+        <h1 class="mt-3 text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+          <%= @class_schedule.course.title %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bg-slate-50 py-12">
+  <div class="mx-auto max-w-5xl px-6 lg:px-8">
+    <div class="grid gap-8 lg:grid-cols-[1fr_340px]">
+      
+      <!-- Left side: Course Description -->
+      <div class="space-y-6">
+        <article class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/60 shadow-sm">
+          <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-4 mb-6">
+            Deskripsi Kursus
+          </h2>
+          <div class="text-slate-700 leading-relaxed space-y-6 prose max-w-none text-base">
+            <%= @class_schedule.course.description %>
+          </div>
+        </article>
+      </div>
+
+      <!-- Right side: Class details & Registration widget -->
+      <aside class="space-y-6 self-start">
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-950 border-b border-slate-100 pb-3 mb-4">Detail Kelas</h3>
+          <dl class="space-y-4 text-sm">
+            <div>
+              <dt class="font-bold text-slate-900">Hari & Jam</dt>
+              <dd class="mt-1 text-slate-600 leading-relaxed font-medium">
+                <%= local_class_time(@class_schedule, format: :range) %>
+                <span class="block text-xs text-slate-400 mt-0.5 font-normal">Zona Waktu: <%= @class_schedule.timezone %></span>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-bold text-slate-900">Format Lokasi</dt>
+              <dd class="mt-1 text-slate-600 leading-relaxed font-medium flex items-center gap-1.5">
+                <% if @class_schedule.online? %>
+                  <span class="inline-block w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                  Online Langsung (Zoom/Teams)
+                <% else %>
+                  <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <%= @class_schedule.location %>
+                <% end %>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-bold text-slate-900">Biaya Investasi</dt>
+              <dd class="mt-1 text-slate-900 text-lg font-black"><%= @class_schedule.display_price_for(current_currency) %></dd>
+            </div>
+            <% if @class_schedule.registration_deadline.present? %>
+              <div>
+                <dt class="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-400">Batas Akhir Pendaftaran</dt>
+                <dd class="mt-1 text-xs font-semibold text-rose-600"><%= @class_schedule.registration_deadline.to_date.to_fs(:long) %></dd>
+              </div>
+            <% end %>
+          </dl>
+
+          <div class="mt-6 border-t border-slate-100 pt-6">
+            <% if @enrollment&.active? %>
+              <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-4 text-emerald-800 text-sm font-bold mb-4 flex items-start gap-2 shadow-sm">
+                <svg class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                </svg>
+                <div>
+                  Terdaftar untuk Kelas Ini
+                  <span class="block text-xs font-normal text-emerald-600 mt-0.5">Kursi Anda telah sepenuhnya aman.</span>
+                </div>
+              </div>
+              <%= button_to "Batalkan Pendaftaran", class_schedule_enrollment_path(@class_schedule), method: :delete, class: "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 hover:border-rose-300 hover:text-rose-600 hover:bg-rose-50/20 transition-all cursor-pointer shadow-sm active:scale-[0.98]" %>
+            <% elsif @class_schedule.available_for_registration? %>
+              <div class="mb-4 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-500">Kursi tersedia:</span>
+                <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 font-bold text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                  <%= @class_schedule.remaining_seats %> tersisa
+                </span>
+              </div>
+              <%= button_to "Daftar Kelas Ini", class_schedule_enrollment_path(@class_schedule), method: :post, form: { data: { turbo: false } }, class: "w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-indigo-500/15 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer" %>
+            <% else %>
+              <div class="rounded-xl bg-slate-50 border border-slate-100 p-4 text-slate-500 text-sm font-bold text-center">
+                Pendaftaran telah ditutup
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h4 class="text-sm font-bold text-slate-900">Butuh pendaftaran grup?</h4>
+          <p class="mt-2 text-xs text-slate-500 leading-relaxed">
+            Tertarik memesan slot untuk seluruh tim Anda? Hubungi kami untuk invoice khusus dan diskon grup perusahaan.
+          </p>
+          <%= link_to "Hubungi Dukungan", new_contact_path(subject: "Pendaftaran Grup: #{@class_schedule.course.title} mulai #{@class_schedule.starts_at.to_date}"), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

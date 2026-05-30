@@ -1,0 +1,9 @@
+existing_registration:
+  user: student
+  class_schedule: open_online
+  status: 0
+
+fills_schedule:
+  user: admin
+  class_schedule: full_online
+  status: 0

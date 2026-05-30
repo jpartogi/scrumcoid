@@ -1,0 +1,31 @@
+<section class="mx-auto max-w-7xl px-6 py-16">
+  <p class="text-sm font-semibold uppercase tracking-wide text-teal-700">Student dashboard</p>
+  <h1 class="mt-2 text-4xl font-semibold tracking-tight">Welcome, <%= current_user.name.presence || current_user.email %></h1>
+  <div class="mt-10 overflow-hidden rounded-lg border border-slate-200 bg-white">
+    <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr>
+          <th class="px-5 py-3 font-semibold">Course</th>
+          <th class="px-5 py-3 font-semibold">Date</th>
+          <th class="px-5 py-3 font-semibold">Class status</th>
+          <th class="px-5 py-3 font-semibold">Registration</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% @enrollments.each do |enrollment| %>
+          <tr>
+            <td class="px-5 py-4 font-medium text-slate-950"><%= enrollment.course.title %></td>
+            <td class="px-5 py-4 text-slate-700"><%= enrollment.class_schedule.starts_at.to_fs(:long) %></td>
+            <td class="px-5 py-4 text-slate-700"><%= enrollment.class_schedule.status %></td>
+            <td class="px-5 py-4 text-slate-700"><%= enrollment.status %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @enrollments.empty? %>
+      <div class="p-8 text-slate-600">
+        You have no registrations yet. <%= link_to "View upcoming classes", class_schedules_path, class: "font-semibold text-teal-700" %>.
+      </div>
+    <% end %>
+  </div>
+</section>

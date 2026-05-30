@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "scrum.co.id" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="scrum.co.id">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen flex flex-col bg-white font-['Inter',sans-serif] text-slate-950 antialiased">
+    <header class="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+        <%= link_to root_path, class: "text-2xl font-black tracking-tighter text-slate-900" do %>
+          scrum<span class="text-indigo-600">coid</span>
+        <% end %>
+        <div class="hidden lg:flex lg:gap-x-12">
+          <%= link_to "Kursus", courses_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
+          <%= link_to "Jadwal", class_schedules_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
+          <%= link_to "Tentang", about_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
+          <%= link_to "Blog", blog_posts_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
+        </div>
+        <div class="flex items-center gap-x-6">
+          <% if current_user&.admin? %>
+            <%= link_to "Dasbor Admin", admin_root_path, class: "text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors" %>
+            <%= button_to "Keluar", destroy_user_session_path, method: :delete, class: "text-sm font-bold text-slate-700 hover:text-rose-600 transition-colors" %>
+          <% end %>
+        </div>
+      </nav>
+    </header>
+
+    <% if notice.present? || alert.present? %>
+      <div class="mx-auto mt-6 max-w-7xl px-6">
+        <% if notice.present? %>
+          <p class="rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3 text-sm font-medium text-indigo-900 shadow-sm"><%= notice %></p>
+        <% end %>
+        <% if alert.present? %>
+          <p class="rounded-lg border border-rose-100 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-900 shadow-sm"><%= alert %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <main class="flex-grow">
+      <%= yield %>
+    </main>
+
+    <% if controller_path.start_with?("admin/") %>
+      <%= render "shared/admin_footer" %>
+    <% else %>
+      <%= render "shared/visitor_footer" %>
+    <% end %>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+usd:
+  course: ai_essentials
+  amount: 1295.0
+  currency: USD
+
+aud:
+  course: ai_essentials
+  amount: 1950.0
+  currency: AUD

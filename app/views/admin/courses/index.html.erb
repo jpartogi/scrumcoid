@@ -1,0 +1,91 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Page Header -->
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Manage Courses</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Add, update, and monitor training curricula offered by the site.</p>
+    </div>
+    <div>
+      <%= link_to new_admin_course_path, class: "inline-flex items-center gap-1.5 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 shadow-sm transition-colors" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        New Course
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Table Container Card -->
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+    <% if @courses.any? %>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+              <th class="px-6 py-4">Course Details</th>
+              <th class="px-6 py-4">Excerpt Summary</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4 text-center">Registrations</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% @courses.each do |course| %>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-4">
+                    <% if course.logo.attached? %>
+                      <%= image_tag course.logo, alt: "#{course.title} logo", class: "h-11 w-11 rounded-lg border border-slate-200 bg-white object-contain p-1 shrink-0 shadow-sm" %>
+                    <% else %>
+                      <div class="h-11 w-11 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 flex items-center justify-center shrink-0 shadow-sm">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
+                        </svg>
+                      </div>
+                    <% end %>
+                    <div>
+                      <p class="font-semibold text-slate-900 leading-tight">
+                        <%= link_to course.title, admin_course_path(course), class: "hover:text-indigo-600 transition-colors" %>
+                      </p>
+                      <p class="text-xs text-slate-400 font-medium mt-1">slug: <%= course.slug %></p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-slate-500 max-w-xs truncate">
+                  <%= course.excerpt %>
+                </td>
+                <td class="px-6 py-4">
+                  <% if course.published? %>
+                    <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">Published</span>
+                  <% else %>
+                    <span class="inline-flex items-center rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-bold text-slate-500 ring-1 ring-inset ring-slate-500/10">Draft</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10">
+                    <%= course.active_enrollment_count %> active
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <div class="inline-flex gap-2">
+                    <%= link_to "View", admin_course_path(course), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
+                    <%= link_to "Edit", edit_admin_course_path(course), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-6 py-16 text-center text-slate-400">
+        <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+        <p class="mt-4 font-semibold text-base">No courses created yet</p>
+        <p class="text-xs text-slate-400 mt-1">Get started by creating your first professional course training model.</p>
+        <%= link_to "Create Course", new_admin_course_path, class: "mt-4 inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</section>

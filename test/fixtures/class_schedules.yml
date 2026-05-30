@@ -1,0 +1,43 @@
+open_online:
+  course: ai_essentials
+  starts_at: <%= 21.days.from_now %>
+  ends_at: <%= 21.days.from_now + 8.hours %>
+  location: Live online via Zoom
+  online: true
+  timezone: Etc/UTC
+  registration_deadline: <%= 14.days.from_now %>
+  capacity: 2
+  status: 1
+
+full_online:
+  course: ai_essentials
+  starts_at: <%= 30.days.from_now %>
+  ends_at: <%= 30.days.from_now + 8.hours %>
+  location: Live online via Zoom
+  online: true
+  timezone: Etc/UTC
+  registration_deadline: <%= 23.days.from_now %>
+  capacity: 1
+  status: 1
+
+closed_online:
+  course: ai_essentials
+  starts_at: <%= 7.days.from_now %>
+  ends_at: <%= 7.days.from_now + 8.hours %>
+  location: Live online via Zoom
+  online: true
+  timezone: Etc/UTC
+  registration_deadline: <%= 1.day.ago %>
+  capacity: 20
+  status: 1
+
+unpublished:
+  course: ai_essentials
+  starts_at: <%= 40.days.from_now %>
+  ends_at: <%= 40.days.from_now + 8.hours %>
+  location: Brisbane
+  online: false
+  timezone: Australia/Brisbane
+  registration_deadline: <%= 33.days.from_now %>
+  capacity: 20
+  status: 0

@@ -1,0 +1,42 @@
+require "test_helper"
+
+class CoursesControllerTest < ActionDispatch::IntegrationTest
+  test "lists published courses" do
+    get courses_path
+
+    assert_response :success
+    assert_select "h3", text: courses(:ai_essentials).title
+    assert_match courses(:ai_essentials).excerpt, response.body
+    assert_match "USD 1295.00", response.body
+    assert_no_match courses(:draft_course).title, response.body
+  end
+
+  test "uses detected country currency when available" do
+    get courses_path, headers: { "CF-IPCountry" => "US" }
+
+    assert_response :success
+    assert_match "USD 1295.00", response.body
+    assert_no_match "AUD 1950.00", response.body
+  end
+
+  test "falls back to usd when detected currency is not available" do
+    get courses_path, headers: { "CF-IPCountry" => "JP" }
+
+    assert_response :success
+    assert_match "USD 1295.00", response.body
+  end
+
+  test "displays attached course logo" do
+    course = courses(:ai_essentials)
+    course.logo.attach(
+      io: file_fixture("course-logo.png").open,
+      filename: "course-logo.png",
+      content_type: "image/png"
+    )
+
+    get courses_path
+
+    assert_response :success
+    assert_select "img[alt='#{course.title} logo']"
+  end
+end

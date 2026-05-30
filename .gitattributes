@@ -1,0 +1,40 @@
+# Auto detect text files and normalize to LF
+* text=auto
+
+# Force Unix line endings on key text files
+*.rb text eol=lf
+*.rake text eol=lf
+*.ru text eol=lf
+Gemfile text eol=lf
+Gemfile.lock text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+*.erb text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+
+# Binary files - do not modify
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.svg binary
+
+# Rails credentials and keys must stay as-is
+config/master.key binary
+config/credentials/*.key binary
+
+# Fly and deployment files
+fly.toml text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf

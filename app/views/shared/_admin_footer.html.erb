@@ -1,0 +1,14 @@
+<footer class="border-t border-slate-800 bg-slate-950 text-slate-300">
+  <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-sm">
+    <p class="font-semibold text-white">scrum.co.id Admin</p>
+    <nav class="flex flex-wrap gap-4">
+      <%= link_to "Dashboard", admin_root_path, class: "hover:text-white" %>
+      <%= link_to "Courses", admin_courses_path, class: "hover:text-white" %>
+      <%= link_to "Class schedules", admin_class_schedules_path, class: "hover:text-white" %>
+      <%= link_to "Blog posts", admin_blog_posts_path, class: "hover:text-white" %>
+      <%= link_to "About page", edit_admin_about_page_path, class: "hover:text-white" %>
+      <%= link_to "Messages", admin_contact_messages_path, class: "hover:text-white" %>
+    </nav>
+    <p class="text-xs text-slate-400">&copy; <%= Time.current.year %> Training operations</p>
+  </div>
+</footer>

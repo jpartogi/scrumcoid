@@ -1,0 +1,25 @@
+ai_essentials_description:
+  record: ai_essentials (Course)
+  name: description
+  body: <div>Practical AI training for Scrum teams.</div>
+
+draft_course_description:
+  record: draft_course (Course)
+  name: description
+  body: <div>Draft course.</div>
+
+published_post_body:
+  record: published_post (BlogPost)
+  name: body
+  body: <div>Long form article body.</div>
+
+draft_post_body:
+  record: draft_post (BlogPost)
+  name: body
+  body: <div>Draft body.</div>
+
+about_page_body:
+  record: current (AboutPage)
+  name: body
+  body: <div>Pelatihan Scrum Profesional kami menggabungkan pengalaman praktis dan standar global.</div>
+
