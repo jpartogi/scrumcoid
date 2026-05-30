@@ -99,6 +99,27 @@ end
 def preprocess_body(html_content)
   doc = Nokogiri::HTML::DocumentFragment.parse(html_content)
   
+  # Remove all <style> tags to avoid layout pollution
+  doc.css('style').remove
+
+  # Unwrap structural layout container divs
+  loop do
+    wrappers = doc.css('div').select do |div|
+      cls = div['class'].to_s
+      cls.include?('sqs-') || cls.include?('row') || cls.include?('col') || cls.include?('span-') || cls.include?('block')
+    end
+    break if wrappers.empty?
+    wrappers.each do |node|
+      node.replace(node.children)
+    end
+  end
+
+  # Clean paragraphs from legacy inline styles
+  doc.css('p').each do |p|
+    p.remove_attribute('style')
+    p.remove_attribute('class') if p['class'].blank?
+  end
+  
   doc.css('img').each do |img|
     data_src = img['data-src'] || img['src']
     if data_src.present?

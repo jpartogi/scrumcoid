@@ -447,6 +447,13 @@ trix-editor .attachment__metadata {
  * to override Tailwind CSS Preflight and ensure standard rich text formatting works properly.
  */
 
+trix-editor p,
+.trix-content p {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.75 !important;
+}
+
 trix-editor h1,
 .trix-content h1 {
   font-size: 1.875rem !important; /* text-3xl */
