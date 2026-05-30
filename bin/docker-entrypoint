@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+# Run db:prepare before starting the web server (works for both rails server and puma)
+if [[ "${@}" == *"rails server"* ]] || [[ "${@}" == *"puma"* ]]; then
   ./bin/rails db:prepare
 fi
 
