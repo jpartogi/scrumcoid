@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_30_151052) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_010616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -132,6 +132,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_151052) do
     t.datetime "created_at", null: false
     t.string "currency"
     t.datetime "paid_at"
+    t.bigint "registration_id"
     t.integer "status", default: 0, null: false
     t.string "stripe_checkout_session_id"
     t.string "stripe_payment_intent_id"
@@ -140,11 +141,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_151052) do
     t.string "visitor_email"
     t.string "visitor_name"
     t.index ["class_schedule_id"], name: "index_enrollments_on_class_schedule_id"
+    t.index ["registration_id"], name: "index_enrollments_on_registration_id"
     t.index ["stripe_checkout_session_id"], name: "index_enrollments_on_stripe_checkout_session_id", unique: true
     t.index ["stripe_payment_intent_id"], name: "index_enrollments_on_stripe_payment_intent_id"
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
     t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id", unique: true
+  end
+
+  create_table "registrations", force: :cascade do |t|
+    t.bigint "class_schedule_id", null: false
+    t.text "company_address"
+    t.string "company_name", null: false
+    t.string "company_phone"
+    t.datetime "created_at", null: false
+    t.string "finance_email", null: false
+    t.string "finance_name", null: false
+    t.string "quotation_pdf_url"
+    t.datetime "quotation_sent_at"
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["class_schedule_id", "finance_email"], name: "index_registrations_on_schedule_and_finance_email", unique: true
+    t.index ["class_schedule_id"], name: "index_registrations_on_class_schedule_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -308,7 +326,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_151052) do
   add_foreign_key "class_schedules", "courses"
   add_foreign_key "course_prices", "courses"
   add_foreign_key "enrollments", "class_schedules"
+  add_foreign_key "enrollments", "registrations"
   add_foreign_key "enrollments", "users"
+  add_foreign_key "registrations", "class_schedules"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

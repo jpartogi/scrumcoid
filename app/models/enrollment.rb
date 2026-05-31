@@ -3,6 +3,7 @@ class Enrollment < ApplicationRecord
 
   belongs_to :user, optional: true
   belongs_to :class_schedule
+  belongs_to :registration, optional: true
 
   validates :user_id, uniqueness: { scope: :class_schedule_id }, allow_nil: true
   validates :visitor_email, presence: true, if: -> { user.blank? }

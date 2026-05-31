@@ -22,16 +22,31 @@
   </head>
 
   <body class="min-h-screen flex flex-col bg-white font-['Inter',sans-serif] text-slate-950 antialiased">
-    <header class="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+    <!-- Premium Top Accent Line -->
+    <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-teal-400"></div>
+
+    <header class="sticky top-0 z-50 border-b border-slate-100/60 bg-white/90 backdrop-blur-md shadow-[0_2px_20px_-3px_rgba(0,0,0,0.02)]">
       <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <%= link_to root_path, class: "text-2xl font-black tracking-tighter text-slate-900" do %>
-          scrum<span class="text-indigo-600">coid</span>
+        <%= link_to root_path, class: "text-2xl font-black tracking-tighter text-slate-900 group" do %>
+          scrum<span class="text-indigo-600 group-hover:text-indigo-500 transition-colors">coid</span>
         <% end %>
-        <div class="hidden lg:flex lg:gap-x-12">
-          <%= link_to "Kursus", courses_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
-          <%= link_to "Jadwal", class_schedules_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
-          <%= link_to "Tentang", about_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
-          <%= link_to "Blog", blog_posts_path, class: "text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors" %>
+        <div class="hidden lg:flex lg:gap-x-10">
+          <%= link_to courses_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
+            Pelatihan
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+          <% end %>
+          <%= link_to class_schedules_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
+            Jadwal
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+          <% end %>
+          <%= link_to about_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
+            Tentang
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+          <% end %>
+          <%= link_to blog_posts_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
+            Blog
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+          <% end %>
         </div>
         <div class="flex items-center gap-x-6">
           <% if current_user&.admin? %>
@@ -43,12 +58,18 @@
     </header>
 
     <% if notice.present? || alert.present? %>
-      <div class="mx-auto mt-6 max-w-7xl px-6">
+      <div class="fixed top-24 right-6 z-50 max-w-md w-full animate-in slide-in-from-top-4 duration-300">
         <% if notice.present? %>
-          <p class="rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3 text-sm font-medium text-indigo-900 shadow-sm"><%= notice %></p>
+          <div class="rounded-2xl border border-indigo-100 bg-white/95 backdrop-blur-md px-5 py-4 text-sm font-semibold text-indigo-900 shadow-[0_10px_35px_-5px_rgba(99,102,241,0.2)] flex items-start gap-3">
+            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-black shadow-sm">✓</span>
+            <p><%= notice %></p>
+          </div>
         <% end %>
         <% if alert.present? %>
-          <p class="rounded-lg border border-rose-100 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-900 shadow-sm"><%= alert %></p>
+          <div class="rounded-2xl border border-rose-100 bg-white/95 backdrop-blur-md px-5 py-4 text-sm font-semibold text-rose-900 shadow-[0_10px_35px_-5px_rgba(244,63,94,0.2)] flex items-start gap-3">
+            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-600 text-white text-[10px] font-black shadow-sm">!</span>
+            <p><%= alert %></p>
+          </div>
         <% end %>
       </div>
     <% end %>

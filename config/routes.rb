@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resource :contact, only: [:new, :create], controller: "contact_messages"
   resources :class_schedules, only: [:index, :show] do
     resource :enrollment, only: [:create, :destroy]
+    resources :registrations, only: [:new, :create], controller: "class_schedules/registrations"
   end
   resources :blog_posts, path: "blog", only: [:index, :show]
   resource :dashboard, only: [:show], controller: "dashboard"
@@ -42,6 +43,7 @@ Rails.application.routes.draw do
       end
     end
     resources :enrollments, only: [:show, :edit, :update]
+    resources :registrations, only: [:index, :show]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

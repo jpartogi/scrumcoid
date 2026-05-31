@@ -27,17 +27,21 @@ module ClassSchedulesHelper
 
     start_day = starts_at.day
     end_day = ends_at.day
-    month = starts_at.strftime("%B")
+    start_month = starts_at.strftime("%B")
+    end_month = ends_at.strftime("%B")
     year = starts_at.year
     start_time = starts_at.strftime("%-l:%M %p")
     end_time = ends_at.strftime("%-l:%M %p")
 
     if starts_at.to_date == ends_at.to_date
-      "#{start_day} #{month} #{year} #{start_time} - #{end_time}"
+      # Same day
+      "#{start_day} #{start_month} #{year} #{start_time} - #{end_time}"
     elsif starts_at.month == ends_at.month && starts_at.year == ends_at.year
-      "#{start_day} - #{end_day} #{month} #{year} #{start_time} - #{end_time}"
+      # Same month, different days
+      "#{start_day} - #{end_day} #{start_month} #{year} #{start_time} - #{end_time}"
     else
-      "#{starts_at.strftime('%-d %B %Y')}, #{start_time} - #{ends_at.strftime('%-d %B %Y')}, #{end_time}"
+      # Different months
+      "#{start_day} #{start_month} - #{end_day} #{end_month} #{year} #{start_time} - #{end_time}"
     end
   end
 

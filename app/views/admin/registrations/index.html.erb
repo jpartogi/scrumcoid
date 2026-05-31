@@ -1,0 +1,39 @@
+<div class="p-8">
+  <h1 class="text-2xl font-bold mb-6">Company Registrations / Quotations</h1>
+
+  <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="px-6 py-4 text-left font-semibold">Company</th>
+          <th class="px-6 py-4 text-left font-semibold">Training</th>
+          <th class="px-6 py-4 text-left font-semibold">Finance Contact</th>
+          <th class="px-6 py-4 text-left font-semibold">Participants</th>
+          <th class="px-6 py-4 text-left font-semibold">Status</th>
+          <th class="px-6 py-4"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y">
+        <% @registrations.each do |reg| %>
+          <tr>
+            <td class="px-6 py-4 font-medium"><%= reg.company_name %></td>
+            <td class="px-6 py-4"><%= reg.course.title %></td>
+            <td class="px-6 py-4">
+              <%= reg.finance_name %><br>
+              <span class="text-xs text-slate-500"><%= reg.finance_email %></span>
+            </td>
+            <td class="px-6 py-4"><%= reg.total_participants %></td>
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-800">
+                <%= reg.status.humanize %>
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <%= link_to "View", admin_registration_path(reg), class: "text-sm font-bold text-indigo-600 hover:text-indigo-500" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

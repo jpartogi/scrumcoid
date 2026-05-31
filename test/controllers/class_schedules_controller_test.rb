@@ -15,11 +15,11 @@ class ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_match "USD 1,295.00", response.body
   end
 
-  test "register form uses normal browser navigation for stripe redirect" do
+  test "register link directs to new registration form" do
     get class_schedule_path(class_schedules(:open_online))
 
     assert_response :success
-    assert_select "form[data-turbo='false'][action='#{class_schedule_enrollment_path(class_schedules(:open_online))}']"
+    assert_select "a[href='#{new_class_schedule_registration_path(class_schedules(:open_online))}']"
   end
 
   test "displays payment success flash after returning from stripe" do

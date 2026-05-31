@@ -27,7 +27,7 @@ class ClassSchedulesHelperTest < ActionView::TestCase
       ends_at: Time.zone.parse("2026-06-01 17:00:00"),
       timezone: "Etc/UTC"
     )
-    assert_equal "30 May 2026, 9:00 AM - 1 June 2026, 5:00 PM", formatted_class_date_range(schedule)
+    assert_equal "30 May - 1 June 2026 9:00 AM - 5:00 PM", formatted_class_date_range(schedule)
   end
 
   test "renders local time data for browser timezone conversion" do

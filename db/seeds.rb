@@ -15,7 +15,7 @@ course_psm = Course.find_or_initialize_by(slug: "professional-scrum-master-i")
 course_psm.update!(
   title: "Professional Scrum Master I (PSM I)",
   excerpt: "Pelatihan resmi Scrum.org untuk menguasai peran Scrum Master secara profesional di Indonesia.",
-  description: "Kursus dua hari yang interaktif ini membekali peserta dengan pemahaman mendalam tentang kerangka kerja Scrum dan peran Scrum Master. Peserta akan mempelajari dasar-dasar empiris Scrum, bagaimana membimbing tim agar berkinerja tinggi, cara memfasilitasi kolaborasi mandiri, dan cara mengatasi hambatan sistemik dalam organisasi untuk mencapai tujuan bisnis.",
+  description: "Pelatihan dua hari yang interaktif ini membekali peserta dengan pemahaman mendalam tentang kerangka kerja Scrum dan peran Scrum Master. Peserta akan mempelajari dasar-dasar empiris Scrum, bagaimana membimbing tim agar berkinerja tinggi, cara memfasilitasi kolaborasi mandiri, dan cara mengatasi hambatan sistemik dalam organisasi untuk mencapai tujuan bisnis.",
   status: :published
 )
 

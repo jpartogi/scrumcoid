@@ -48,7 +48,7 @@
       <div class="space-y-6">
         <article class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/60 shadow-sm">
           <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-4 mb-6">
-            Deskripsi Kursus
+            Deskripsi Pelatihan
           </h2>
           <div class="text-slate-700 leading-relaxed space-y-6 prose max-w-none text-base">
             <%= @class_schedule.course.description %>
@@ -123,7 +123,7 @@
                   <%= @class_schedule.remaining_seats %> tersisa
                 </span>
               </div>
-              <%= button_to "Daftar Kelas Ini", class_schedule_enrollment_path(@class_schedule), method: :post, form: { data: { turbo: false } }, class: "w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-indigo-500/15 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer" %>
+              <%= link_to "Daftar Kelas Ini", new_class_schedule_registration_path(@class_schedule), class: "w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 text-sm font-bold text-white hover:shadow-lg hover:shadow-indigo-500/15 hover:scale-[1.02] active:scale-[0.98] transition-all" %>
             <% else %>
               <div class="rounded-xl bg-slate-50 border border-slate-100 p-4 text-slate-500 text-sm font-bold text-center">
                 Pendaftaran telah ditutup
@@ -137,7 +137,7 @@
           <p class="mt-2 text-xs text-slate-500 leading-relaxed">
             Tertarik memesan slot untuk seluruh tim Anda? Hubungi kami untuk invoice khusus dan diskon grup perusahaan.
           </p>
-          <%= link_to "Hubungi Dukungan", new_contact_path(subject: "Pendaftaran Grup: #{@class_schedule.course.title} mulai #{@class_schedule.starts_at.to_date}"), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+          <%= link_to "Hubungi Kami", new_contact_path(subject: "Pendaftaran Grup: #{@class_schedule.course.title} mulai #{@class_schedule.starts_at.to_date}"), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
         </div>
       </aside>
     </div>

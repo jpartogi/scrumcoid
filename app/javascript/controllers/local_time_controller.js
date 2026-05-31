@@ -36,26 +36,41 @@ export default class extends Controller {
   }
 
   formatRange(start, end, timeZone) {
-    const dateFormatter = new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
+    const opts = { timeZone }
+
+    const startDay = start.toLocaleString('en-US', { ...opts, day: 'numeric' })
+    const endDay = end.toLocaleString('en-US', { ...opts, day: 'numeric' })
+    const startMonth = start.toLocaleString('en-US', { ...opts, month: 'long' })
+    const endMonth = end.toLocaleString('en-US', { ...opts, month: 'long' })
+    const year = start.toLocaleString('en-US', { ...opts, year: 'numeric' })
+
+    const timeFormatter = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
       timeZone
     })
-    const timeFormatter = new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-      timeZone,
-      timeZoneName: "short"
-    })
 
-    const startDate = dateFormatter.format(start)
-    const endDate = dateFormatter.format(end)
     const startTime = timeFormatter.format(start)
     const endTime = timeFormatter.format(end)
 
-    if (startDate === endDate) {
-      return `${startDate}, ${startTime} - ${endTime}`
+    const startMonthNum = parseInt(start.toLocaleString('en-US', { ...opts, month: 'numeric' }))
+    const endMonthNum = parseInt(end.toLocaleString('en-US', { ...opts, month: 'numeric' }))
+    const startYear = parseInt(start.toLocaleString('en-US', { ...opts, year: 'numeric' }))
+    const endYear = parseInt(end.toLocaleString('en-US', { ...opts, year: 'numeric' }))
+
+    const sameDay = startDay === endDay && startMonthNum === endMonthNum && startYear === endYear
+
+    if (sameDay) {
+      return `${startDay} ${startMonth} ${year} ${startTime} - ${endTime}`
     }
 
-    return `${startDate}, ${startTime} - ${endDate}, ${endTime}`
+    if (startMonthNum === endMonthNum && startYear === endYear) {
+      // Same month
+      return `${startDay} - ${endDay} ${startMonth} ${year} ${startTime} - ${endTime}`
+    }
+
+    // Different months
+    return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year} ${startTime} - ${endTime}`
   }
 }

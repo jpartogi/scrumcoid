@@ -1,0 +1,83 @@
+<div class="max-w-3xl mx-auto px-6 py-12">
+  <div class="mb-10">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-900">Pendaftaran Pelatihan</h1>
+    <p class="mt-2 text-slate-600">
+      Silakan lengkapi formulir di bawah ini untuk mendaftar. Kami akan mengirimkan quotation dalam bentuk PDF.
+    </p>
+    <div class="mt-3 text-sm">
+      <span class="font-semibold"><%= @class_schedule.course.title %></span>
+      <span class="text-slate-500">· <%= @class_schedule.starts_at.strftime("%d %B %Y") %></span>
+    </div>
+  </div>
+
+  <%= form_with model: [@class_schedule, @registration], local: true, data: { controller: "participants" } do |f| %>
+    <!-- Section 1: Person Registering (Finance / Billing Contact) -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 mb-8 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900 mb-6">1. Data Penanggung Jawab / Keuangan</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <%= f.label :finance_name, "Nama Lengkap Penanggung Jawab", class: "block text-sm font-semibold text-slate-700 mb-1.5" %>
+          <%= f.text_field :finance_name, required: true, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" %>
+        </div>
+
+        <div>
+          <%= f.label :finance_email, "Email Penanggung Jawab (untuk quotation)", class: "block text-sm font-semibold text-slate-700 mb-1.5" %>
+          <%= f.email_field :finance_email, required: true, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" %>
+        </div>
+
+        <div class="md:col-span-2">
+          <%= f.label :company_name, "Nama Perusahaan / Institusi", class: "block text-sm font-semibold text-slate-700 mb-1.5" %>
+          <%= f.text_field :company_name, required: true, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" %>
+        </div>
+
+        <div class="md:col-span-2">
+          <%= f.label :company_phone, "Nomor Telepon Perusahaan", class: "block text-sm font-semibold text-slate-700 mb-1.5" %>
+          <%= f.text_field :company_phone, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" %>
+        </div>
+
+        <div >
+          <%= f.label :company_address, "Alamat Perusahaan", class: "block text-sm font-semibold text-slate-700 mb-1.5" %>
+          <%= f.text_area :company_address, rows: 3, class: "w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Participants -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm" data-participants-target="participants">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-slate-900">2. Data Peserta</h2>
+        <button type="button"
+                data-action="participants#add"
+                class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+          + Tambah Peserta
+        </button>
+      </div>
+
+      <div data-participants-target="participantsList">
+        <%= f.fields_for :enrollments, @registration.enrollments.build do |pf| %>
+          <%= render "participant_fields", f: pf %>
+        <% end %>
+      </div>
+
+      <!-- Template for new participant row -->
+      <template data-participants-target="template">
+        <%= f.fields_for :enrollments, Enrollment.new, child_index: "NEW_RECORD" do |pf| %>
+          <%= render "participant_fields", f: pf %>
+        <% end %>
+      </template>
+
+      <p class="mt-4 text-xs text-slate-500">
+        Anda dapat menambahkan lebih dari satu peserta. Jika Anda sendiri yang akan mengikuti pelatihan, silakan centang opsi di bawah atau tambahkan data Anda sebagai peserta.
+      </p>
+    </div>
+
+    <div class="mt-8">
+      <%= f.submit "Kirim Permintaan Pendaftaran", 
+                   class: "w-full md:w-auto rounded-2xl bg-slate-900 hover:bg-indigo-600 px-10 py-4 text-sm font-bold text-white transition-colors shadow-sm active:scale-[0.985]" %>
+      <p class="mt-3 text-xs text-slate-500 text-center md:text-left">
+        Quotation akan dikirim ke email penanggung jawab yang tertera di atas dan email admin kami.
+      </p>
+    </div>
+  <% end %>
+</div>
