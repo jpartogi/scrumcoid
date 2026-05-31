@@ -1,66 +1,145 @@
-<div class="max-w-4xl mx-auto p-8">
-  <div class="flex justify-between items-start mb-8">
-    <div>
-      <h1 class="text-2xl font-bold">Registration #<%= @registration.id %></h1>
-      <p class="text-slate-500"><%= @registration.company_name %></p>
+<% content_for :title, "Registration ##{@registration.id}" %>
+
+<%# ── Delete confirmation dialog ── %>
+<dialog id="delete-registration-dialog"
+        class="rounded-2xl shadow-2xl border border-rose-100 p-0 w-full max-w-md backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm">
+  <div class="p-8">
+    <%# Warning icon %>
+    <div class="flex items-center justify-center h-14 w-14 rounded-full bg-rose-50 ring-8 ring-rose-50/40 mx-auto">
+      <svg class="h-7 w-7 text-rose-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
     </div>
-    <%= link_to "Back to List", admin_registrations_path, class: "text-sm font-bold text-slate-600 hover:text-slate-900" %>
+
+    <div class="mt-5 text-center">
+      <h2 class="text-lg font-extrabold text-slate-900">Delete Registration?</h2>
+      <p class="mt-2 text-sm text-slate-500 leading-relaxed">
+        You are about to permanently delete Registration <span class="font-bold text-slate-800">#<%= @registration.id %></span>
+        for <span class="font-bold text-slate-800"><%= @registration.company_name %></span>.
+      </p>
+      <div class="mt-3 inline-flex items-center gap-2 rounded-lg bg-rose-50 border border-rose-100 px-4 py-2.5 text-sm font-semibold text-rose-700">
+        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+        <span><%= @registration.total_participants %> participant enrollment<%= @registration.total_participants == 1 ? "" : "s" %> will also be deleted.</span>
+      </div>
+      <p class="mt-4 text-xs text-slate-400">This action is <strong>irreversible</strong> and cannot be undone.</p>
+    </div>
+
+    <div class="mt-6 flex items-center gap-3">
+      <button type="button"
+              onclick="document.getElementById('delete-registration-dialog').close()"
+              class="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+        Cancel
+      </button>
+      <%= button_to admin_registration_path(@registration), method: :delete,
+          form_class: "flex-1",
+          class: "w-full rounded-lg bg-rose-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-rose-700 transition-all shadow-sm cursor-pointer" do %>
+        Yes, Delete Permanently
+      <% end %>
+    </div>
+  </div>
+</dialog>
+
+<section class="px-8 py-10 max-w-4xl mx-auto space-y-6">
+  <%# Header row %>
+  <div class="flex items-start justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <%= link_to admin_registrations_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all shrink-0" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      <% end %>
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">
+          Registration #<%= @registration.id %>
+        </h1>
+        <p class="text-sm text-slate-500 mt-0.5"><%= @registration.company_name %></p>
+      </div>
+    </div>
+
+    <%# Delete button — triggers dialog %>
+    <button type="button"
+            onclick="document.getElementById('delete-registration-dialog').showModal()"
+            class="inline-flex items-center gap-2 rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all shadow-sm shrink-0">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+      </svg>
+      Delete Registration
+    </button>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Training Schedule Info -->
-    <div class="bg-white border border-slate-200 rounded-3xl p-6 lg:col-span-2 shadow-sm">
-      <h3 class="font-bold mb-4 text-slate-900">Training Schedule</h3>
+    <%# Training Schedule Info %>
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:col-span-2 shadow-sm">
+      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3 mb-5">Training Schedule</h3>
       <% if @registration.class_schedule.present? %>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p class="text-lg font-extrabold text-slate-900"><%= @registration.class_schedule.course.title %></p>
             <p class="text-sm font-semibold text-indigo-600 mt-1">
-              <%= @registration.class_schedule.starts_at.strftime("%d %b") %> - <%= @registration.class_schedule.ends_at.strftime("%d %b %Y") %>
+              <%= @registration.class_schedule.starts_at.strftime("%d %b") %> – <%= @registration.class_schedule.ends_at.strftime("%d %b %Y") %>
             </p>
             <p class="text-xs text-slate-500 mt-1">Location: <%= @registration.class_schedule.location %></p>
           </div>
-          <div>
-            <%= link_to admin_class_schedule_path(@registration.class_schedule), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors" do %>
-              View Class Schedule
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-              </svg>
-            <% end %>
-          </div>
+          <%= link_to admin_class_schedule_path(@registration.class_schedule), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors shrink-0" do %>
+            View Class Schedule
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          <% end %>
         </div>
       <% else %>
         <p class="text-sm text-slate-500 italic">No associated class schedule found.</p>
       <% end %>
     </div>
-    <!-- Finance Info -->
-    <div class="bg-white border border-slate-200 rounded-3xl p-6">
-      <h3 class="font-bold mb-4">Finance / Billing Contact</h3>
+
+    <%# Finance Info %>
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3 mb-5">Finance / Billing Contact</h3>
       <dl class="space-y-3 text-sm">
-        <div><dt class="text-slate-500">Name</dt><dd class="font-medium"><%= @registration.finance_name %></dd></div>
-        <div><dt class="text-slate-500">Email</dt><dd><%= @registration.finance_email %></dd></div>
-        <div><dt class="text-slate-500">Company</dt><dd><%= @registration.company_name %></dd></div>
-        <div><dt class="text-slate-500">Address</dt><dd class="whitespace-pre-line"><%= @registration.company_address %></dd></div>
-        <div><dt class="text-slate-500">Phone</dt><dd><%= @registration.company_phone %></dd></div>
+        <div><dt class="text-slate-400 text-xs font-bold uppercase tracking-wide">Name</dt><dd class="mt-1 font-semibold text-slate-900"><%= @registration.finance_name %></dd></div>
+        <div><dt class="text-slate-400 text-xs font-bold uppercase tracking-wide">Email</dt><dd class="mt-1 font-medium"><%= @registration.finance_email %></dd></div>
+        <div><dt class="text-slate-400 text-xs font-bold uppercase tracking-wide">Company</dt><dd class="mt-1 font-semibold text-slate-900"><%= @registration.company_name %></dd></div>
+        <div><dt class="text-slate-400 text-xs font-bold uppercase tracking-wide">Address</dt><dd class="mt-1 whitespace-pre-line font-medium text-slate-700"><%= @registration.company_address %></dd></div>
+        <div><dt class="text-slate-400 text-xs font-bold uppercase tracking-wide">Phone</dt><dd class="mt-1 font-medium text-slate-700"><%= @registration.company_phone %></dd></div>
       </dl>
     </div>
 
-    <!-- Participants -->
-    <div class="bg-white border border-slate-200 rounded-3xl p-6">
-      <h3 class="font-bold mb-4">Participants (<%= @registration.total_participants %>)</h3>
-      <ul class="space-y-3 text-sm">
-        <% @registration.enrollments.each do |enrollment| %>
-          <li class="border-b pb-3 last:border-0">
-            <div class="font-medium"><%= enrollment.visitor_name || enrollment.attendee_name %></div>
-            <div class="text-slate-500"><%= enrollment.visitor_email || enrollment.attendee_email %></div>
-          </li>
-        <% end %>
-      </ul>
+    <%# Participants %>
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3 mb-5">
+        Participants (<%= @registration.total_participants %>)
+      </h3>
+      <% if @registration.enrollments.any? %>
+        <ul class="space-y-3">
+          <% @registration.enrollments.each do |enrollment| %>
+            <li class="flex items-center justify-between border-b border-slate-50 pb-3 last:border-0 last:pb-0">
+              <div>
+                <p class="text-sm font-semibold text-slate-900"><%= enrollment.visitor_name || enrollment.attendee_name %></p>
+                <p class="text-xs text-slate-500 mt-0.5"><%= enrollment.visitor_email || enrollment.attendee_email %></p>
+              </div>
+              <%= link_to admin_enrollment_path(enrollment), class: "text-xs font-bold text-indigo-600 hover:text-indigo-500 shrink-0 ml-3" do %>
+                View →
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-slate-400 italic">No participants recorded.</p>
+      <% end %>
     </div>
   </div>
 
-  <div class="mt-8 text-sm text-slate-500">
-    Status: <span class="font-semibold text-slate-900"><%= @registration.status.humanize %></span><br>
-    Requested on: <%= @registration.created_at.strftime("%d %b %Y %H:%M") %>
+  <%# Status footer %>
+  <div class="flex items-center gap-6 text-sm text-slate-500 bg-white border border-slate-200 rounded-2xl px-6 py-4 shadow-sm">
+    <div>
+      Status:
+      <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/20 ml-1">
+        <%= @registration.status.humanize %>
+      </span>
+    </div>
+    <div class="text-slate-400">·</div>
+    <div>Requested on <span class="font-semibold text-slate-800"><%= @registration.created_at.strftime("%d %b %Y %H:%M") %></span></div>
   </div>
-</div>
+</section>

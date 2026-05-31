@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       end
     end
     resources :enrollments, only: [:show, :edit, :update, :destroy]
-    resources :registrations, only: [:index, :show]
+    resources :registrations, only: [:index, :show, :destroy]
     resources :admin_contacts
     resources :customers
   end
