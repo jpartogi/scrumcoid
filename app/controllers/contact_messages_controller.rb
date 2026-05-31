@@ -29,7 +29,7 @@ class ContactMessagesController < ApplicationController
 
     if @contact_message.save
       ContactMailer.notification(@contact_message).deliver_later
-      redirect_to new_contact_path, notice: "Thanks for your message. We will get back to you soon."
+      redirect_to new_contact_path, notice: "Terima kasih atas pesan Anda. Kami akan segera menghubungi Anda kembali."
     else
       @main_contact = AdminContact.find_by(main: true)
       render :new, status: :unprocessable_entity
