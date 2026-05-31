@@ -41,7 +41,6 @@ class ApplicationController < ActionController::Base
     return if controller_path.start_with?("admin/")
     return if devise_controller?
     return if request.path.start_with?("/rails/")
-    return if controller_path == "stripe_webhooks"
 
     ip_hash = Digest::SHA256.hexdigest(request.remote_ip)
     visited_on = Date.today

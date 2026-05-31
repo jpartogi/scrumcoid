@@ -21,11 +21,4 @@ class ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "a[href='#{new_class_schedule_registration_path(class_schedules(:open_online))}']"
   end
-
-  test "displays payment success flash after returning from stripe" do
-    get class_schedule_path(class_schedules(:open_online)), params: { checkout: "success" }
-
-    assert_response :success
-    assert_select "p", text: /Payment received/
-  end
 end

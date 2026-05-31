@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_090210) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_121712) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -160,16 +160,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_090210) do
     t.datetime "paid_at"
     t.bigint "registration_id"
     t.integer "status", default: 0, null: false
-    t.string "stripe_checkout_session_id"
-    t.string "stripe_payment_intent_id"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.string "visitor_email"
     t.string "visitor_name"
     t.index ["class_schedule_id"], name: "index_enrollments_on_class_schedule_id"
     t.index ["registration_id"], name: "index_enrollments_on_registration_id"
-    t.index ["stripe_checkout_session_id"], name: "index_enrollments_on_stripe_checkout_session_id", unique: true
-    t.index ["stripe_payment_intent_id"], name: "index_enrollments_on_stripe_payment_intent_id"
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
     t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id"

@@ -139,12 +139,6 @@
                 <span class="text-slate-400 font-medium">Pending or Manual booking</span>
               <% end %></dd>
           </div>
-          <% if @enrollment.stripe_checkout_session_id.present? %>
-            <div>
-              <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Stripe Checkout ID</dt>
-              <dd class="mt-1 text-slate-400 font-mono text-[9px] break-all select-all"><%= @enrollment.stripe_checkout_session_id %></dd>
-            </div>
-          <% end %>
         </dl>
       </div>
 

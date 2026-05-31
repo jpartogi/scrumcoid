@@ -7,13 +7,11 @@ Rails.application.routes.draw do
   resource :about, only: [:show], controller: "about"
   resource :contact, only: [:new, :create], controller: "contact_messages"
   resources :class_schedules, only: [:index, :show] do
-    resource :enrollment, only: [:create, :destroy]
+    resource :enrollment, only: [:destroy]
     resources :registrations, only: [:new, :create], controller: "class_schedules/registrations"
   end
   resources :blog_posts, path: "blog", only: [:index, :show]
   resource :dashboard, only: [:show], controller: "dashboard"
-  post "stripe/webhook", to: "stripe_webhooks#create"
-  post "webhooks/stripe", to: "stripe_webhooks#create"
 
   namespace :admin do
     root "dashboard#show"
