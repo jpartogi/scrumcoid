@@ -25,6 +25,7 @@ class ContactMailer < ApplicationMailer
     cc_emails = cc_emails.map(&:strip).uniq.reject(&:empty?)
 
     mail_options = {
+      from: @contact_message.email,
       to: to_emails,
       subject: "Pesan Baru dari Kontak: #{@contact_message.subject}"
     }

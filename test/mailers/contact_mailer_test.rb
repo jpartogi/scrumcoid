@@ -15,6 +15,7 @@ class ContactMailerTest < ActionMailer::TestCase
 
     assert_equal "Pesan Baru dari Kontak: #{contact_message.subject}", mail.subject
     assert_includes mail.to, "jessica.stella@scrum.co.id"
+    assert_includes mail.from, "andi@example.com"
     assert_nil mail.cc
     assert_match "Andi", mail.body.encoded
     assert_match "andi@example.com", mail.body.encoded
@@ -38,6 +39,7 @@ class ContactMailerTest < ActionMailer::TestCase
     mail = ContactMailer.notification(contact_message)
 
     assert_includes mail.to, "main@example.com"
+    assert_includes mail.from, "budi@example.com"
     assert_not_includes mail.to, "cc@example.com"
     
     assert_includes mail.cc, "cc@example.com"
