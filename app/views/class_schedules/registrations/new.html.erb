@@ -4,6 +4,14 @@
   <div class="absolute -left-20 -top-20 -z-10 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" aria-hidden="true"></div>
 
   <div class="mx-auto max-w-3xl px-6">
+    <!-- Back Link to ClassSchedules#show -->
+    <%= link_to class_schedule_path(@class_schedule), class: "inline-flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors mb-6 group" do %>
+      <svg class="h-4.5 w-4.5 transform group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Kembali ke Detail Kelas
+    <% end %>
+
     <div class="grid gap-8 lg:grid-cols-[1fr_160px] items-center">
       <div>
         <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-indigo-400 ring-1 ring-inset ring-indigo-500/30">
