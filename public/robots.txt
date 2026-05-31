@@ -1,1 +1,16 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+# robots.txt for scrum.co.id
+# Clean SEO directives for search crawlers
+
+User-agent: *
+
+# Disallow private user and admin directories
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /users/
+Disallow: /rails/
+
+# Allow indexing on all other public routes
+Allow: /
+
+# Reference the XML sitemap
+Sitemap: https://scrum.co.id/sitemap.xml

@@ -47,5 +47,6 @@ Rails.application.routes.draw do
     resources :customers
   end
 
+  get "sitemap.xml" => "sitemaps#show", defaults: { format: "xml" }
   get "up" => "rails/health#show", as: :rails_health_check
 end
