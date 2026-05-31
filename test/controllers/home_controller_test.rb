@@ -5,8 +5,8 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_select "h1", /Kuasai Scrum Profesional/
-    assert_select "footer", text: /Pelatihan Scrum Profesional/
+    assert_select "h1", /Kuasai Profesional Scrum/
+    assert_select "footer", text: /Pelatihan Profesional Scrum/
     assert_select "a", text: "Sign in", count: 0
     assert_select "a", text: "Get Started", count: 0
     assert_select "a", text: "Admin dashboard", count: 0

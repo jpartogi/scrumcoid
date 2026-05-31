@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["participants", "template"]
+  static targets = ["participants", "template", "financeName", "financeEmail", "sameAsBilling"]
 
   add(event) {
     event.preventDefault()
@@ -15,13 +15,41 @@ export default class extends Controller {
     
     const wrapper = event.target.closest("[data-participant-wrapper]")
     if (wrapper) {
-      // If it has an ID, we need to mark for destroy
       const destroyInput = wrapper.querySelector("input[name*='_destroy']")
       if (destroyInput) {
         destroyInput.value = "1"
         wrapper.style.display = "none"
       } else {
         wrapper.remove()
+      }
+    }
+  }
+
+  toggleSameAsBilling(event) {
+    if (event.target.checked) {
+      this.syncSameAsBilling()
+    } else {
+      const firstWrapper = this.participantsTarget.querySelector("[data-participant-wrapper]")
+      if (firstWrapper) {
+        const nameInput = firstWrapper.querySelector("input[name*='[visitor_name]']")
+        const emailInput = firstWrapper.querySelector("input[name*='[visitor_email]']")
+        if (nameInput) nameInput.value = ""
+        if (emailInput) emailInput.value = ""
+      }
+    }
+  }
+
+  syncSameAsBilling() {
+    if (this.hasSameAsBillingTarget && this.sameAsBillingTarget.checked) {
+      const nameVal = this.hasFinanceNameTarget ? this.financeNameTarget.value : ""
+      const emailVal = this.hasFinanceEmailTarget ? this.financeEmailTarget.value : ""
+
+      const firstWrapper = this.participantsTarget.querySelector("[data-participant-wrapper]")
+      if (firstWrapper) {
+        const nameInput = firstWrapper.querySelector("input[name*='[visitor_name]']")
+        const emailInput = firstWrapper.querySelector("input[name*='[visitor_email]']")
+        if (nameInput) nameInput.value = nameVal
+        if (emailInput) emailInput.value = emailVal
       }
     }
   }

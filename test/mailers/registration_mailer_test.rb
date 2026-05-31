@@ -1,12 +1,34 @@
 require "test_helper"
 
 class RegistrationMailerTest < ActionMailer::TestCase
-  test "quotation" do
+  test "quotation with fallback when no admin emails configured" do
+    AdminEmail.destroy_all
     registration = registrations(:one)
     pdf_content = "%PDF-1.4 mock pdf content"
     mail = RegistrationMailer.quotation(registration, pdf_content)
+    
     assert_equal "Quotation for #{registration.course.title} - #{registration.company_name}", mail.subject
     assert_includes mail.to, registration.finance_email
+    assert_includes mail.to, "jessica.stella@scrum.co.id"
+    assert_nil mail.cc
     assert_match "Thank you for your interest", mail.body.encoded
+  end
+
+  test "quotation sends to main admin emails in TO and others in CC" do
+    AdminEmail.destroy_all
+    main_admin = AdminEmail.create!(email: "main@example.com", main: true)
+    cc_admin = AdminEmail.create!(email: "cc@example.com", main: false)
+
+    registration = registrations(:one)
+    pdf_content = "%PDF-1.4 mock pdf content"
+    mail = RegistrationMailer.quotation(registration, pdf_content)
+
+    assert_includes mail.to, registration.finance_email
+    assert_includes mail.to, "main@example.com"
+    assert_not_includes mail.to, "cc@example.com"
+    
+    assert_includes mail.cc, "cc@example.com"
+    assert_not_includes mail.cc, "main@example.com"
+    assert_not_includes mail.cc, registration.finance_email
   end
 end

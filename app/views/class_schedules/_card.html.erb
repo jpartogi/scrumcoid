@@ -27,7 +27,7 @@
       <div class="flex items-center justify-between text-slate-600 font-medium">
         <span class="font-bold text-slate-900"><%= schedule.display_price_for(current_currency) %></span>
         <% if schedule.registration_deadline.present? %>
-          <span class="text-[10px] text-rose-500 font-bold bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Batas: <%= schedule.registration_deadline.to_date.to_fs(:short) %></span>
+          <span class="text-[10px] text-rose-500 font-bold bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Batas Pendaftaran: <%= schedule.registration_deadline.to_date.to_fs(:short) %></span>
         <% end %>
       </div>
     </div>

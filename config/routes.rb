@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     end
     resources :enrollments, only: [:show, :edit, :update]
     resources :registrations, only: [:index, :show]
+    resources :admin_emails
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
