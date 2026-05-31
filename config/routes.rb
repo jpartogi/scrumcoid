@@ -42,7 +42,7 @@ Rails.application.routes.draw do
         patch :archive
       end
     end
-    resources :enrollments, only: [:show, :edit, :update]
+    resources :enrollments, only: [:show, :edit, :update, :destroy]
     resources :registrations, only: [:index, :show]
     resources :admin_emails
   end

@@ -7,6 +7,8 @@
 one:
   class_schedule: open_online
   company_name: "Acme Corp"
+  company_address: "123 Acme Way"
+  company_phone: "+1555123456"
   finance_name: "John Doe"
   finance_email: "john@acme.com"
   status: 0

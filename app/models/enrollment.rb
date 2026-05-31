@@ -5,6 +5,8 @@ class Enrollment < ApplicationRecord
   belongs_to :class_schedule
   belongs_to :registration, optional: true
 
+  before_validation :copy_company_details_from_registration
+
   validates :user_id, uniqueness: { scope: :class_schedule_id }, allow_nil: true
   validates :visitor_email, presence: true, if: -> { user.blank? }
   validates :visitor_email, uniqueness: { scope: :class_schedule_id }, allow_blank: true
@@ -21,6 +23,16 @@ class Enrollment < ApplicationRecord
   end
 
   private
+
+  def copy_company_details_from_registration
+    if registration.present?
+      self.company_name ||= registration.company_name
+      self.company_address ||= registration.company_address
+      self.company_phone ||= registration.company_phone
+      self.finance_name ||= registration.finance_name
+      self.finance_email ||= registration.finance_email
+    end
+  end
 
   def class_schedule_accepts_registration
     return if class_schedule.blank?

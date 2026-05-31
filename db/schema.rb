@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_025102) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_040227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -137,8 +137,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_025102) do
   create_table "enrollments", force: :cascade do |t|
     t.integer "amount_paid_cents"
     t.bigint "class_schedule_id", null: false
+    t.text "company_address"
+    t.string "company_name"
+    t.string "company_phone"
     t.datetime "created_at", null: false
     t.string "currency"
+    t.string "finance_email"
+    t.string "finance_name"
     t.datetime "paid_at"
     t.bigint "registration_id"
     t.integer "status", default: 0, null: false

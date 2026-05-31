@@ -107,6 +107,7 @@
                     <div class="inline-flex gap-2">
                       <%= link_to "View", admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
                       <%= link_to "Edit", edit_admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
+                      <%= button_to "Delete", admin_enrollment_path(enrollment), method: :delete, data: { confirm: "Are you sure you want to permanently delete this student registration?" }, class: "inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50/50 px-2.5 py-1.5 rounded-lg border border-rose-100 transition-colors cursor-pointer", form_class: "inline-flex" %>
                     </div>
                   </td>
                 </tr>

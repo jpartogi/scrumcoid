@@ -62,6 +62,40 @@
         </div>
       </div>
 
+      <% if @enrollment.registration_id.present? || @enrollment.company_name.present? %>
+        <!-- Corporate Registration Details -->
+        <div class="border-t border-slate-200 pt-6 space-y-6">
+          <h2 class="text-base font-bold text-slate-900">Corporate Registration Details</h2>
+          
+          <div class="grid gap-6 md:grid-cols-2">
+            <div>
+              <%= form.label :company_name, "Company Name", class: "block text-sm font-bold text-slate-700" %>
+              <%= form.text_field :company_name, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+            </div>
+            
+            <div>
+              <%= form.label :company_phone, "Company Phone", class: "block text-sm font-bold text-slate-700" %>
+              <%= form.text_field :company_phone, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+            </div>
+            
+            <div class="md:col-span-2">
+              <%= form.label :company_address, "Company Address", class: "block text-sm font-bold text-slate-700" %>
+              <%= form.text_area :company_address, rows: 3, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+            </div>
+            
+            <div>
+              <%= form.label :finance_name, "Finance Contact Name", class: "block text-sm font-bold text-slate-700" %>
+              <%= form.text_field :finance_name, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+            </div>
+            
+            <div>
+              <%= form.label :finance_email, "Finance Contact Email", class: "block text-sm font-bold text-slate-700" %>
+              <%= form.email_field :finance_email, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <!-- Form Actions -->
       <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
         <%= form.submit "Update Registration", class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>

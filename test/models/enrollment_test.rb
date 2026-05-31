@@ -40,4 +40,21 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_not enrollment.valid?
     assert_includes enrollment.errors[:visitor_email], "can't be blank"
   end
+
+  test "copies company details from registration on validation" do
+    registration = registrations(:one)
+    enrollment = Enrollment.new(
+      class_schedule: class_schedules(:open_online),
+      visitor_name: "John Doe",
+      visitor_email: "john.doe@example.com",
+      registration: registration
+    )
+
+    assert enrollment.valid?
+    assert_equal registration.company_name, enrollment.company_name
+    assert_equal registration.company_address, enrollment.company_address
+    assert_equal registration.company_phone, enrollment.company_phone
+    assert_equal registration.finance_name, enrollment.finance_name
+    assert_equal registration.finance_email, enrollment.finance_email
+  end
 end

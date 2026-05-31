@@ -1,7 +1,7 @@
 class Admin::EnrollmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_admin!
-  before_action :set_enrollment, only: [:show, :edit, :update]
+  before_action :set_enrollment, only: [:show, :edit, :update, :destroy]
 
   def show
   end
@@ -17,6 +17,12 @@ class Admin::EnrollmentsController < ApplicationController
     end
   end
 
+  def destroy
+    class_schedule = @enrollment.class_schedule
+    @enrollment.destroy!
+    redirect_to admin_class_schedule_path(class_schedule), notice: "Student registration has been permanently deleted."
+  end
+
   private
 
   def set_enrollment
@@ -24,6 +30,10 @@ class Admin::EnrollmentsController < ApplicationController
   end
 
   def enrollment_params
-    params.require(:enrollment).permit(:status, :visitor_name, :visitor_email)
+    params.require(:enrollment).permit(
+      :status, :visitor_name, :visitor_email,
+      :company_name, :company_address, :company_phone,
+      :finance_name, :finance_email
+    )
   end
 end

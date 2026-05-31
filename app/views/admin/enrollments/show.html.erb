@@ -86,6 +86,38 @@
           </div>
         </div>
       </div>
+
+      <% if @enrollment.company_name.present? %>
+        <!-- Corporate Registration Details Card -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Corporate Registration Details</h2>
+          
+          <div class="mt-6 grid gap-6 sm:grid-cols-2">
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Company Name</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900"><%= @enrollment.company_name %></p>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Company Phone</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900"><%= @enrollment.company_phone.presence || "-" %></p>
+            </div>
+            <div class="sm:col-span-2">
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Company Address</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900"><%= @enrollment.company_address.presence || "-" %></p>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Finance Contact Name</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900"><%= @enrollment.finance_name %></p>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Finance Contact Email</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900">
+                <%= mail_to @enrollment.finance_email, @enrollment.finance_email, class: "text-indigo-600 hover:underline hover:text-indigo-500 transition-colors" %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <!-- Right Column: Sidebar metadata & Actions -->
@@ -129,6 +161,8 @@
         <% else %>
           <%= button_to "Restore Registration", admin_enrollment_path(@enrollment, enrollment: { status: "active" }), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
         <% end %>
+
+        <%= button_to "Hard Delete Student", admin_enrollment_path(@enrollment), method: :delete, data: { confirm: "Are you absolutely sure you want to permanently delete this student registration?" }, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
       </div>
     </div>
   </div>
