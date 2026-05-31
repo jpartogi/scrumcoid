@@ -10,6 +10,8 @@ class Registration < ApplicationRecord
     cancelled: 3
   }
 
+  before_validation :assign_class_schedule_to_enrollments
+
   validates :finance_name, :finance_email, :company_name, presence: true
   validates :finance_email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
@@ -21,5 +23,15 @@ class Registration < ApplicationRecord
 
   def total_participants
     enrollments.count
+  end
+
+  private
+
+  def assign_class_schedule_to_enrollments
+    if class_schedule.present?
+      enrollments.each do |enrollment|
+        enrollment.class_schedule = class_schedule
+      end
+    end
   end
 end

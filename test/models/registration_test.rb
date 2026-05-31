@@ -1,7 +1,20 @@
 require "test_helper"
 
 class RegistrationTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "automatically assigns class_schedule to nested enrollments" do
+    schedule = class_schedules(:open_online)
+    registration = Registration.new(
+      class_schedule: schedule,
+      company_name: "Test Company",
+      finance_name: "Finance Manager",
+      finance_email: "finance@company.com"
+    )
+    registration.enrollments.build(visitor_name: "Participant One", visitor_email: "one@company.com")
+    registration.enrollments.build(visitor_name: "Participant Two", visitor_email: "two@company.com")
+
+    assert registration.valid?
+    registration.enrollments.each do |enrollment|
+      assert_equal schedule, enrollment.class_schedule
+    end
+  end
 end
