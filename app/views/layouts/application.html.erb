@@ -30,7 +30,7 @@
     <!-- Premium Top Accent Line -->
     <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-teal-400"></div>
 
-    <header class="sticky top-0 z-50 border-b border-slate-100/60 bg-white/90 backdrop-blur-md shadow-[0_2px_20px_-3px_rgba(0,0,0,0.02)]">
+    <header class="sticky top-0 z-50 border-b border-slate-100/60 bg-white/90 backdrop-blur-md shadow-[0_2px_20px_-3px_rgba(0,0,0,0.02)]" data-controller="mobile-menu">
       <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <%= link_to root_path, class: "text-2xl font-black tracking-tighter text-slate-900 group" do %>
           Scrum<span class="text-indigo-600 group-hover:text-indigo-500 transition-colors">.co.id</span>
@@ -57,13 +57,43 @@
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
           <% end %>
         </div>
-        <div class="flex items-center gap-x-6">
+        <div class="hidden lg:flex items-center gap-x-6">
           <% if current_user&.admin? %>
             <%= link_to "Dasbor Admin", admin_root_path, class: "text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors" %>
             <%= button_to "Keluar", destroy_user_session_path, method: :delete, class: "text-sm font-bold text-slate-700 hover:text-rose-600 transition-colors" %>
           <% end %>
         </div>
+        <button
+          type="button"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 text-slate-700 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 lg:hidden"
+          aria-controls="mobile-site-menu"
+          aria-expanded="false"
+          aria-label="Buka menu navigasi"
+          data-mobile-menu-target="button"
+          data-action="mobile-menu#toggle keydown.esc@window->mobile-menu#close"
+        >
+          <svg class="h-5 w-5" data-mobile-menu-target="openIcon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg class="hidden h-5 w-5" data-mobile-menu-target="closeIcon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </nav>
+      <div id="mobile-site-menu" class="hidden border-t border-slate-100 bg-white/95 px-6 pb-6 pt-2 shadow-[0_16px_24px_-24px_rgba(15,23,42,0.45)] lg:hidden" data-mobile-menu-target="panel">
+        <div class="mx-auto flex max-w-7xl flex-col gap-1">
+          <%= link_to "Pelatihan", courses_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+          <%= link_to "Jadwal", class_schedules_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+          <%= link_to "Tentang", about_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+          <%= link_to "Blog", blog_posts_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+          <%= link_to "Kontak", new_contact_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+          <% if current_user&.admin? %>
+            <div class="my-2 border-t border-slate-100"></div>
+            <%= link_to "Dasbor Admin", admin_root_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+            <%= button_to "Keluar", destroy_user_session_path, method: :delete, class: "w-full rounded-lg px-3 py-3 text-left text-base font-bold text-slate-700 transition hover:bg-rose-50 hover:text-rose-600" %>
+          <% end %>
+        </div>
+      </div>
     </header>
 
     <% if notice.present? || alert.present? %>
