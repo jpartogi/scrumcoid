@@ -14,11 +14,8 @@ class ClassSchedules::RegistrationsController < ApplicationController
       # Create participant enrollments
       # (already handled via nested attributes)
 
-      # Generate PDF
-      pdf_content = QuotationPdf.generate(@registration)
-
       # Send email
-      RegistrationMailer.quotation(@registration, pdf_content).deliver_later
+      RegistrationMailer.quotation(@registration).deliver_later
 
       # Update status
       @registration.update(status: :quotation_sent, quotation_sent_at: Time.current)

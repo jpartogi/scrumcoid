@@ -4,8 +4,7 @@ class RegistrationMailerTest < ActionMailer::TestCase
   test "quotation with fallback when no admin emails configured" do
     AdminEmail.destroy_all
     registration = registrations(:one)
-    pdf_content = "%PDF-1.4 mock pdf content"
-    mail = RegistrationMailer.quotation(registration, pdf_content)
+    mail = RegistrationMailer.quotation(registration)
     
     assert_equal "Quotation for #{registration.course.title} - #{registration.company_name}", mail.subject
     assert_includes mail.to, registration.finance_email
@@ -20,8 +19,7 @@ class RegistrationMailerTest < ActionMailer::TestCase
     cc_admin = AdminEmail.create!(email: "cc@example.com", main: false)
 
     registration = registrations(:one)
-    pdf_content = "%PDF-1.4 mock pdf content"
-    mail = RegistrationMailer.quotation(registration, pdf_content)
+    mail = RegistrationMailer.quotation(registration)
 
     assert_includes mail.to, registration.finance_email
     assert_includes mail.to, "main@example.com"

@@ -1,7 +1,8 @@
 class RegistrationMailer < ApplicationMailer
-  def quotation(registration, pdf_content)
+  def quotation(registration)
     @registration = registration
     @course = registration.course
+    pdf_content = QuotationPdf.generate(registration)
 
     # To: finance_email + main admin emails
     to_emails = [registration.finance_email]
