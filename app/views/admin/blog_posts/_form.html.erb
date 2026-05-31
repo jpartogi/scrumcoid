@@ -27,6 +27,11 @@
   </div>
 
   <div>
+    <%= form.label :meta_keywords, "Meta Keywords (SEO)", class: "block text-sm font-bold text-slate-700" %>
+    <%= form.text_field :meta_keywords, placeholder: "e.g., scrum, agile, software development", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+  </div>
+
+  <div>
     <%= form.label :body, class: "block text-sm font-bold text-slate-700" %>
     <div class="mt-1.5 block rounded-lg border border-slate-300 bg-white shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-teal-600/10 focus-within:border-teal-600 transition-all">
       <%= form.rich_text_area :body, class: "rich-text-editor-tall p-3 min-h-[20rem] focus:outline-none" %>

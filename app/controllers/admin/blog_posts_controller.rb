@@ -57,6 +57,6 @@ class Admin::BlogPostsController < ApplicationController
   end
 
   def blog_post_params
-    params.require(:blog_post).permit(:title, :slug, :excerpt, :body, :published_at, :status)
+    params.require(:blog_post).permit(:title, :slug, :excerpt, :body, :published_at, :status, :meta_keywords)
   end
 end

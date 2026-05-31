@@ -1,5 +1,6 @@
 <% content_for :title, "#{@class_schedule.course.title} — #{@class_schedule.starts_at.strftime('%d %b %Y')}" %>
 <% content_for :description, "Daftar ke kelas #{@class_schedule.course.title} yang dimulai #{@class_schedule.starts_at.strftime('%d %B %Y')}. #{@class_schedule.course.excerpt.presence || 'Pelatihan Scrum bersertifikat resmi dari Scrum.org tersedia untuk tim dan profesional di Indonesia.'}" %>
+<% content_for :keywords, @class_schedule.course.meta_keywords if @class_schedule.course.meta_keywords.present? %>
 
 <section class="relative isolate overflow-hidden bg-slate-950 py-16 sm:py-20">
   <!-- Spotlight backgrounds -->

@@ -39,4 +39,12 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "img[alt='#{course.title} logo']"
   end
+
+  test "show page displays meta keywords when present" do
+    course = courses(:ai_essentials)
+    get course_path(course)
+
+    assert_response :success
+    assert_select "meta[name='keywords'][content='scrum, ai, essentials']"
+  end
 end

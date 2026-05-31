@@ -5,6 +5,7 @@ published_post:
   body: Long form article body.
   published_at: <%= 2.days.ago %>
   status: 1
+  meta_keywords: scrum, ai, blog
 
 draft_post:
   title: Draft Article

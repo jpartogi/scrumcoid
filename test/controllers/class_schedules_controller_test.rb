@@ -21,4 +21,12 @@ class ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "a[href='#{new_class_schedule_registration_path(class_schedules(:open_online))}']"
   end
+
+  test "show page displays meta keywords from associated course" do
+    schedule = class_schedules(:open_online)
+    get class_schedule_path(schedule)
+
+    assert_response :success
+    assert_select "meta[name='keywords'][content='scrum, ai, essentials']"
+  end
 end

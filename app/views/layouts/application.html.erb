@@ -2,8 +2,11 @@
 <html>
   <head>
     <% page_title = content_for(:title).presence %>
-    <title><%= page_title ? "#{page_title} | scrum.co.id" : "scrum.co.id — Pelatihan Professional Scrum & Sertifikasi Resmi di Indonesia" %></title>
+    <title><%= page_title ? "#{page_title} | Scrum.co.id" : "Scrum.co.id — Pelatihan Professional Scrum & Sertifikasi Resmi di Indonesia" %></title>
     <meta name="description" content="<%= content_for(:description).presence || "scrum.co.id adalah mitra resmi Scrum.org di Indonesia yang menyediakan pelatihan PSM, PSPO, dan pelatihan Agile bersertifikat internasional untuk tim dan organisasi." %>">
+    <% if content_for?(:keywords) %>
+      <meta name="keywords" content="<%= content_for(:keywords) %>">
+    <% end %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="scrum.co.id">

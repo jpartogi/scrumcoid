@@ -1,5 +1,6 @@
 <% content_for :title, @blog_post.title %>
 <% content_for :description, @blog_post.excerpt.presence || "Baca artikel #{@blog_post.title} di blog scrum.co.id — wawasan Scrum, Agile, dan Business Agility untuk profesional Indonesia." %>
+<% content_for :keywords, @blog_post.meta_keywords if @blog_post.meta_keywords.present? %>
 
 <section class="relative isolate overflow-hidden bg-slate-950 py-16 sm:py-20">
   <!-- Spotlight backgrounds -->
