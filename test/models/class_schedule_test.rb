@@ -21,7 +21,7 @@ class ClassScheduleTest < ActiveSupport::TestCase
     schedule.timezone = nil
 
     assert schedule.valid?
-    assert_equal "Australia/Brisbane", schedule.timezone
+    assert_equal "Asia/Jakarta", schedule.timezone
   end
 
   test "requires valid timezone" do

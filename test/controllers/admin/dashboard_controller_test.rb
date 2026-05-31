@@ -16,8 +16,8 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", "Admin dashboard"
-    assert_select "#admin-nav-content", text: /#{users(:admin).name}/
-    assert_select "a[href='#{edit_user_registration_path}']", text: "Account settings"
+    assert_select "#admin-user-section", text: /#{users(:admin).name}/
+    assert_select "a[href='#{edit_user_registration_path}']", text: "Settings"
     assert_select "footer", text: /scrum.co.id Admin/
     assert_no_match "Professional Scrum training for teams", response.body
     

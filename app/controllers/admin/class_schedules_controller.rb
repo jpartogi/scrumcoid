@@ -13,14 +13,17 @@ class Admin::ClassSchedulesController < ApplicationController
   def new
     time_zone = Time.find_zone!(ClassSchedule::DEFAULT_TIMEZONE)
     starts_at = time_zone.now.advance(weeks: 2).change(hour: 9, min: 0, sec: 0)
+    ends_at = starts_at.change(hour: 17, min: 30)
 
     @class_schedule = ClassSchedule.new(
       starts_at: starts_at,
-      ends_at: starts_at.change(hour: 17),
+      ends_at: ends_at,
       registration_deadline: starts_at - 7.days,
       timezone: ClassSchedule::DEFAULT_TIMEZONE,
-      capacity: 20,
-      online: true
+      location: "Jakarta, Indonesia",
+      capacity: 12,
+      online: false,
+      status: "published"
     )
   end
 

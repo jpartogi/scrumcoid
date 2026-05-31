@@ -1,5 +1,5 @@
 class ClassSchedule < ApplicationRecord
-  DEFAULT_TIMEZONE = "Australia/Brisbane"
+  DEFAULT_TIMEZONE = "Asia/Jakarta"
 
   enum :status, { unpublished: 0, published: 1, cancelled: 2 }
 
