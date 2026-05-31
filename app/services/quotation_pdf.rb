@@ -61,11 +61,22 @@ class QuotationPdf
     pdf.text "Detail Pelatihan", style: :bold, size: 12, color: "0F172A"
     pdf.move_down 6
 
+    price = course_price
+    price_display = price ? price.display_amount : "Hubungi Kami"
+    total_display = if price
+      formatted_total = ActiveSupport::NumberHelper.number_to_delimited(format('%.2f', price.amount.to_f * @registration.total_participants))
+      "#{price.currency.upcase} #{formatted_total}"
+    else
+      "Hubungi Kami"
+    end
+
     data = [
       ["Nama Pelatihan", @course.title],
       ["Jadwal", formatted_date_range],
       ["Lokasi", @schedule.online? ? "Online Langsung (Zoom/Teams)" : @schedule.location],
-      ["Jumlah Peserta", "#{@registration.total_participants} Orang"]
+      ["Biaya per Peserta", price_display],
+      ["Jumlah Peserta", "#{@registration.total_participants} Orang"],
+      ["Total Investasi", total_display]
     ]
 
     pdf.table(data, column_widths: [120, 375]) do |t|
@@ -153,5 +164,9 @@ class QuotationPdf
     end
 
     "#{range_str}"
+  end
+
+  def course_price
+    @course.price_for("IDR") || @course.price_for("USD") || @course.course_prices.first
   end
 end

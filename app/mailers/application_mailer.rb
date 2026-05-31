@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV.fetch("MAILER_FROM", "no-reply@scrumcoid.fly.dev")
+  default from: ENV.fetch("MAILER_FROM", "noreply@scrum.co.id")
   layout "mailer"
 end

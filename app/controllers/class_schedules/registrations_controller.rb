@@ -21,7 +21,7 @@ class ClassSchedules::RegistrationsController < ApplicationController
       @registration.update(status: :quotation_sent, quotation_sent_at: Time.current)
 
       redirect_to class_schedule_path(@class_schedule), 
-                  notice: "Thank you! We have received your registration request. A quotation has been sent to #{@registration.finance_email}."
+                  notice: "Terima kasih! Kami telah menerima permintaan pendaftaran Anda. Penawaran harga (quotation) telah dikirim ke #{@registration.finance_email}."
     else
       @registration.enrollments.build if @registration.enrollments.empty?
       render :new, status: :unprocessable_entity

@@ -58,17 +58,31 @@
     </header>
 
     <% if notice.present? || alert.present? %>
-      <div class="fixed top-24 right-6 z-50 max-w-md w-full animate-in slide-in-from-top-4 duration-300">
+      <div class="fixed top-24 right-6 z-50 max-w-md w-full flex flex-col gap-3 animate-in slide-in-from-top-4 duration-300">
         <% if notice.present? %>
-          <div class="rounded-2xl border border-indigo-100 bg-white/95 backdrop-blur-md px-5 py-4 text-sm font-semibold text-indigo-900 shadow-[0_10px_35px_-5px_rgba(99,102,241,0.2)] flex items-start gap-3">
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-black shadow-sm">✓</span>
-            <p><%= notice %></p>
+          <div class="rounded-2xl border border-indigo-100 bg-white/95 backdrop-blur-md px-5 py-4 text-sm font-semibold text-indigo-900 shadow-[0_10px_35px_-5px_rgba(99,102,241,0.2)] flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-black shadow-sm">✓</span>
+              <p><%= notice %></p>
+            </div>
+            <button type="button" onclick="this.parentElement.remove()" class="ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 shrink-0 cursor-pointer" aria-label="Close">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+            </button>
           </div>
         <% end %>
         <% if alert.present? %>
-          <div class="rounded-2xl border border-rose-100 bg-white/95 backdrop-blur-md px-5 py-4 text-sm font-semibold text-rose-900 shadow-[0_10px_35px_-5px_rgba(244,63,94,0.2)] flex items-start gap-3">
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-600 text-white text-[10px] font-black shadow-sm">!</span>
-            <p><%= alert %></p>
+          <div class="rounded-2xl border border-rose-100 bg-white/95 backdrop-blur-md px-5 py-4 text-sm font-semibold text-rose-900 shadow-[0_10px_35px_-5px_rgba(244,63,94,0.2)] flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-600 text-white text-[10px] font-black shadow-sm">!</span>
+              <p><%= alert %></p>
+            </div>
+            <button type="button" onclick="this.parentElement.remove()" class="ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 shrink-0 cursor-pointer" aria-label="Close">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+            </button>
           </div>
         <% end %>
       </div>

@@ -6,11 +6,11 @@ class RegistrationMailerTest < ActionMailer::TestCase
     registration = registrations(:one)
     mail = RegistrationMailer.quotation(registration)
     
-    assert_equal "Quotation for #{registration.course.title} - #{registration.company_name}", mail.subject
+    assert_equal "Penawaran untuk #{registration.course.title} - #{registration.company_name}", mail.subject
     assert_includes mail.to, registration.finance_email
     assert_includes mail.to, "jessica.stella@scrum.co.id"
     assert_nil mail.cc
-    assert_match "Thank you for your interest", mail.body.encoded
+    assert_match "Terima kasih atas ketertarikan", mail.body.encoded
   end
 
   test "quotation sends to main admin emails in TO and others in CC" do

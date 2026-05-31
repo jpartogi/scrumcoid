@@ -1,12 +1,20 @@
-Dear <%= @registration.finance_name %>,
+Yth. Bapak/Ibu <%= @registration.finance_name %>,
 
-Thank you for your interest in our training program.
+Terima kasih atas ketertarikan Anda pada program pelatihan kami. Kami telah menerima permintaan pendaftaran Anda dengan rincian berikut:
 
-Please find attached the quotation for <%= @course.title %> for <%= @registration.company_name %>.
+Nama Pelatihan: <%= @course.title %>
+Jadwal Kelas: <%= @registration.class_schedule.starts_at.strftime('%d %B %Y') %>
+Jumlah Peserta: <%= @registration.total_participants %> Orang
+<% price = @course.price_for("IDR") || @course.price_for("USD") || @course.course_prices.first %>
+<% if price %>
+Biaya per Peserta: <%= price.display_amount %>
+Total Investasi: <%= price.currency.upcase %> <%= ActiveSupport::NumberHelper.number_to_delimited(format('%.2f', price.amount.to_f * @registration.total_participants)) %>
+<% end %>
 
-The quotation includes <%= @registration.total_participants %> participant(s).
+Terlampir pada email ini adalah dokumen Penawaran Harga (Quotation) resmi dalam format PDF.
 
-If you have any questions, please don't hesitate to reply to this email.
+Jika Anda memiliki pertanyaan lebih lanjut mengenai administrasi, jadwal, atau invoice, silakan langsung membalas email ini.
 
-Best regards,
-Scrumcoid Team
+Salam hangat,
+Jessica Stella
+PT. Adaptiva Sinergi Asia

@@ -29,7 +29,7 @@ class RegistrationMailer < ApplicationMailer
 
     mail_options = {
       to: to_emails,
-      subject: "Quotation for #{@course.title} - #{@registration.company_name}"
+      subject: "Penawaran untuk #{@course.title} - #{@registration.company_name}"
     }
     mail_options[:cc] = cc_emails if cc_emails.any?
 
