@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_052601) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_083424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -331,6 +331,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_052601) do
     t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
     t.index ["key", "value"], name: "index_solid_queue_semaphores_on_key_and_value"
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
+  end
+
+  create_table "unique_visits", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_hash", null: false
+    t.datetime "updated_at", null: false
+    t.date "visited_on", null: false
+    t.index ["ip_hash", "visited_on"], name: "index_unique_visits_on_ip_hash_and_visited_on", unique: true
+    t.index ["visited_on"], name: "index_unique_visits_on_visited_on"
   end
 
   create_table "users", force: :cascade do |t|

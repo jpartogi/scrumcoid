@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :track_unique_visit
   helper_method :current_currency
   layout :determine_layout
 
@@ -34,5 +35,19 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
     devise_parameter_sanitizer.permit(:account_update, keys: [:name])
+  end
+
+  def track_unique_visit
+    return if controller_path.start_with?("admin/")
+    return if devise_controller?
+    return if request.path.start_with?("/rails/")
+    return if controller_path == "stripe_webhooks"
+
+    ip_hash = Digest::SHA256.hexdigest(request.remote_ip)
+    visited_on = Date.today
+
+    UniqueVisit.create_or_find_by!(ip_hash: ip_hash, visited_on: visited_on)
+  rescue => e
+    logger.error "Failed to track unique visit: #{e.message}"
   end
 end

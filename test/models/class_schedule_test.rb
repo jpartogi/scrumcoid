@@ -44,22 +44,19 @@ class ClassScheduleTest < ActiveSupport::TestCase
     assert_equal "USD 1,295", schedule.display_price_for("JPY")
   end
 
-  test "requires venue_name and venue_address when offline" do
+  test "requires venue when offline" do
     schedule = class_schedules(:open_online)
     schedule.online = false
-    schedule.venue_name = nil
-    schedule.venue_address = nil
+    schedule.venue = nil
 
     assert_not schedule.valid?
-    assert_includes schedule.errors[:venue_name], "can't be blank"
-    assert_includes schedule.errors[:venue_address], "can't be blank"
+    assert_includes schedule.errors[:venue], "can't be blank"
   end
 
-  test "does not require venue_name and venue_address when online" do
+  test "does not require venue when online" do
     schedule = class_schedules(:open_online)
     schedule.online = true
-    schedule.venue_name = nil
-    schedule.venue_address = nil
+    schedule.venue = nil
 
     assert schedule.valid?
   end

@@ -20,6 +20,10 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{edit_user_registration_path}']", text: "Account settings"
     assert_select "footer", text: /scrum.co.id Admin/
     assert_no_match "Professional Scrum training for teams", response.body
+    
+    # Assert visitor statistics are displayed
+    assert_select "p", text: "Today's Visitors"
+    assert_select "h2", text: /Visitor Traffic \(7 Days\)/
   end
 
   test "admin dashboard displays latest five registrations" do

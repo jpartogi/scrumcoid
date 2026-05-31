@@ -10,5 +10,18 @@ class Admin::DashboardController < ApplicationController
     @unread_contact_message_count = ContactMessage.unread.count
     @upcoming_schedules = ClassSchedule.upcoming.includes(:course).limit(5)
     @latest_registrations = Registration.includes(:class_schedule => :course).order(created_at: :desc).limit(5)
+
+    # Visitor traffic statistics
+    @today_visits = UniqueVisit.today.count
+    @yesterday_visits = UniqueVisit.yesterday.count
+
+    # 7-day visitor traffic history (padded with 0s for empty days)
+    raw_visits = UniqueVisit.last_7_days.group(:visited_on).count
+    @daily_visits_7_days = (6.days.ago.to_date..Date.today).map do |date|
+      {
+        date: date,
+        count: raw_visits[date] || 0
+      }
+    end.reverse # Show latest dates first in history
   end
 end

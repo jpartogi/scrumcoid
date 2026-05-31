@@ -16,8 +16,7 @@ class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
           online: false,
           capacity: 20,
           status: "published",
-          venue_name: "Brisbane Convention Centre",
-          venue_address: "Glenelg St, South Brisbane QLD 4101"
+          venue_id: venues(:brisbane_hub).id
         }
       }
     end
@@ -27,7 +26,7 @@ class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Australia/Brisbane", schedule.timezone
     assert_equal Time.find_zone("Australia/Brisbane").parse("2026-06-01 09:00"), schedule.starts_at
     assert_equal Time.find_zone("Australia/Brisbane").parse("2026-06-01 17:00"), schedule.ends_at
-    assert_equal "Brisbane Convention Centre", schedule.venue_name
-    assert_equal "Glenelg St, South Brisbane QLD 4101", schedule.venue_address
+    assert_equal "Brisbane Training Hub", schedule.venue_name
+    assert_equal "123 Queen St, Brisbane QLD 4000", schedule.venue_address
   end
 end
