@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_040227) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -159,7 +159,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_040227) do
     t.index ["stripe_payment_intent_id"], name: "index_enrollments_on_stripe_payment_intent_id"
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
-    t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id", unique: true
+    t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id"
   end
 
   create_table "registrations", force: :cascade do |t|
@@ -174,7 +174,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_040227) do
     t.datetime "quotation_sent_at"
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
-    t.index ["class_schedule_id", "finance_email"], name: "index_registrations_on_schedule_and_finance_email", unique: true
+    t.index ["class_schedule_id", "finance_email"], name: "index_registrations_on_schedule_and_finance_email"
     t.index ["class_schedule_id"], name: "index_registrations_on_class_schedule_id"
   end
 

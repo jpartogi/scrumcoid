@@ -57,4 +57,24 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_equal registration.finance_name, enrollment.finance_name
     assert_equal registration.finance_email, enrollment.finance_email
   end
+
+  test "allows duplicate visitor email registrations on the same schedule" do
+    schedule = class_schedules(:open_online)
+    schedule.update!(capacity: 10)
+
+    enrollment1 = Enrollment.new(
+      class_schedule: schedule,
+      visitor_name: "Visitor One",
+      visitor_email: "duplicate@example.com"
+    )
+    assert enrollment1.valid?
+    enrollment1.save!
+
+    enrollment2 = Enrollment.new(
+      class_schedule: schedule,
+      visitor_name: "Visitor Two",
+      visitor_email: "duplicate@example.com"
+    )
+    assert enrollment2.valid?
+  end
 end

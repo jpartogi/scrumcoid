@@ -9,7 +9,6 @@ class Enrollment < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :class_schedule_id }, allow_nil: true
   validates :visitor_email, presence: true, if: -> { user.blank? }
-  validates :visitor_email, uniqueness: { scope: :class_schedule_id }, allow_blank: true
   validate :class_schedule_accepts_registration, on: :create
 
   delegate :course, to: :class_schedule
