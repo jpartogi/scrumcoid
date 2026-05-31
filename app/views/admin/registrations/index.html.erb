@@ -1,39 +1,66 @@
-<div class="p-8">
-  <h1 class="text-2xl font-bold mb-6">Company Registrations / Quotations</h1>
-
-  <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden">
-    <table class="w-full text-sm">
-      <thead class="bg-slate-50">
-        <tr>
-          <th class="px-6 py-4 text-left font-semibold">Company</th>
-          <th class="px-6 py-4 text-left font-semibold">Training</th>
-          <th class="px-6 py-4 text-left font-semibold">Finance Contact</th>
-          <th class="px-6 py-4 text-left font-semibold">Participants</th>
-          <th class="px-6 py-4 text-left font-semibold">Status</th>
-          <th class="px-6 py-4"></th>
-        </tr>
-      </thead>
-      <tbody class="divide-y">
-        <% @registrations.each do |reg| %>
-          <tr>
-            <td class="px-6 py-4 font-medium"><%= reg.company_name %></td>
-            <td class="px-6 py-4"><%= reg.course.title %></td>
-            <td class="px-6 py-4">
-              <%= reg.finance_name %><br>
-              <span class="text-xs text-slate-500"><%= reg.finance_email %></span>
-            </td>
-            <td class="px-6 py-4"><%= reg.total_participants %></td>
-            <td class="px-6 py-4">
-              <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-800">
-                <%= reg.status.humanize %>
-              </span>
-            </td>
-            <td class="px-6 py-4 text-right">
-              <%= link_to "View", admin_registration_path(reg), class: "text-sm font-bold text-indigo-600 hover:text-indigo-500" %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Page Header -->
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Company Registrations & Quotations</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Monitor company registrations, billing profiles, and participant counts.</p>
+    </div>
   </div>
-</div>
+
+  <!-- Table Container Card -->
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+    <% if @registrations.any? %>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+              <th class="px-6 py-4">Company</th>
+              <th class="px-6 py-4">Training Schedule</th>
+              <th class="px-6 py-4">Finance Contact</th>
+              <th class="px-6 py-4 text-center">Participants</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% @registrations.each do |reg| %>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4 font-semibold text-slate-900"><%= reg.company_name %></td>
+                <td class="px-6 py-4">
+                  <% if reg.class_schedule.present? %>
+                    <%= link_to reg.course.title, admin_class_schedule_path(reg.class_schedule), class: "font-semibold text-indigo-600 hover:text-indigo-500 transition-colors" %><br>
+                    <span class="text-xs text-slate-500 mt-0.5 block">
+                      <%= reg.class_schedule.starts_at.strftime("%d %b") %> - <%= reg.class_schedule.ends_at.strftime("%d %b %Y") %>
+                    </span>
+                  <% else %>
+                    <span class="text-slate-400 italic">No schedule</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4">
+                  <p class="font-medium text-slate-800"><%= reg.finance_name %></p>
+                  <p class="text-xs text-slate-400 font-medium mt-0.5"><%= reg.finance_email %></p>
+                </td>
+                <td class="px-6 py-4 text-center font-bold text-slate-800"><%= reg.total_participants %></td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 ring-1 ring-inset ring-amber-600/20">
+                    <%= reg.status.humanize %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <%= link_to "View Details", admin_registration_path(reg), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-6 py-16 text-center text-slate-400">
+        <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25" />
+        </svg>
+        <p class="mt-4 font-semibold text-base">No registrations received yet</p>
+      </div>
+    <% end %>
+  </div>
+</section>

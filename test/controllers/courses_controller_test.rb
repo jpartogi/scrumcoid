@@ -7,7 +7,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h3", text: courses(:ai_essentials).title
     assert_match courses(:ai_essentials).excerpt, response.body
-    assert_match "USD 1,295.00", response.body
+    assert_match "USD 1,295", response.body
     assert_no_match courses(:draft_course).title, response.body
   end
 
@@ -15,15 +15,15 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     get courses_path, headers: { "CF-IPCountry" => "US" }
 
     assert_response :success
-    assert_match "USD 1,295.00", response.body
-    assert_no_match "AUD 1,950.00", response.body
+    assert_match "USD 1,295", response.body
+    assert_no_match "AUD 1,950", response.body
   end
 
   test "falls back to usd when detected currency is not available" do
     get courses_path, headers: { "CF-IPCountry" => "JP" }
 
     assert_response :success
-    assert_match "USD 1,295.00", response.body
+    assert_match "USD 1,295", response.body
   end
 
   test "displays attached course logo" do

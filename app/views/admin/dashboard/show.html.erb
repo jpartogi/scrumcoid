@@ -77,59 +77,121 @@
 
   <!-- Dashboard Split Grid -->
   <div class="grid gap-8 lg:grid-cols-3">
-    <!-- Left Column: Upcoming Class Schedules (Wide) -->
-    <div class="lg:col-span-2 space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-        <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008z" />
-        </svg>
-        Upcoming Classes
-      </h2>
-
-      <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-        <% if @upcoming_schedules.any? %>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-sm">
-              <thead>
-                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
-                  <th class="px-6 py-4">Course</th>
-                  <th class="px-6 py-4">Date / Time</th>
-                  <th class="px-6 py-4 text-center">Registrations</th>
-                  <th class="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-100">
-                <% @upcoming_schedules.each do |schedule| %>
-                  <tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="px-6 py-4 font-semibold text-slate-900 max-w-xs truncate">
-                      <%= link_to schedule.course.title, admin_class_schedule_path(schedule), class: "hover:text-indigo-600" %>
-                    </td>
-                    <td class="px-6 py-4 text-slate-500 font-medium">
-                      <%= local_class_time(schedule, format: :range) %>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                      <span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10">
-                        <%= schedule.registration_count %> / <%= schedule.capacity %>
-                      </span>
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                      <%= link_to "Manage", admin_class_schedule_path(schedule), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/30 px-3 py-1.5 rounded-lg border border-indigo-100 hover:bg-indigo-50 transition-colors" %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        <% else %>
-          <div class="px-6 py-12 text-center text-slate-400">
-            <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    <!-- Left Column: Upcoming Class Schedules & Latest Registrations (Wide) -->
+    <div class="lg:col-span-2 space-y-8">
+      
+      <!-- Latest Registrations -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.03 0 1.9.693 2.166 1.638m-7.377 2.24a4.12 4.12 0 0 0-1.53.48m12.452-2.235A4.119 4.119 0 0 1 20.25 6m-16.5 0a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 3.75 21h.75m0-18H6.75m-3 9h.008v.008H3.75V12Zm0 3h.008v.008H3.75V15Zm0 3h.008v.008H3.75V18Z" />
             </svg>
-            <p class="mt-4 font-semibold text-sm">No upcoming classes scheduled</p>
-            <%= link_to "Schedule a class", new_admin_class_schedule_path, class: "mt-4 inline-flex items-center gap-1 text-xs font-bold text-white bg-indigo-600 px-3.5 py-2 rounded-lg hover:bg-indigo-500 shadow-sm transition-colors" %>
-          </div>
-        <% end %>
+            Latest Registrations
+          </h2>
+          <%= link_to "View All", admin_registrations_path, class: "text-xs font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+          <% if @latest_registrations.any? %>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+                    <th class="px-6 py-4">Company Details</th>
+                    <th class="px-6 py-4">Course Training</th>
+                    <th class="px-6 py-4 text-center">Participants</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <% @latest_registrations.each do |reg| %>
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                      <td class="px-6 py-4 font-semibold text-slate-900">
+                        <%= reg.company_name %><br>
+                        <span class="text-xs text-slate-400 font-medium"><%= reg.finance_email %></span>
+                      </td>
+                      <td class="px-6 py-4">
+                        <% if reg.class_schedule.present? %>
+                          <%= link_to reg.course.title, admin_class_schedule_path(reg.class_schedule), class: "font-semibold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+                        <% else %>
+                          <span class="text-slate-400 italic">No schedule</span>
+                        <% end %>
+                      </td>
+                      <td class="px-6 py-4 text-center font-bold text-slate-800">
+                        <%= reg.total_participants %>
+                      </td>
+                      <td class="px-6 py-4 text-right">
+                        <%= link_to "View", admin_registration_path(reg), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/30 px-3 py-1.5 rounded-lg border border-indigo-100 hover:bg-indigo-50 transition-colors" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <div class="px-6 py-12 text-center text-slate-400">
+              <p class="font-semibold text-sm">No registrations received yet</p>
+            </div>
+          <% end %>
+        </div>
       </div>
+
+      <!-- Upcoming Classes -->
+      <div class="space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008z" />
+          </svg>
+          Upcoming Classes
+        </h2>
+
+        <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+          <% if @upcoming_schedules.any? %>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+                    <th class="px-6 py-4">Course</th>
+                    <th class="px-6 py-4">Date / Time</th>
+                    <th class="px-6 py-4 text-center">Registrations</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <% @upcoming_schedules.each do |schedule| %>
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                      <td class="px-6 py-4 font-semibold text-slate-900 max-w-xs truncate">
+                        <%= link_to schedule.course.title, admin_class_schedule_path(schedule), class: "hover:text-indigo-600" %>
+                      </td>
+                      <td class="px-6 py-4 text-slate-500 font-medium">
+                        <%= local_class_time(schedule, format: :range) %>
+                      </td>
+                      <td class="px-6 py-4 text-center">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10">
+                          <%= schedule.registration_count %> / <%= schedule.capacity %>
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 text-right">
+                        <%= link_to "Manage", admin_class_schedule_path(schedule), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/30 px-3 py-1.5 rounded-lg border border-indigo-100 hover:bg-indigo-50 transition-colors" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <div class="px-6 py-12 text-center text-slate-400">
+              <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p class="mt-4 font-semibold text-sm">No upcoming classes scheduled</p>
+              <%= link_to "Schedule a class", new_admin_class_schedule_path, class: "mt-4 inline-flex items-center gap-1 text-xs font-bold text-white bg-indigo-600 px-3.5 py-2 rounded-lg hover:bg-indigo-500 shadow-sm transition-colors" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
     </div>
 
     <!-- Right Column: Shortcuts & Operations (Narrow) -->

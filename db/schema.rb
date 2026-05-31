@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_052601) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -92,11 +92,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
     t.integer "status", default: 0, null: false
     t.string "timezone", default: "Australia/Brisbane", null: false
     t.datetime "updated_at", null: false
-    t.string "venue_address"
-    t.string "venue_name"
+    t.bigint "venue_id"
     t.index ["course_id"], name: "index_class_schedules_on_course_id"
     t.index ["starts_at"], name: "index_class_schedules_on_starts_at"
     t.index ["status"], name: "index_class_schedules_on_status"
+    t.index ["venue_id"], name: "index_class_schedules_on_venue_id"
   end
 
   create_table "contact_messages", force: :cascade do |t|
@@ -134,6 +134,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
     t.index ["status"], name: "index_courses_on_status"
   end
 
+  create_table "customers", force: :cascade do |t|
+    t.text "company_address"
+    t.string "company_name", null: false
+    t.string "company_phone"
+    t.datetime "created_at", null: false
+    t.string "finance_email", null: false
+    t.string "finance_name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["finance_email"], name: "index_customers_on_finance_email", unique: true
+  end
+
   create_table "enrollments", force: :cascade do |t|
     t.integer "amount_paid_cents"
     t.bigint "class_schedule_id", null: false
@@ -168,6 +179,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
     t.string "company_name", null: false
     t.string "company_phone"
     t.datetime "created_at", null: false
+    t.bigint "customer_id"
     t.string "finance_email", null: false
     t.string "finance_name", null: false
     t.string "quotation_pdf_url"
@@ -176,6 +188,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
     t.datetime "updated_at", null: false
     t.index ["class_schedule_id", "finance_email"], name: "index_registrations_on_schedule_and_finance_email"
     t.index ["class_schedule_id"], name: "index_registrations_on_class_schedule_id"
+    t.index ["customer_id"], name: "index_registrations_on_customer_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -334,14 +347,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_043217) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "venues", force: :cascade do |t|
+    t.string "address", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "class_schedules", "courses"
+  add_foreign_key "class_schedules", "venues"
   add_foreign_key "course_prices", "courses"
   add_foreign_key "enrollments", "class_schedules"
   add_foreign_key "enrollments", "registrations"
   add_foreign_key "enrollments", "users"
   add_foreign_key "registrations", "class_schedules"
+  add_foreign_key "registrations", "customers"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

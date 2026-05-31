@@ -1,0 +1,53 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between border-b border-slate-200 pb-5">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Venues</h1>
+      <p class="text-xs text-slate-400 font-medium mt-1">Manage offline training locations</p>
+    </div>
+    <%= link_to "New Venue", new_admin_venue_path, class: "inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm" %>
+  </div>
+
+  <!-- Venues Table -->
+  <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+    <% if @venues.any? %>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-100 bg-slate-50">
+            <th class="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Venue Name</th>
+            <th class="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Address</th>
+            <th class="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Schedules</th>
+            <th class="px-6 py-3.5"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <% @venues.each do |venue| %>
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="px-6 py-4 font-semibold text-slate-900"><%= venue.name %></td>
+              <td class="px-6 py-4 text-slate-500"><%= venue.address %></td>
+              <td class="px-6 py-4 text-center">
+                <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                  <%= venue.class_schedules.count %>
+                </span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <%= link_to "View", admin_venue_path(venue), class: "text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors" %>
+                  <%= link_to "Edit", edit_admin_venue_path(venue), class: "text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors" %>
+                  <%= button_to "Delete", admin_venue_path(venue), method: :delete,
+                      data: { turbo_confirm: "Delete #{venue.name}? Class schedules using this venue will have their venue cleared." },
+                      class: "text-xs font-bold text-rose-500 hover:text-rose-700 transition-colors" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="py-16 text-center">
+        <p class="text-sm font-semibold text-slate-500">No venues yet.</p>
+        <%= link_to "Create your first venue", new_admin_venue_path, class: "mt-3 inline-block text-sm font-bold text-teal-700 hover:text-teal-800 transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</section>

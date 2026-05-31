@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "scrum.co.id" %></title>
+    <% page_title = content_for(:title).presence %>
+    <title><%= page_title ? "#{page_title} | scrum.co.id" : "scrum.co.id — Pelatihan Professional Scrum & Sertifikasi Resmi di Indonesia" %></title>
+    <meta name="description" content="<%= content_for(:description).presence || "scrum.co.id adalah mitra resmi Scrum.org di Indonesia yang menyediakan pelatihan PSM, PSPO, dan pelatihan Agile bersertifikat internasional untuk tim dan organisasi." %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="scrum.co.id">
@@ -45,6 +47,10 @@
           <% end %>
           <%= link_to blog_posts_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
             Blog
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+          <% end %>
+          <%= link_to new_contact_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
+            Kontak
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
           <% end %>
         </div>

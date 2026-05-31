@@ -41,5 +41,4 @@ unpublished:
   registration_deadline: <%= 33.days.from_now %>
   capacity: 20
   status: 0
-  venue_name: Brisbane Training Hub
-  venue_address: 123 Queen St, Brisbane QLD 4000
+  venue: brisbane_hub

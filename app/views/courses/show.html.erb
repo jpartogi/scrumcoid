@@ -1,3 +1,6 @@
+<% content_for :title, @course.title %>
+<% content_for :description, @course.excerpt.presence || "Pelajari lebih lanjut tentang #{@course.title} — pelatihan Scrum bersertifikat resmi dari Scrum.org yang tersedia di Indonesia." %>
+
 <section class="relative isolate overflow-hidden bg-slate-950 py-20 sm:py-24">
   <!-- Spotlight backgrounds -->
   <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] from-indigo-950/40 via-slate-950 to-slate-950" aria-hidden="true"></div>
@@ -54,7 +57,7 @@
         <div class="rounded-3xl border border-slate-150 bg-white p-8 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:border-indigo-500/15 transition-all duration-300">
           <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Investasi Kelas</span>
           <div class="mt-2 flex items-baseline gap-x-2">
-            <span class="text-4xl font-extrabold tracking-tight text-slate-900"><%= @course.display_price_for(current_currency) %></span>
+            <span class="text-2xl font-black tracking-tight text-slate-900 leading-tight"><%= @course.display_price_for(current_currency) %></span>
           </div>
           <p class="mt-4 text-xs text-slate-555 leading-relaxed">
             Biaya standar per peserta. Diskon tersedia untuk pendaftaran grup atau early-bird. Periksa detail kartu jadwal kelas di bawah.

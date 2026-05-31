@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         patch :unpublish
       end
     end
+    resources :venues
     resources :blog_posts do
       member do
         patch :publish
@@ -45,6 +46,7 @@ Rails.application.routes.draw do
     resources :enrollments, only: [:show, :edit, :update, :destroy]
     resources :registrations, only: [:index, :show]
     resources :admin_emails
+    resources :customers
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

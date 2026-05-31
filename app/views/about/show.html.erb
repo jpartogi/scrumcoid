@@ -1,3 +1,6 @@
+<% content_for :title, @about_page&.title.presence || "Tentang Kami" %>
+<% content_for :description, @about_page&.summary.presence || "scrum.co.id adalah pelopor pelatihan Professional Scrum resmi di Indonesia sejak 2012. Mitra resmi Scrum.org dan anggota Professional Training Network (PTN)." %>
+
 <section class="relative isolate overflow-hidden bg-slate-950 py-24 sm:py-32">
   <!-- Spotlight backgrounds -->
   <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-indigo-950/40 via-slate-950 to-slate-950" aria-hidden="true"></div>

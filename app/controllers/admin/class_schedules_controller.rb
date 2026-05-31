@@ -68,7 +68,7 @@ class Admin::ClassSchedulesController < ApplicationController
 
   def class_schedule_params
     params.require(:class_schedule).permit(:course_id, :starts_at, :ends_at, :location, :online,
-      :registration_deadline, :timezone, :capacity, :status, :venue_name, :venue_address)
+      :registration_deadline, :timezone, :capacity, :status, :venue_id)
   end
 
   def normalized_class_schedule_params

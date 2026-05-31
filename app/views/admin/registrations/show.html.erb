@@ -8,6 +8,31 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Training Schedule Info -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 lg:col-span-2 shadow-sm">
+      <h3 class="font-bold mb-4 text-slate-900">Training Schedule</h3>
+      <% if @registration.class_schedule.present? %>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p class="text-lg font-extrabold text-slate-900"><%= @registration.class_schedule.course.title %></p>
+            <p class="text-sm font-semibold text-indigo-600 mt-1">
+              <%= @registration.class_schedule.starts_at.strftime("%d %b") %> - <%= @registration.class_schedule.ends_at.strftime("%d %b %Y") %>
+            </p>
+            <p class="text-xs text-slate-500 mt-1">Location: <%= @registration.class_schedule.location %></p>
+          </div>
+          <div>
+            <%= link_to admin_class_schedule_path(@registration.class_schedule), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors" do %>
+              View Class Schedule
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <p class="text-sm text-slate-500 italic">No associated class schedule found.</p>
+      <% end %>
+    </div>
     <!-- Finance Info -->
     <div class="bg-white border border-slate-200 rounded-3xl p-6">
       <h3 class="font-bold mb-4">Finance / Billing Contact</h3>

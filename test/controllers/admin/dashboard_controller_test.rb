@@ -21,4 +21,14 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select "footer", text: /scrum.co.id Admin/
     assert_no_match "Professional Scrum training for teams", response.body
   end
+
+  test "admin dashboard displays latest five registrations" do
+    sign_in users(:admin)
+
+    get admin_root_path
+
+    assert_response :success
+    assert_select "h2", text: /Latest Registrations/
+    assert_select "td", text: /Acme Corp/
+  end
 end

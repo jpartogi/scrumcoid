@@ -9,5 +9,6 @@ class Admin::DashboardController < ApplicationController
     @draft_blog_post_count = BlogPost.draft.count
     @unread_contact_message_count = ContactMessage.unread.count
     @upcoming_schedules = ClassSchedule.upcoming.includes(:course).limit(5)
+    @latest_registrations = Registration.includes(:class_schedule => :course).order(created_at: :desc).limit(5)
   end
 end

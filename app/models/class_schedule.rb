@@ -4,6 +4,10 @@ class ClassSchedule < ApplicationRecord
   enum :status, { unpublished: 0, published: 1, cancelled: 2 }
 
   belongs_to :course
+  belongs_to :venue, optional: true
+
+  # Delegate so existing views using class_schedule.venue_name / .venue_address keep working
+  delegate :name, :address, to: :venue, prefix: true, allow_nil: true
   has_many :enrollments, dependent: :destroy
   has_many :students, through: :enrollments, source: :user
 
@@ -11,7 +15,7 @@ class ClassSchedule < ApplicationRecord
 
   validates :starts_at, :ends_at, :location, :registration_deadline, :timezone, presence: true
   validates :capacity, numericality: { greater_than: 0 }
-  validates :venue_name, :venue_address, presence: true, unless: :online?
+  validates :venue, presence: true, unless: :online?
   validate :timezone_must_be_valid
   validate :ends_after_start
 

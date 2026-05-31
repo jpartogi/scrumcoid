@@ -169,6 +169,44 @@ fly volumes list --app scrumcoid
 
 ## Important Notes
 
+### Running Migrations on Fly.io
+
+Migrations do **not** run automatically on every request or on normal app boot.
+
+They are executed automatically during `fly deploy` because of this setting in `fly.toml`:
+
+```toml
+[deploy]
+  release_command = './bin/rails db:prepare'
+```
+
+`db:prepare` is the recommended command — it creates the database if needed and runs all pending migrations.
+
+**Best way to run migrations:**
+
+```bash
+fly deploy
+```
+
+This is the safest method because:
+- It runs as part of the official release process.
+- If migrations fail, the deploy fails and your previous version stays up.
+- Your app only starts after migrations succeed.
+
+**Manual migration (if needed):**
+
+If for some reason you need to run migrations without a full deploy (e.g. during debugging):
+
+```bash
+fly console --app scrumcoid --command "bin/rails db:migrate"
+```
+
+Or the older SSH method:
+
+```bash
+fly ssh console --app scrumcoid -C "bin/rails db:migrate"
+```
+
 ### Database
 
 - We deliberately use **one database** for everything (primary + cache + queue + cable).
@@ -349,6 +387,16 @@ Connect to the DB and check that the user has `CREATE DATABASE` rights if you ev
 - [ ] Test password reset emails
 - [ ] Upload a course logo (verifies storage)
 - [ ] (Future) Consider switching to Tigris: `fly storage create` + `ACTIVE_STORAGE_SERVICE=tigris`
+
+### Running Migrations
+
+If you see "Migrations are pending", just run:
+
+```bash
+fly deploy
+```
+
+Your `fly.toml` already has `release_command = './bin/rails db:prepare'`, so migrations will run automatically as part of the deploy process before the new version goes live. This is the safest and recommended approach on Fly.io.
 
 ---
 

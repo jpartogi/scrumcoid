@@ -25,7 +25,17 @@ class CoursePrice < ApplicationRecord
   end
 
   def display_amount
-    "#{currency.upcase} #{ActiveSupport::NumberHelper.number_to_delimited(format('%.2f', amount.to_f))}"
+    curr = currency.upcase
+    if curr == "IDR"
+      # Indonesian convention: no decimal places, comma-dash suffix
+      formatted = ActiveSupport::NumberHelper.number_to_delimited(amount.to_i, delimiter: ".")
+      "#{curr} #{formatted},-"
+    else
+      # Strip trailing .00 for clean display; keep decimals if non-zero
+      num = amount.to_f
+      formatted = num == num.floor ? ActiveSupport::NumberHelper.number_to_delimited(num.to_i) : ActiveSupport::NumberHelper.number_to_delimited(format('%.2f', num))
+      "#{curr} #{formatted}"
+    end
   end
 
   private

@@ -1,0 +1,46 @@
+<%= form_with model: [:admin, customer], class: "space-y-6" do |form| %>
+  <% if customer.errors.any? %>
+    <div class="rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+      <span><%= customer.errors.full_messages.to_sentence %></span>
+    </div>
+  <% end %>
+
+  <!-- Grid Row -->
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :company_name, class: "block text-sm font-bold text-slate-700" %>
+      <%= form.text_field :company_name, placeholder: "e.g., PT. Global Indonesia", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+    
+    <div>
+      <%= form.label :company_phone, class: "block text-sm font-bold text-slate-700" %>
+      <%= form.text_field :company_phone, placeholder: "e.g., +62 21 555 1234", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :finance_name, "Finance / Billing Contact Name", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.text_field :finance_name, placeholder: "e.g., Budi Santoso", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+    
+    <div>
+      <%= form.label :finance_email, "Finance / Billing Contact Email", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.email_field :finance_email, placeholder: "e.g., billing@globalindo.com", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :company_address, "Company Billing Address", class: "block text-sm font-bold text-slate-700" %>
+    <%= form.text_area :company_address, rows: 4, placeholder: "Provide the complete official company address for billing and invoice/quotation delivery...", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/10 transition-all placeholder:text-slate-400" %>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+    <%= form.submit "Update Customer Profile", class: "rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-indigo-700 transition-colors shadow-sm cursor-pointer" %>
+    <%= link_to "Cancel", customer.persisted? ? admin_customer_path(customer) : admin_customers_path, class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+  </div>
+<% end %>

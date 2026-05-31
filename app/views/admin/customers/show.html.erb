@@ -1,0 +1,167 @@
+<section class="px-8 py-10 max-w-7xl mx-auto space-y-6">
+  <!-- Breadcrumb & Header -->
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <%= link_to "CRM", admin_customers_path, class: "hover:text-indigo-600 transition-colors" %>
+        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+        <span>Customer Details</span>
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 mt-2"><%= @customer.company_name %></h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Contact: <%= @customer.finance_name %> &middot; <%= @customer.finance_email %></p>
+    </div>
+    <div class="inline-flex gap-2">
+      <%= link_to admin_customers_path, class: "inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 shadow-sm transition-colors" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Back to CRM
+      <% end %>
+      <%= link_to edit_admin_customer_path(@customer), class: "inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.83 20.013a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+        </svg>
+        Edit Customer
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Customer Profile Info Card -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6 lg:col-span-1">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Corporate Profile</h3>
+      </div>
+      <dl class="space-y-4 text-sm">
+        <div>
+          <dt class="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">Company Name</dt>
+          <dd class="font-bold text-slate-900 mt-1"><%= @customer.company_name %></dd>
+        </div>
+        <div>
+          <dt class="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">Phone Number</dt>
+          <dd class="font-medium text-slate-900 mt-1"><%= @customer.company_phone.presence || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">Company Address</dt>
+          <dd class="text-slate-700 mt-1 whitespace-pre-line leading-relaxed"><%= @customer.company_address.presence || "No address details specified." %></dd>
+        </div>
+        <div class="border-t border-slate-100 pt-4">
+          <h4 class="text-xs font-bold text-slate-800 mb-3">Finance / Billing Contact</h4>
+          <div class="space-y-3">
+            <div>
+              <dt class="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">Billing Name</dt>
+              <dd class="font-semibold text-slate-900 mt-0.5"><%= @customer.finance_name %></dd>
+            </div>
+            <div>
+              <dt class="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">Billing Email</dt>
+              <dd class="font-medium text-indigo-600 mt-0.5 select-all"><%= @customer.finance_email %></dd>
+            </div>
+          </div>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Registrations & Billings Card -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 space-y-4">
+      <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Registrations & Quotations (<%= @registrations.count %>)</h3>
+      <% if @registrations.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-100 text-slate-500 font-bold pb-2">
+                <th class="py-3">Reg ID</th>
+                <th class="py-3">Training Course / Schedule</th>
+                <th class="py-3 text-center">Qty</th>
+                <th class="py-3">Date Requested</th>
+                <th class="py-3">Status</th>
+                <th class="py-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+              <% @registrations.each do |reg| %>
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                  <td class="py-3 font-semibold text-slate-700">#<%= reg.id %></td>
+                  <td class="py-3">
+                    <% if reg.class_schedule.present? %>
+                      <p class="font-semibold text-slate-900"><%= reg.class_schedule.course.title %></p>
+                      <p class="text-slate-500 mt-0.5">
+                        <%= reg.class_schedule.starts_at.strftime("%d %b") %> - <%= reg.class_schedule.ends_at.strftime("%d %b %Y") %>
+                      </p>
+                    <% else %>
+                      <span class="text-slate-400 italic">Schedule not found</span>
+                    <% end %>
+                  </td>
+                  <td class="py-3 text-center font-bold text-slate-800"><%= reg.total_participants %></td>
+                  <td class="py-3 text-slate-500"><%= reg.created_at.strftime("%d %b %Y %H:%M") %></td>
+                  <td class="py-3">
+                    <span class="inline-flex items-center rounded-full px-2 py-0.5 font-semibold bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-600/20">
+                      <%= reg.status.humanize %>
+                    </span>
+                  </td>
+                  <td class="py-3 text-right">
+                    <%= link_to "View Detail", admin_registration_path(reg), class: "text-indigo-600 hover:text-indigo-500 font-bold" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-slate-400 text-sm italic py-4">No registrations recorded for this customer yet.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Connected Participant Enrollments Card -->
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Class Enrollments & Participants (<%= @enrollments.count %>)</h3>
+    <% if @enrollments.any? %>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+              <th class="px-6 py-4">Participant Name</th>
+              <th class="px-6 py-4">Participant Email</th>
+              <th class="px-6 py-4">Associated Course</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% @enrollments.each do |enrollment| %>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4 font-semibold text-slate-900">
+                  <%= enrollment.visitor_name || enrollment.attendee_name || "—" %>
+                </td>
+                <td class="px-6 py-4 text-slate-600 select-all font-medium">
+                  <%= enrollment.visitor_email || enrollment.attendee_email || "—" %>
+                </td>
+                <td class="px-6 py-4">
+                  <% if enrollment.class_schedule.present? %>
+                    <p class="font-semibold text-slate-800"><%= enrollment.class_schedule.course.title %></p>
+                    <p class="text-xs text-slate-400 mt-0.5">
+                      <%= enrollment.class_schedule.starts_at.strftime("%d %b") %> - <%= enrollment.class_schedule.ends_at.strftime("%d %b %Y") %>
+                    </p>
+                  <% else %>
+                    <span class="text-slate-400 italic">No schedule</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <div class="inline-flex gap-2">
+                    <%= link_to "View", admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
+                    <%= link_to "Edit", edit_admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-6 py-12 text-center text-slate-400">
+        <p class="text-sm italic">No participants enrolled under this customer account yet.</p>
+      </div>
+    <% end %>
+  </div>
+</section>
