@@ -12,6 +12,7 @@ class QuotationPdf
     @registration = registration
     @course = registration.course
     @schedule = registration.class_schedule
+    @main_contact = AdminContact.find_by(main: true)
   end
 
   def generate
@@ -21,7 +22,9 @@ class QuotationPdf
     pdf.bounding_box([0, pdf.bounds.height], width: 495, height: 50) do
       pdf.bounding_box([0, 50], width: 320, height: 50) do
         pdf.text "PT. Adaptiva Sinergi Asia", size: 14, style: :bold, color: "0F172A"
-        pdf.text "Email: jessica.stella@scrum.co.id | Telp: +62 856 4342 8348", size: 8, color: "475569"
+        email = @main_contact&.email.presence || "jessica.stella@scrum.co.id"
+        phone = @main_contact&.whatsapp_number.presence || "+62 856 4342 8348"
+        pdf.text "Email: #{email} | Telp: #{phone}", size: 8, color: "475569"
         pdf.text "Website: scrum.co.id", size: 8, color: "475569"
       end
     end

@@ -1,12 +1,9 @@
-class RegistrationMailer < ApplicationMailer
-  def quotation(registration)
-    @registration = registration
-    @course = registration.course
-    @main_contact = AdminContact.find_by(main: true)
-    pdf_content = QuotationPdf.generate(registration)
+class ContactMailer < ApplicationMailer
+  def notification(contact_message)
+    @contact_message = contact_message
 
-    # To: finance_email + main admin emails
-    to_emails = [registration.finance_email]
+    # To: main admin emails
+    to_emails = []
     
     # CC: non-main admin emails
     cc_emails = []
@@ -19,22 +16,20 @@ class RegistrationMailer < ApplicationMailer
       to_emails << "jessica.stella@scrum.co.id"
     end
 
-    # Clean and unique emails
+    # Fallback to default if no main admin emails exist
+    if to_emails.empty?
+      to_emails << "jessica.stella@scrum.co.id"
+    end
+
     to_emails = to_emails.map(&:strip).uniq.reject(&:empty?)
     cc_emails = cc_emails.map(&:strip).uniq.reject(&:empty?)
 
-    attachments["quotation_#{registration.id}.pdf"] = {
-      mime_type: "application/pdf",
-      content: pdf_content
-    }
-
     mail_options = {
       to: to_emails,
-      subject: "Penawaran untuk #{@course.title} - #{@registration.company_name}"
+      subject: "Pesan Baru dari Kontak: #{@contact_message.subject}"
     }
     mail_options[:cc] = cc_emails if cc_emails.any?
 
     mail(mail_options)
   end
 end
-

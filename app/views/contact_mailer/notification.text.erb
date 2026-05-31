@@ -1,0 +1,18 @@
+Halo Admin,
+
+Anda telah menerima pesan kontak baru dari situs Scrum.co.id. Berikut adalah rincian pesan tersebut:
+
+Nama Pengirim: <%= @contact_message.name %>
+Alamat Email: <%= @contact_message.email %>
+<% if @contact_message.company.present? %>
+Perusahaan: <%= @contact_message.company %>
+<% end %>
+Subjek: <%= @contact_message.subject %>
+
+Pesan:
+<%= @contact_message.message %>
+
+Buka di Dashboard Admin: <%= admin_contact_message_url(@contact_message) %>
+
+--
+Email ini dikirim secara otomatis oleh sistem Scrum.co.id.

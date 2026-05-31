@@ -1,11 +1,16 @@
 require "test_helper"
 
 class ContactMessagesControllerTest < ActionDispatch::IntegrationTest
-  test "shows contact form" do
+  test "shows contact form and displays main WhatsApp contact when present" do
+    AdminContact.destroy_all
+    main_contact = AdminContact.create!(email: "main@example.com", name: "Joko", whatsapp_number: "+62812345", main: true)
+
     get new_contact_path
 
     assert_response :success
     assert_select "h1", /Diskusikan Kebutuhan/
+    assert_select "strong", "Joko"
+    assert_select "a[href=?]", "https://wa.me/62812345"
   end
 
   test "creates contact message" do
@@ -23,5 +28,25 @@ class ContactMessagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_contact_path
     assert ContactMessage.last.unread?
+  end
+
+  test "creates contact message with dropdown choices and compiles subject" do
+    assert_difference -> { ContactMessage.count }, 1 do
+      post contact_path, params: {
+        contact_message: {
+          name: "Susi",
+          email: "susi@example.com",
+          company: "Susi Corp",
+          jenis_inkuiri: "Quotation Pelatihan Privat",
+          pelatihan: "Scrum.org AI Essentials",
+          message: "Saya tertarik dengan pelatihan privat AI Essentials."
+        }
+      }
+    end
+
+    assert_redirected_to new_contact_path
+    last_message = ContactMessage.last
+    assert_equal "Quotation Pelatihan Privat - Scrum.org AI Essentials", last_message.subject
+    assert last_message.unread?
   end
 end

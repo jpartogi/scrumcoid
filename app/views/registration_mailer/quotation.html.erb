@@ -54,13 +54,17 @@
       </p>
 
       <p style="font-size: 14px; color: #475569; margin-bottom: 24px;">
-        Jika Anda memiliki pertanyaan lebih lanjut mengenai administrasi, jadwal, atau invoice, silakan langsung membalas email ini atau menghubungi saya via WhatsApp di +62 856 4342 8348.
+        <% if @main_contact&.whatsapp_number.present? %>
+          Jika Anda memiliki pertanyaan lebih lanjut mengenai administrasi, jadwal, atau invoice, silakan langsung membalas email ini atau menghubungi saya via WhatsApp di <%= @main_contact.whatsapp_number %>.
+        <% else %>
+          Jika Anda memiliki pertanyaan lebih lanjut mengenai administrasi, jadwal, atau invoice, silakan langsung membalas email ini atau menghubungi saya via WhatsApp di +62 856 4342 8348.
+        <% end %>
       </p>
 
       <!-- Signature Block -->
       <div style="border-top: 1px solid #f1f5f9; padding-top: 20px; font-size: 13px; color: #64748b;">
         Salam hangat,<br>
-        <strong style="color: #0f172a;">Jessica Stella</strong>
+        <strong style="color: #0f172a;"><%= @main_contact&.name.presence || "Jessica Stella" %></strong>
       </div>
     </div>
     
