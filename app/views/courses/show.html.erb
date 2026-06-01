@@ -90,7 +90,7 @@
         <div class="mt-8 grid gap-6 md:grid-cols-2">
           <% if @class_schedules.any? %>
             <% @class_schedules.each do |schedule| %>
-              <%= render "class_schedules/card", schedule: schedule %>
+              <%= render "class_schedules/card", schedule: schedule, logo_padding_class: "p-[2px]" %>
             <% end %>
           <% else %>
             <div class="col-span-full rounded-[2rem] border-2 border-dashed border-slate-200 bg-white py-12 px-6 text-center">

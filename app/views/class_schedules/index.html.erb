@@ -28,7 +28,7 @@
     <% if @class_schedules.any? %>
       <div class="grid gap-6 md:grid-cols-2">
         <% @class_schedules.each do |schedule| %>
-          <%= render "card", schedule: schedule %>
+          <%= render "card", schedule: schedule, logo_padding_class: "p-[2px]" %>
         <% end %>
       </div>
     <% else %>
