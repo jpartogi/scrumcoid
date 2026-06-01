@@ -17,7 +17,7 @@
       </div>
 
       <!-- High-impact typographic hierarchy -->
-      <div class="text-4xl sm:text-6xl font-black tracking-tight text-white space-y-4 leading-none">
+      <div class="text-4xl sm:text-6xl font-black tracking-tight text-white space-y-4 leading-[1.12]">
         <div class="bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-200">Improve competitive advantage</div>
         <div class="bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-200">Challenge the status quo</div>
         <div class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-teal-300 font-extrabold pb-2">
@@ -52,7 +52,7 @@
       <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-12 lg:max-w-none lg:grid-cols-3">
         
         <!-- Pillar 1 -->
-        <div class="flex flex-col bg-white p-8 rounded-3xl border border-slate-150 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-10px_rgba(99,102,241,0.06)] hover:-translate-y-1.5 hover:border-indigo-500/15 transition-all duration-300">
+        <div class="flex flex-col bg-white p-8 rounded-3xl border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-10px_rgba(99,102,241,0.06)] hover:-translate-y-1.5 hover:border-purple-500/40 transition-all duration-300">
           <dt class="text-lg font-bold leading-7 text-slate-900">
             <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)]">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -67,7 +67,7 @@
         </div>
 
         <!-- Pillar 2 -->
-        <div class="flex flex-col bg-white p-8 rounded-3xl border border-slate-150 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-10px_rgba(147,51,234,0.06)] hover:-translate-y-1.5 hover:border-purple-500/15 transition-all duration-300">
+        <div class="flex flex-col bg-white p-8 rounded-3xl border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-10px_rgba(147,51,234,0.06)] hover:-translate-y-1.5 hover:border-purple-500/40 transition-all duration-300">
           <dt class="text-lg font-bold leading-7 text-slate-900">
             <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.3)]">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Pillar 3 -->
-        <div class="flex flex-col bg-white p-8 rounded-3xl border border-slate-150 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-10px_rgba(13,148,136,0.06)] hover:-translate-y-1.5 hover:border-teal-500/15 transition-all duration-300">
+        <div class="flex flex-col bg-white p-8 rounded-3xl border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-10px_rgba(13,148,136,0.06)] hover:-translate-y-1.5 hover:border-purple-500/40 transition-all duration-300">
           <dt class="text-lg font-bold leading-7 text-slate-900">
             <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-600 text-white shadow-[0_0_20px_rgba(13,148,136,0.3)]">
               <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -92,7 +92,7 @@
             Dukungan Berkelanjutan
           </dt>
           <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-slate-600">
-            <p class="flex-auto leading-relaxed">Bimbingan (coaching) paska-pelatihan untuk memastikan kerangka kerja Scrum berjalan efektif dan memberi dampak nyata.</p>
+            <p class="flex-auto leading-relaxed">Komunitas Alumni pelatihan Professional Scrum yang besar dan saling mendukung satu sama lain.</p>
           </dd>
         </div>
       </dl>
@@ -113,7 +113,7 @@
     </div>
     <div class="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10 sm:mt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
       <% @featured_schedules.each do |schedule| %>
-        <article class="flex flex-col justify-between rounded-3xl border border-slate-150 bg-white p-8 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_25px_50px_-12px_rgba(99,102,241,0.08)] hover:-translate-y-1.5 hover:border-indigo-500/15 transition-all duration-300 relative group">
+        <article class="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-8 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_25px_50px_-12px_rgba(99,102,241,0.08)] hover:-translate-y-1.5 hover:border-purple-500/40 transition-all duration-300 relative group">
           <div>
             <div class="flex items-start gap-4">
               <% if schedule.course.logo.attached? %>
@@ -193,4 +193,3 @@
     </div>
   </div>
 </section>
-

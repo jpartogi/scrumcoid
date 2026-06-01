@@ -71,7 +71,7 @@
 
     <%= form_with model: [@class_schedule, @registration], local: true, data: { controller: "participants" } do |f| %>
       <!-- Section 1: Person Registering (Finance / Billing Contact) -->
-      <div class="bg-white border border-slate-200 rounded-3xl p-8 mb-8 shadow-sm">
+      <div class="bg-white border border-slate-200/80 rounded-3xl p-8 mb-8 shadow-sm transition-all duration-300 hover:border-purple-500/40">
         <h2 class="text-xl font-bold text-slate-900 mb-6">1. Data Penanggung Jawab / Keuangan</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -107,7 +107,7 @@
       </div>
 
       <!-- Section 2: Participants -->
-      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+      <div class="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-sm transition-all duration-300 hover:border-purple-500/40">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-xl font-bold text-slate-900">2. Data Peserta</h2>
           <button type="button"

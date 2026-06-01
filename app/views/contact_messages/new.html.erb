@@ -25,7 +25,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       
       <!-- Kolom Kiri: Formulir Kontak -->
-      <div class="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-8 sm:p-12 shadow-sm">
+      <div class="lg:col-span-2 rounded-3xl border border-slate-200/80 bg-white p-8 sm:p-12 shadow-sm transition-all duration-300 hover:border-purple-500/40">
         <h2 class="text-2xl font-bold text-slate-900 border-b border-slate-100 pb-4 mb-6">Kirim Pesan</h2>
         
         <%= form_with model: @contact_message, url: contact_path, class: "space-y-6" do |form| %>
@@ -80,7 +80,7 @@
       <!-- Kolom Kanan: Sidebar Informasi Kontak -->
       <div class="space-y-6">
         <% if @main_contact.present? %>
-          <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div class="rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:border-purple-500/40">
             <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4 mb-6">Informasi Kontak</h3>
             
             <% if @main_contact.whatsapp_number.present? %>
@@ -119,7 +119,7 @@
           </div>
         <% end %>
 
-        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div class="rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:border-purple-500/40">
           <h3 class="text-lg font-bold text-slate-900 mb-4">Jam Operasional</h3>
           <p class="text-sm text-slate-600 leading-relaxed">
             Senin - Jumat: 09:00 - 17:00 WIB<br>

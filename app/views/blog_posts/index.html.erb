@@ -28,7 +28,7 @@
     <% if @blog_posts.any? %>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         <% @blog_posts.each do |post| %>
-          <article class="relative isolate flex flex-col justify-between bg-white rounded-[2rem] p-8 border border-slate-150 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_-12px_rgba(99,102,241,0.07)] hover:border-indigo-500/15 hover:scale-[1.005] transition-all duration-300 group">
+          <article class="relative isolate flex flex-col justify-between bg-white rounded-[2rem] p-8 border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_-12px_rgba(99,102,241,0.07)] hover:border-purple-500/40 hover:scale-[1.005] transition-all duration-300 group">
 
             <div>
               <div class="flex items-center gap-x-4 text-xs">
@@ -66,4 +66,3 @@
     <% end %>
   </div>
 </div>
-

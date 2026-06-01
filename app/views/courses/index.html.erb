@@ -28,7 +28,7 @@
 
     <div id="course-container" class="mx-auto mt-12 flex flex-col gap-8 lg:mx-0 max-w-4xl">
       <% @courses.each do |course| %>
-        <article class="relative isolate flex flex-col gap-8 rounded-[2rem] bg-white p-6 sm:p-8 border border-slate-150 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_-12px_rgba(99,102,241,0.07)] hover:border-indigo-500/15 hover:scale-[1.005] transition-all duration-300 lg:flex-row group">
+        <article class="relative isolate flex flex-col gap-8 rounded-[2rem] bg-white p-6 sm:p-8 border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_-12px_rgba(99,102,241,0.07)] hover:border-purple-500/40 hover:scale-[1.005] transition-all duration-300 lg:flex-row group">
           
           <div class="relative shrink-0 w-full lg:w-48 h-48 rounded-2xl bg-slate-50/50 border border-slate-100 p-6 flex items-center justify-center overflow-hidden">
             <% if course.logo.attached? %>
@@ -76,4 +76,3 @@
     </div>
   </div>
 </div>
-
