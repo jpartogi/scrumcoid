@@ -1,3 +1,57 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scrum.co.id icon">
+  <defs>
+    <!-- Indigo to violet gradient matching the generated PNG -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#4338CA"/>
+      <stop offset="55%"  stop-color="#6D28D9"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+
+    <!-- Top-left shine overlay -->
+    <linearGradient id="shine" x1="0" y1="0" x2="320" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Drop shadow for the "S" -->
+    <filter id="letterShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1e1b4b" flood-opacity="0.45"/>
+    </filter>
+
+    <!-- Outer box shadow -->
+    <filter id="boxShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#1e1b4b" flood-opacity="0.40"/>
+    </filter>
+
+    <clipPath id="roundedClip">
+      <rect x="0" y="0" width="512" height="512" rx="108" ry="108"/>
+    </clipPath>
+  </defs>
+
+  <!-- Dark navy canvas background -->
+  <rect width="512" height="512" rx="108" fill="#0F172A"/>
+
+  <!-- Gradient rounded square (main icon face) -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)" filter="url(#boxShadow)" clip-path="url(#roundedClip)"/>
+
+  <!-- Shine overlay -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#shine)" clip-path="url(#roundedClip)"/>
+
+  <!-- Bold white "S" — centered, heavy weight -->
+  <text
+    x="248"
+    y="340"
+    text-anchor="middle"
+    font-family="Inter, 'Arial Black', Helvetica, sans-serif"
+    font-size="310"
+    font-weight="900"
+    fill="#ffffff"
+    letter-spacing="-8"
+    filter="url(#letterShadow)"
+    clip-path="url(#roundedClip)"
+  >S</text>
+
+  <!-- Teal accent dot — bottom-right, matching brand accent colour -->
+  <circle cx="388" cy="398" r="36" fill="#2DD4BF" opacity="0.95" clip-path="url(#roundedClip)"/>
+  <circle cx="388" cy="398" r="20" fill="#ffffff" opacity="0.85" clip-path="url(#roundedClip)"/>
 </svg>
