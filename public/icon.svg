@@ -1,57 +1,87 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scrum.co.id icon">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scrum.co.id — Sprint and Daily Scrum cycles">
   <defs>
-    <!-- Indigo to violet gradient matching the generated PNG -->
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+    <!-- Background: deep indigo → violet gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
       <stop offset="0%"   stop-color="#4338CA"/>
-      <stop offset="55%"  stop-color="#6D28D9"/>
+      <stop offset="50%"  stop-color="#5B21B6"/>
       <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
 
-    <!-- Top-left shine overlay -->
-    <linearGradient id="shine" x1="0" y1="0" x2="320" y2="320" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.18"/>
+    <!-- Subtle top-left shine -->
+    <linearGradient id="shine" x1="0" y1="0" x2="300" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.14"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
 
-    <!-- Drop shadow for the "S" -->
-    <filter id="letterShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1e1b4b" flood-opacity="0.45"/>
+    <!-- Drop shadow for the letter S -->
+    <filter id="sShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#1e1b4b" flood-opacity="0.5"/>
     </filter>
 
-    <!-- Outer box shadow -->
-    <filter id="boxShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#1e1b4b" flood-opacity="0.40"/>
+    <!-- Glow for the teal Daily Scrum circle -->
+    <filter id="tealGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
 
-    <clipPath id="roundedClip">
-      <rect x="0" y="0" width="512" height="512" rx="108" ry="108"/>
+    <clipPath id="roundClip">
+      <rect width="512" height="512" rx="110" ry="110"/>
     </clipPath>
   </defs>
 
-  <!-- Dark navy canvas background -->
-  <rect width="512" height="512" rx="108" fill="#0F172A"/>
+  <!-- Dark navy canvas -->
+  <rect width="512" height="512" rx="110" fill="#0F172A"/>
 
-  <!-- Gradient rounded square (main icon face) -->
-  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)" filter="url(#boxShadow)" clip-path="url(#roundedClip)"/>
+  <!-- Main gradient face -->
+  <rect width="512" height="512" rx="110" fill="url(#bg)" clip-path="url(#roundClip)"/>
 
   <!-- Shine overlay -->
-  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#shine)" clip-path="url(#roundedClip)"/>
+  <rect width="512" height="512" rx="110" fill="url(#shine)" clip-path="url(#roundClip)"/>
 
-  <!-- Bold white "S" — centered, heavy weight -->
+  <!--
+    LARGE CIRCLE = Sprint ring
+    Center: 248, 256  Radius: 188
+    Rendered as an open arc (gap at bottom ~30°) suggesting the cycle continues.
+    Arc from 190° to 350° clockwise (missing the bottom-left segment).
+    stroke-dasharray used to create the gap effect cleanly.
+  -->
+  <circle
+    cx="248" cy="256" r="188"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="22"
+    stroke-opacity="0.45"
+    stroke-linecap="round"
+    stroke-dasharray="1060 120"
+    stroke-dashoffset="-60"
+    clip-path="url(#roundClip)"
+  />
+
+  <!--
+    LETTER S — bold, centered, white
+  -->
   <text
     x="248"
-    y="340"
+    y="342"
     text-anchor="middle"
     font-family="Inter, 'Arial Black', Helvetica, sans-serif"
-    font-size="310"
+    font-size="290"
     font-weight="900"
     fill="#ffffff"
-    letter-spacing="-8"
-    filter="url(#letterShadow)"
-    clip-path="url(#roundedClip)"
+    letter-spacing="-6"
+    filter="url(#sShadow)"
+    clip-path="url(#roundClip)"
   >S</text>
 
-  <!-- Teal accent dot — bottom-right, matching brand accent colour -->
-  <circle cx="388" cy="398" r="36" fill="#2DD4BF" opacity="0.95" clip-path="url(#roundedClip)"/>
-  <circle cx="388" cy="398" r="20" fill="#ffffff" opacity="0.85" clip-path="url(#roundedClip)"/>
+  <!--
+    SMALL CIRCLE = Daily Scrum
+    Positioned bottom-right, partially overlapping the Sprint ring arc.
+    Large enough to be clearly visible as a distinct element.
+  -->
+  <!-- Teal glow halo -->
+  <circle cx="392" cy="398" r="52" fill="#14B8A6" opacity="0.3" clip-path="url(#roundClip)"/>
+  <!-- Main teal circle -->
+  <circle cx="392" cy="398" r="40" fill="#14B8A6" clip-path="url(#roundClip)"/>
+  <!-- Inner white highlight -->
+  <circle cx="380" cy="386" r="12" fill="#ffffff" opacity="0.55" clip-path="url(#roundClip)"/>
 </svg>
