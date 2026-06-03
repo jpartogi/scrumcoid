@@ -47,6 +47,8 @@ class ApplicationController < ActionController::Base
     # Skip obvious non-human / infrastructure paths that shouldn't count as visits
     path = request.path.downcase
     return if path == "/robots.txt" || path == "/favicon.ico" ||
+              path == "/icon.svg" || path.start_with?("/icon-") ||
+              path == "/apple-touch-icon.png" || path == "/manifest.json" ||
               path.start_with?("/assets/") || path.start_with?("/packs/") ||
               path.start_with?("/up") || path == "/sitemap.xml"
 
