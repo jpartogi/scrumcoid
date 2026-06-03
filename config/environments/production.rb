@@ -43,6 +43,16 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # Trust the proxies we run behind (Fly/Thruster internal IPs + standard privates + localhost).
+  # This improves request.remote_ip (used as fallback in our client_ip helper) and other Rails
+  # IP-dependent behavior. Our visit tracking prefers explicit headers (CF-Connecting-IP etc.)
+  # so this is defense-in-depth.
+  config.action_dispatch.trusted_proxies = [
+    "127.0.0.0/8", "::1",
+    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "169.254.0.0/16",
+    "fc00::/7", "fe80::/10"
+  ]
+
   # Skip http-to-https redirect for the default health check endpoint.
   config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 

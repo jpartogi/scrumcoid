@@ -14,3 +14,12 @@
 #     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
 #     schedule: every hour at minute 12
 
+  # Daily cleanup of old visitor tracking data (cookie/IP fingerprints).
+  # Keeps 90 days of history by default for dashboard "more stats".
+  prune_old_visitor_data:
+    class: PruneUniqueVisitsJob
+    queue: background
+    args:
+      retention_days: 90
+    schedule: every day at 3am
+

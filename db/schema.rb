@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_125653) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_03_143241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -335,10 +335,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_125653) do
 
   create_table "unique_visits", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "ip_hash", null: false
+    t.string "fingerprint", null: false
     t.datetime "updated_at", null: false
     t.date "visited_on", null: false
-    t.index ["ip_hash", "visited_on"], name: "index_unique_visits_on_ip_hash_and_visited_on", unique: true
+    t.index ["fingerprint", "visited_on"], name: "index_unique_visits_on_fingerprint_and_visited_on", unique: true
     t.index ["visited_on"], name: "index_unique_visits_on_visited_on"
   end
 
