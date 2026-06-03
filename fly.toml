@@ -12,8 +12,8 @@ console_command = '/rails/bin/rails console'
   release_command = './bin/rails db:prepare'
 
 [env]
-  APP_HOST = 'scrumcoid.fly.dev'
-  MAILER_FROM = 'noreply@scrumcoid'
+  APP_HOST = 'scrum.co.id'
+  MAILER_FROM = 'jessica.stella@scrum.co.id'
   RAILS_ENV = 'production'
   RAILS_LOG_LEVEL = 'debug'  # Temporarily set to debug to see why Puma isn't starting
   RAILS_MAX_THREADS = '5'
@@ -56,8 +56,8 @@ console_command = '/rails/bin/rails console'
       X-Forwarded-Proto = 'https'
 
 [[vm]]
-  memory = '2gb'
+  memory = '1gb'
   cpus = 1
-  memory_mb = 2048
+  memory_mb = 1024
   size = "performance-2x"
   restart_policy = "on-fail"
