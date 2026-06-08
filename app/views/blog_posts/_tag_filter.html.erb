@@ -1,0 +1,26 @@
+<% if all_tags.any? %>
+  <div class="mb-10 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
+    <div class="flex items-center gap-2 mb-4">
+      <svg class="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+      </svg>
+      <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Filter berdasarkan topik</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <%= link_to blog_posts_path, class: blog_post_all_tags_filter_class(current_tag) do %>
+        <% if current_tag.blank? %>
+          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        <% end %>
+        Semua artikel
+      <% end %>
+      <% all_tags.each do |tag| %>
+        <%= link_to blog_posts_path(tag: tag), class: blog_post_tag_filter_class(tag, current_tag) do %>
+          <span class="<%= BlogPost.normalize_tag(tag) == BlogPost.normalize_tag(current_tag.to_s) ? 'opacity-70' : 'opacity-40' %>">#</span><%= tag %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

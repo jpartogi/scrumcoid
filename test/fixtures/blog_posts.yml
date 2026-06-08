@@ -6,6 +6,16 @@ published_post:
   published_at: <%= 2.days.ago %>
   status: 1
   meta_keywords: scrum, ai, blog
+  tags: scrum, ai
+
+related_post:
+  title: Agile Foundations
+  slug: agile-foundations
+  excerpt: Agile basics for teams.
+  body: Another article body.
+  published_at: <%= 3.days.ago %>
+  status: 1
+  tags: scrum, agile
 
 draft_post:
   title: Draft Article

@@ -10,10 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_03_143241) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
-
+ActiveRecord::Schema[8.1].define(version: 2026_06_08_151936) do
   create_table "about_pages", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "summary", null: false
@@ -77,6 +74,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_03_143241) do
     t.datetime "published_at"
     t.string "slug", null: false
     t.integer "status", default: 0, null: false
+    t.text "tags"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_blog_posts_on_slug", unique: true

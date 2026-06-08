@@ -1,0 +1,15 @@
+<% if post.tag_list.any? %>
+  <div class="flex flex-wrap gap-2 <%= local_assigns.fetch(:wrapper_class, "") %>">
+    <% post.tag_list.each do |tag| %>
+      <% if local_assigns.fetch(:linkable, true) %>
+        <%= link_to blog_posts_path(tag: tag), class: local_assigns.fetch(:link_class, blog_post_tag_link_class), title: "Ver artigos com a tag #{tag}" do %>
+          <span class="opacity-50">#</span><%= tag %>
+        <% end %>
+      <% else %>
+        <span class="<%= local_assigns.fetch(:link_class, blog_post_tag_link_class) %>">
+          <span class="opacity-50">#</span><%= tag %>
+        </span>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

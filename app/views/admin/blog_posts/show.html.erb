@@ -58,6 +58,12 @@
             <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Status</dt>
             <dd class="mt-1 text-slate-600 font-semibold"><%= @blog_post.status.capitalize %></dd>
           </div>
+          <% if @blog_post.tags.present? %>
+            <div>
+              <dt class="font-bold text-slate-900 uppercase tracking-wider text-[10px]">Tags</dt>
+              <dd class="mt-1 text-slate-600 font-semibold"><%= @blog_post.tags %></dd>
+            </div>
+          <% end %>
         </dl>
       </div>
 
