@@ -45,4 +45,20 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", blog_posts_path(tag: "ai"), text: /ai/
     assert_match blog_posts(:related_post).title, response.body
   end
+
+  test "show page hides edit button for guests" do
+    get blog_post_path(blog_posts(:published_post))
+
+    assert_response :success
+    assert_select "a", text: "Edit Blog Post", count: 0
+  end
+
+  test "show page displays edit button for admin" do
+    sign_in users(:admin)
+    post = blog_posts(:published_post)
+    get blog_post_path(post)
+
+    assert_response :success
+    assert_select "a[href=?]", edit_admin_blog_post_path(post), text: "Edit Blog Post", count: 2
+  end
 end

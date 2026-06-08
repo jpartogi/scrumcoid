@@ -9,6 +9,15 @@
   <div class="absolute -left-20 -top-20 -z-10 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" aria-hidden="true"></div>
 
   <div class="mx-auto max-w-3xl px-6 lg:px-8">
+    <% if current_user&.admin? %>
+      <div class="mb-6 flex justify-end">
+        <div class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-white/40">Admin</span>
+          <div class="h-3 w-px bg-white/20"></div>
+          <%= render "admin_edit_link", blog_post: @blog_post %>
+        </div>
+      </div>
+    <% end %>
     <div class="text-center">
       <span class="inline-flex items-center rounded-full bg-teal-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-teal-400 ring-1 ring-inset ring-teal-500/30 shadow-[0_0_15px_rgba(20,184,166,0.1)]">
         Detail Artikel
@@ -64,11 +73,16 @@
         </div>
       <% end %>
 
-      <div class="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
+      <div class="mt-16 pt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
         <%= link_to blog_posts_path, class: "text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/back" do %>
           <span class="group-hover/back:-translate-x-1 transition-transform duration-200">&larr;</span> Kembali ke Blog
         <% end %>
-        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">scrum.co.id</span>
+        <div class="flex items-center gap-4">
+          <% if current_user&.admin? %>
+            <%= render "admin_edit_link", blog_post: @blog_post %>
+          <% end %>
+          <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">scrum.co.id</span>
+        </div>
       </div>
     </div>
   </div>
