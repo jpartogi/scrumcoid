@@ -59,6 +59,6 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     get blog_post_path(post)
 
     assert_response :success
-    assert_select "a[href=?]", edit_admin_blog_post_path(post), text: "Edit Blog Post", count: 2
+    assert_select "a[href=?]", edit_admin_blog_post_path(post), text: /Edit Post/, count: 2
   end
 end
