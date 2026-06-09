@@ -42,4 +42,20 @@ class ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_match blog_posts(:related_post).title, response.body
     assert_no_match "Topik", response.body
   end
+
+  test "show page hides edit button for guests" do
+    get class_schedule_path(class_schedules(:open_online))
+
+    assert_response :success
+    assert_select "a[href=?]", edit_admin_class_schedule_path(class_schedules(:open_online)), count: 0
+  end
+
+  test "show page displays edit button for admin" do
+    sign_in users(:admin)
+    schedule = class_schedules(:open_online)
+    get class_schedule_path(schedule)
+
+    assert_response :success
+    assert_select "a[href=?]", edit_admin_class_schedule_path(schedule), text: /Edit Schedule/, count: 2
+  end
 end
