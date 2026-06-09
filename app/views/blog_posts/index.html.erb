@@ -70,6 +70,22 @@
           </article>
         <% end %>
       </div>
+
+      <% if @blog_posts.total_pages > 1 %>
+        <div class="mt-16 flex flex-col gap-4 rounded-[2rem] border border-slate-200/80 bg-white px-8 py-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)] sm:flex-row sm:items-center sm:justify-between animate-fade-in">
+          <p class="text-sm font-medium text-slate-500 flex items-center gap-2.5">
+            <span class="inline-block h-2 w-2 rounded-full bg-teal-500 shadow-sm shadow-teal-500/25"></span>
+            <%= page_entries_info_for(@blog_posts, entry_name: "artikel", locale: :id) %>
+          </p>
+          <%= render "shared/pagination",
+            paginated: @blog_posts,
+            path: method(:blog_posts_path),
+            extra_params: { tag: @current_tag.presence },
+            include_per_page: false,
+            previous_label: "Sebelumnya",
+            next_label: "Berikutnya" %>
+        </div>
+      <% end %>
     <% else %>
       <div class="rounded-[2rem] border-2 border-dashed border-slate-200 bg-white py-12 px-6 text-center">
         <svg class="mx-auto h-12 w-12 text-slate-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">

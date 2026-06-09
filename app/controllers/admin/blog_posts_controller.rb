@@ -1,4 +1,6 @@
 class Admin::BlogPostsController < ApplicationController
+  INDEX_PER_PAGE = 10
+
   before_action :authenticate_user!
   before_action :authorize_admin!
   before_action :set_blog_post, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
@@ -13,7 +15,7 @@ class Admin::BlogPostsController < ApplicationController
     @blog_posts = PaginatedScope.wrap(
       BlogPost.order("#{sort_column} #{sort_direction}"),
       page: params[:page],
-      per_page: params[:per_page]
+      per_page: params[:per_page].presence || INDEX_PER_PAGE
     )
   end
 

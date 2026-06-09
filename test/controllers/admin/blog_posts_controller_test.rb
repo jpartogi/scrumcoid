@@ -36,14 +36,21 @@ class Admin::BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href*='sort=published_at'][href*='direction=asc']"
   end
 
-  test "index paginates blog posts" do
+  test "index defaults to ten posts per page" do
     get admin_blog_posts_path
+
+    assert_response :success
+    assert_select "input[name='per_page'][value='10']"
+  end
+
+  test "index paginates blog posts" do
+    get admin_blog_posts_path(per_page: 2)
 
     assert_response :success
     assert_select "nav[aria-label='Pagination']"
     assert_select "tbody tr", count: 2
 
-    get admin_blog_posts_path(page: 2)
+    get admin_blog_posts_path(page: 2, per_page: 2)
 
     assert_response :success
     assert_select "tbody tr", count: 1

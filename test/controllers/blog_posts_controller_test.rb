@@ -27,6 +27,38 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "meta[name='keywords'][content='scrum, ai, blog']"
   end
 
+  test "index paginates published posts" do
+    @original_per_page = PaginatedScope.default_per_page
+    PaginatedScope.default_per_page = 1
+
+    get blog_posts_path
+
+    assert_response :success
+    assert_select "nav[aria-label='Pagination']"
+    assert_match blog_posts(:published_post).title, response.body
+    assert_no_match blog_posts(:related_post).title, response.body
+
+    get blog_posts_path(page: 2)
+
+    assert_response :success
+    assert_match blog_posts(:related_post).title, response.body
+  ensure
+    PaginatedScope.default_per_page = @original_per_page
+  end
+
+  test "index paginates filtered posts by tag" do
+    @original_per_page = PaginatedScope.default_per_page
+    PaginatedScope.default_per_page = 1
+
+    get blog_posts_path(tag: "scrum")
+
+    assert_response :success
+    assert_select "nav[aria-label='Pagination']"
+    assert_select "a[href=?]", blog_posts_path(page: 2, tag: "scrum")
+  ensure
+    PaginatedScope.default_per_page = @original_per_page
+  end
+
   test "index filters posts by tag" do
     get blog_posts_path(tag: "scrum")
 
