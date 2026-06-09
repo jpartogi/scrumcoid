@@ -45,6 +45,29 @@ module ClassSchedulesHelper
     end
   end
 
+  # Returns just the date portion (e.g. "12 Jun 2025" or "12–13 Jun 2025")
+  def class_schedule_date_part(schedule)
+    starts_at = schedule.starts_at.in_time_zone(schedule.time_zone || Time.zone)
+    ends_at   = schedule.ends_at.in_time_zone(schedule.time_zone || Time.zone)
+
+    if starts_at.to_date == ends_at.to_date
+      starts_at.strftime("%-d %b %Y")
+    elsif starts_at.month == ends_at.month && starts_at.year == ends_at.year
+      "#{starts_at.strftime('%-d')}–#{ends_at.strftime('%-d %b %Y')}"
+    else
+      "#{starts_at.strftime('%-d %b')} – #{ends_at.strftime('%-d %b %Y')}"
+    end
+  end
+
+  # Returns just the time range (e.g. "9:00 AM – 5:30 PM WIB")
+  def class_schedule_time_part(schedule)
+    starts_at = schedule.starts_at.in_time_zone(schedule.time_zone || Time.zone)
+    ends_at   = schedule.ends_at.in_time_zone(schedule.time_zone || Time.zone)
+    tz_abbr   = starts_at.strftime("%Z")
+
+    "#{starts_at.strftime('%-l:%M %p')} – #{ends_at.strftime('%-l:%M %p')} #{tz_abbr}"
+  end
+
   private
 
   def server_formatted_class_time(schedule, format)
