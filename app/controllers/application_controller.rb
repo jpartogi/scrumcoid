@@ -13,8 +13,12 @@ class ApplicationController < ActionController::Base
   private
 
   def determine_layout
-    if controller_path.start_with?("admin/") || (devise_controller? && current_user&.admin? && action_name.in?(%w[edit update]))
+    if controller_path.start_with?("admin/")
       "admin"
+    elsif devise_controller? && current_user&.admin? && action_name.in?(%w[edit update])
+      "admin"
+    elsif devise_controller?
+      "auth"
     else
       "application"
     end

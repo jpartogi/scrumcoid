@@ -1,25 +1,46 @@
-<%- if controller_name != 'sessions' %>
-  <p><%= link_to "Log in", new_session_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <p><%= link_to "Sign up", new_registration_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <p><%= link_to "Forgot your password?", new_password_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <p><%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <p><%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <p><%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %></p>
+<%# Shared navigation links — used in contexts where we don't override per-page %>
+<div class="space-y-2 text-sm text-center">
+  <%- if controller_name != 'sessions' %>
+    <p>
+      <%= link_to "Sign in to your account", new_session_path(resource_name),
+          class: "font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+    </p>
   <% end %>
-<% end %>
+
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <p>
+      <%= link_to "Create a new account", new_registration_path(resource_name),
+          class: "font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+    </p>
+  <% end %>
+
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <p class="text-slate-500">
+      <%= link_to "Forgot your password?", new_password_path(resource_name),
+          class: "font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+    </p>
+  <% end %>
+
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <p class="text-slate-500">
+      <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name),
+          class: "font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+    </p>
+  <% end %>
+
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <p class="text-slate-500">
+      <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name),
+          class: "font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+    </p>
+  <% end %>
+
+  <%- if devise_mapping.omniauthable? %>
+    <%- resource_class.omniauth_providers.each do |provider| %>
+      <p>
+        <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false },
+            class: "w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all shadow-sm cursor-pointer" %>
+      </p>
+    <% end %>
+  <% end %>
+</div>

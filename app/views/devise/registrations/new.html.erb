@@ -1,12 +1,91 @@
-<section class="mx-auto max-w-md px-6 py-16">
-  <h1 class="text-3xl font-semibold tracking-tight">Create your student account</h1>
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 space-y-5" }) do |f| %>
+<%# Sign Up %>
+<div class="space-y-8">
+  <%# Header %>
+  <div>
+    <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Create your account</h1>
+    <p class="mt-1 text-sm text-slate-500">Join scrum.co.id to access your training dashboard.</p>
+  </div>
+
+  <%# Form card %>
+  <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
     <%= render "devise/shared/error_messages", resource: resource %>
-    <div><%= f.label :name, class: "text-sm font-semibold" %><%= f.text_field :name, autofocus: true, autocomplete: "name", class: "mt-1 w-full rounded-md border border-slate-300 px-3 py-2" %></div>
-    <div><%= f.label :email, class: "text-sm font-semibold" %><%= f.email_field :email, autocomplete: "email", class: "mt-1 w-full rounded-md border border-slate-300 px-3 py-2" %></div>
-    <div><%= f.label :password, class: "text-sm font-semibold" %><%= f.password_field :password, autocomplete: "new-password", class: "mt-1 w-full rounded-md border border-slate-300 px-3 py-2" %><% if @minimum_password_length %><p class="mt-1 text-xs text-slate-500"><%= @minimum_password_length %> characters minimum</p><% end %></div>
-    <div><%= f.label :password_confirmation, class: "text-sm font-semibold" %><%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 w-full rounded-md border border-slate-300 px-3 py-2" %></div>
-    <%= f.submit "Sign up", class: "w-full rounded-md bg-teal-700 px-4 py-3 text-sm font-semibold text-white hover:bg-teal-800" %>
-  <% end %>
-  <div class="mt-6 text-sm text-slate-600"><%= render "devise/shared/links" %></div>
-</section>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-5" }) do |f| %>
+
+      <%# Full name %>
+      <div>
+        <%= f.label :name, "Full Name", class: "block text-sm font-bold text-slate-700 mb-1.5" %>
+        <div class="relative">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+            <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+          </div>
+          <%= f.text_field :name, autofocus: true, autocomplete: "name",
+              placeholder: "e.g., Budi Santoso",
+              class: "w-full rounded-lg border border-slate-300 bg-slate-50 pl-10 pr-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" %>
+        </div>
+      </div>
+
+      <%# Email %>
+      <div>
+        <%= f.label :email, class: "block text-sm font-bold text-slate-700 mb-1.5" %>
+        <div class="relative">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+            <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <%= f.email_field :email, autocomplete: "email",
+              placeholder: "you@example.com",
+              class: "w-full rounded-lg border border-slate-300 bg-slate-50 pl-10 pr-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" %>
+        </div>
+      </div>
+
+      <%# Password %>
+      <div>
+        <%= f.label :password, class: "block text-sm font-bold text-slate-700 mb-1.5" %>
+        <div class="relative">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+            <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <%= f.password_field :password, autocomplete: "new-password",
+              placeholder: "••••••••",
+              class: "w-full rounded-lg border border-slate-300 bg-slate-50 pl-10 pr-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" %>
+        </div>
+        <% if @minimum_password_length %>
+          <p class="mt-1.5 text-xs text-slate-400 font-medium"><%= @minimum_password_length %> characters minimum</p>
+        <% end %>
+      </div>
+
+      <%# Password confirmation %>
+      <div>
+        <%= f.label :password_confirmation, "Confirm Password", class: "block text-sm font-bold text-slate-700 mb-1.5" %>
+        <div class="relative">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+            <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password",
+              placeholder: "••••••••",
+              class: "w-full rounded-lg border border-slate-300 bg-slate-50 pl-10 pr-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" %>
+        </div>
+      </div>
+
+      <%# Submit %>
+      <%= f.submit "Create account",
+          class: "w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-violet-500 hover:shadow-indigo-500/40 hover:-translate-y-px transition-all duration-200 cursor-pointer" %>
+
+    <% end %>
+  </div>
+
+  <%# Sign in link %>
+  <p class="text-center text-sm text-slate-500">
+    Already have an account?
+    <%= link_to "Sign in", new_session_path(resource_name),
+        class: "font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+  </p>
+</div>
