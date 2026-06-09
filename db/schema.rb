@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_08_151936) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_09_025230) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "about_pages", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "summary", null: false
@@ -130,6 +133,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_08_151936) do
     t.string "meta_keywords"
     t.string "slug", null: false
     t.integer "status", default: 0, null: false
+    t.text "tags"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_courses_on_slug", unique: true

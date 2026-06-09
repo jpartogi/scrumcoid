@@ -35,6 +35,19 @@ class Course < ApplicationRecord
     slug
   end
 
+  def tag_list
+    tags.to_s.split(",").map(&:strip).reject(&:blank?)
+  end
+
+  def related_blog_posts(limit: 3)
+    return BlogPost.none if tag_list.empty?
+
+    scope = BlogPost.recent
+    tag_list.reduce(BlogPost.none) do |result, tag|
+      result.or(scope.with_tag(tag))
+    end.distinct.limit(limit)
+  end
+
   private
 
   def set_slug

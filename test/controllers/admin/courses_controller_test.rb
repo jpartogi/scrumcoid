@@ -18,6 +18,25 @@ class Admin::CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_select "img[alt='#{course.title} logo']"
   end
 
+  test "admin can save course tags" do
+    sign_in users(:admin)
+    course = courses(:ai_essentials)
+
+    patch admin_course_path(course), params: {
+      course: {
+        title: course.title,
+        slug: course.slug,
+        excerpt: course.excerpt,
+        description: course.description,
+        status: course.status,
+        tags: "scrum, agile, ai"
+      }
+    }
+
+    assert_redirected_to admin_course_path(course)
+    assert_equal "scrum, agile, ai", course.reload.tags
+  end
+
   test "admin can create course with multiple prices" do
     sign_in users(:admin)
 

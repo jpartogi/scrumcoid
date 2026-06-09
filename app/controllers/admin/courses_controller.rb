@@ -59,7 +59,7 @@ class Admin::CoursesController < ApplicationController
   end
 
   def course_params
-    params.require(:course).permit(:title, :slug, :excerpt, :description, :status, :logo, :meta_keywords,
+    params.require(:course).permit(:title, :slug, :excerpt, :description, :status, :logo, :meta_keywords, :tags,
       course_prices_attributes: [:id, :currency, :amount, :_destroy])
   end
 end

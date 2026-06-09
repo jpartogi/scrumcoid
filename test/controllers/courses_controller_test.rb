@@ -47,4 +47,15 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "meta[name='keywords'][content='scrum, ai, essentials']"
   end
+
+  test "show page displays related blog posts but not course tags" do
+    course = courses(:ai_essentials)
+    get course_path(course)
+
+    assert_response :success
+    assert_match blog_posts(:published_post).title, response.body
+    assert_match blog_posts(:related_post).title, response.body
+    assert_no_match "Topik", response.body
+    assert_select "a[href=?]", blog_posts_path(tag: "scrum"), count: 0
+  end
 end

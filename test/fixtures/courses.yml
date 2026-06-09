@@ -5,6 +5,7 @@ ai_essentials:
   description: Practical AI training for Scrum teams.
   status: 1
   meta_keywords: scrum, ai, essentials
+  tags: scrum, ai
 
 draft_course:
   title: Private Draft Course
