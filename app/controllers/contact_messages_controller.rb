@@ -2,9 +2,19 @@ class ContactMessagesController < ApplicationController
   def new
     @contact_message = ContactMessage.new
     
+    if params[:jenis_inkuiri].present?
+      @contact_message.jenis_inkuiri = params[:jenis_inkuiri]
+    end
+
+    if params[:pelatihan].present?
+      @contact_message.pelatihan = params[:pelatihan]
+    end
+
     if params[:subject].present?
       subject_str = params[:subject].to_s
-      if subject_str.downcase.include?("privat") || subject_str.downcase.include?("quotation")
+      if subject_str.downcase.include?("grup") || subject_str.downcase.include?("pendaftaran grup")
+        @contact_message.jenis_inkuiri = "Pendaftaran Grup"
+      elsif subject_str.downcase.include?("privat") || subject_str.downcase.include?("quotation")
         @contact_message.jenis_inkuiri = "Quotation Pelatihan Privat"
       elsif subject_str.downcase.include?("publik") || subject_str.downcase.include?("waiting list")
         @contact_message.jenis_inkuiri = "Waiting List Pelatihan Publik"

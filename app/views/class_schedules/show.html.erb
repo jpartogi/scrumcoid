@@ -185,7 +185,7 @@
           <p class="mt-2 text-xs text-slate-500 leading-relaxed">
             Tertarik memesan slot untuk seluruh tim Anda? Hubungi kami untuk invoice khusus dan diskon grup perusahaan.
           </p>
-          <%= link_to "Hubungi Kami", new_contact_path(subject: "Pendaftaran Grup: #{@class_schedule.course.title} mulai #{@class_schedule.starts_at.to_date}"), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
+          <%= link_to "Hubungi Kami", new_contact_path(jenis_inkuiri: "Pendaftaran Grup", pelatihan: @class_schedule.course.title), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-500 transition-colors" %>
         </div>
       </aside>
     </div>

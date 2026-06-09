@@ -49,4 +49,28 @@ class ContactMessagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Quotation Pelatihan Privat - Scrum.org AI Essentials", last_message.subject
     assert last_message.unread?
   end
+
+  test "new action pre-fills form fields based on query parameters" do
+    get new_contact_path(jenis_inkuiri: "Pendaftaran Grup", pelatihan: "Scrum.org AI Essentials")
+
+    assert_response :success
+    assert_select "select#contact_message_jenis_inkuiri" do
+      assert_select "option[selected]", text: "Pendaftaran Grup"
+    end
+    assert_select "select#contact_message_pelatihan" do
+      assert_select "option[selected]", text: "Scrum.org AI Essentials"
+    end
+  end
+
+  test "new action parses fallback subject query param correctly" do
+    get new_contact_path(subject: "Pendaftaran Grup: Scrum.org AI Essentials")
+
+    assert_response :success
+    assert_select "select#contact_message_jenis_inkuiri" do
+      assert_select "option[selected]", text: "Pendaftaran Grup"
+    end
+    assert_select "select#contact_message_pelatihan" do
+      assert_select "option[selected]", text: "Scrum.org AI Essentials"
+    end
+  end
 end

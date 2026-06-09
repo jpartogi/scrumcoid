@@ -75,7 +75,7 @@
           <p class="mt-2 text-xs text-slate-600 leading-relaxed">
             Kami menyelenggarakan coaching dan pelatihan privat khusus yang disesuaikan dengan produk, tools, dan tantangan tim Anda.
           </p>
-          <%= link_to new_contact_path(subject: "Pelatihan privat: #{@course.title}"), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors group/link" do %>
+          <%= link_to new_contact_path(jenis_inkuiri: "Quotation Pelatihan Privat", pelatihan: @course.title), class: "mt-4 inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors group/link" do %>
             Tanyakan tentang kelas privat <span class="group-hover/link:translate-x-1 transition-transform duration-200">&rarr;</span>
           <% end %>
         </div>

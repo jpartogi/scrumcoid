@@ -39,7 +39,7 @@
         <h3 class="mt-4 text-sm font-bold text-slate-900">Belum ada kelas publik yang dijadwalkan</h3>
         <p class="mt-1 text-sm text-slate-500">Hubungi kami untuk meminta tanggal khusus atau merancang kelas privat perusahaan.</p>
         <div class="mt-6">
-          <%= link_to "Tanyakan tentang jadwal kelas →", new_contact_path(subject: "Tanya jadwal kelas publik"), class: "inline-flex items-center rounded-xl bg-indigo-50 px-4 py-2.5 text-sm font-bold text-indigo-700 hover:bg-indigo-100 transition-colors" %>
+          <%= link_to "Tanyakan tentang jadwal kelas →", new_contact_path(jenis_inkuiri: "Waiting List Pelatihan Publik", pelatihan: "Lainnya"), class: "inline-flex items-center rounded-xl bg-indigo-50 px-4 py-2.5 text-sm font-bold text-indigo-700 hover:bg-indigo-100 transition-colors" %>
         </div>
       </div>
     <% end %>
