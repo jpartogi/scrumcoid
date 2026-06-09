@@ -4,7 +4,11 @@ class Admin::CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
 
   def index
-    @courses = Course.with_attached_logo.includes(:class_schedules).order(:title)
+    @courses = PaginatedScope.wrap(
+      Course.with_attached_logo.includes(:class_schedules).order(:title),
+      page: params[:page],
+      per_page: params[:per_page]
+    )
   end
 
   def show

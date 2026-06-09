@@ -3,6 +3,20 @@ require "test_helper"
 class Admin::CoursesControllerTest < ActionDispatch::IntegrationTest
   include ActionDispatch::TestProcess::FixtureFile
 
+  test "admin courses index respects per_page parameter" do
+    sign_in users(:admin)
+    @original_per_page = PaginatedScope.default_per_page
+    PaginatedScope.default_per_page = 1
+
+    get admin_courses_path(per_page: 1)
+
+    assert_response :success
+    assert_select "input[name='per_page'][value='1']"
+    assert_select "nav[aria-label='Pagination']"
+  ensure
+    PaginatedScope.default_per_page = @original_per_page
+  end
+
   test "admin courses index displays course logo" do
     sign_in users(:admin)
     course = courses(:ai_essentials)

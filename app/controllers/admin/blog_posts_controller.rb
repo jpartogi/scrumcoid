@@ -4,7 +4,17 @@ class Admin::BlogPostsController < ApplicationController
   before_action :set_blog_post, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
 
   def index
-    @blog_posts = BlogPost.order(created_at: :desc)
+    sort_column    = %w[title published_at].include?(params[:sort]) ? params[:sort] : "created_at"
+    sort_direction = params[:direction] == "asc" ? "asc" : "desc"
+
+    @sort_column    = sort_column
+    @sort_direction = sort_direction
+
+    @blog_posts = PaginatedScope.wrap(
+      BlogPost.order("#{sort_column} #{sort_direction}"),
+      page: params[:page],
+      per_page: params[:per_page]
+    )
   end
 
   def show

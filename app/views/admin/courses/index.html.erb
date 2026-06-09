@@ -18,6 +18,15 @@
   <!-- Table Container Card -->
   <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
     <% if @courses.any? %>
+      <div class="flex flex-col gap-3 border-b border-slate-100 bg-slate-50/50 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <%= render "shared/per_page_selector", paginated: @courses, url: admin_courses_path %>
+        <% if @courses.total_pages > 1 %>
+          <p class="text-xs font-medium text-slate-500">
+            <%= page_entries_info_for(@courses, entry_name: "course") %>
+          </p>
+        <% end %>
+      </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-sm">
           <thead>
@@ -77,6 +86,15 @@
           </tbody>
         </table>
       </div>
+
+      <% if @courses.total_pages > 1 %>
+        <div class="flex flex-col gap-3 border-t border-slate-100 bg-slate-50/50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-xs font-medium text-slate-500">
+            <%= page_entries_info_for(@courses, entry_name: "course") %>
+          </p>
+          <%= render "shared/pagination", paginated: @courses, path: method(:admin_courses_path) %>
+        </div>
+      <% end %>
     <% else %>
       <div class="px-6 py-16 text-center text-slate-400">
         <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">

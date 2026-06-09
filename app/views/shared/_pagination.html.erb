@@ -1,0 +1,53 @@
+<%# locals: (paginated:, path:) %>
+<nav class="flex items-center justify-end gap-1" aria-label="Pagination">
+  <ul class="inline-flex items-center gap-1">
+    <% unless paginated.first_page? %>
+      <li>
+        <%= link_to paginated_path(path, paginated, page: 1), class: "inline-flex min-w-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 transition-colors" do %>
+          &laquo;
+        <% end %>
+      </li>
+      <li>
+        <%= link_to paginated_path(path, paginated, page: paginated.current_page - 1), class: "inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 transition-colors", rel: "prev" do %>
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Prev
+        <% end %>
+      </li>
+    <% end %>
+
+    <% previous_page = nil %>
+    <% pagination_window(paginated).each do |page| %>
+      <% if previous_page && page > previous_page + 1 %>
+        <li>
+          <span class="inline-flex min-w-9 items-center justify-center px-2 py-1.5 text-xs font-semibold text-slate-400">&hellip;</span>
+        </li>
+      <% end %>
+      <li>
+        <% if page == paginated.current_page %>
+          <span class="inline-flex min-w-9 items-center justify-center rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm" aria-current="page"><%= page %></span>
+        <% else %>
+          <%= link_to page, paginated_path(path, paginated, page: page), class: "inline-flex min-w-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 transition-colors" %>
+        <% end %>
+      </li>
+      <% previous_page = page %>
+    <% end %>
+
+    <% unless paginated.last_page? %>
+      <li>
+        <%= link_to paginated_path(path, paginated, page: paginated.current_page + 1), class: "inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 transition-colors", rel: "next" do %>
+          Next
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to paginated_path(path, paginated, page: paginated.total_pages), class: "inline-flex min-w-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 transition-colors" do %>
+          &raquo;
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
