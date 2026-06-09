@@ -86,9 +86,19 @@
           <dl class="space-y-4 text-sm">
             <div>
               <dt class="font-bold text-slate-900">Hari & Jam</dt>
-              <dd class="mt-1 text-slate-600 leading-relaxed font-medium">
-                <%= local_class_time(@class_schedule, format: :range) %>
-                <span class="block text-xs text-slate-400 mt-0.5 font-normal">Zona Waktu: <%= @class_schedule.timezone %></span>
+              <dd class="mt-2 text-slate-600 leading-relaxed font-medium space-y-1.5 text-sm">
+                <span class="flex items-center gap-2">
+                  <svg class="h-4 w-4 text-indigo-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                  </svg>
+                  <%= class_schedule_date_part(@class_schedule) %>
+                </span>
+                <span class="flex items-center gap-2">
+                  <svg class="h-4 w-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <%= class_schedule_time_part(@class_schedule) %>
+                </span>
               </dd>
             </div>
             <div>
