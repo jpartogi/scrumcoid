@@ -29,4 +29,17 @@ class ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "meta[name='keywords'][content='scrum, ai, essentials']"
   end
+
+  test "show page displays related blog posts and other schedules for the same course" do
+    schedule = class_schedules(:open_online)
+    other_schedule = class_schedules(:full_online)
+    get class_schedule_path(schedule)
+
+    assert_response :success
+    assert_select "#other-schedules"
+    assert_select "#other-schedules a[href='#{class_schedule_path(other_schedule)}']"
+    assert_match blog_posts(:published_post).title, response.body
+    assert_match blog_posts(:related_post).title, response.body
+    assert_no_match "Topik", response.body
+  end
 end
