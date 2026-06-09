@@ -191,8 +191,9 @@
                       <td class="px-6 py-4 font-semibold text-slate-900 max-w-xs truncate">
                         <%= link_to schedule.course.title, admin_class_schedule_path(schedule), class: "hover:text-indigo-600" %>
                       </td>
-                      <td class="px-6 py-4 text-slate-500 font-medium">
-                        <%= local_class_time(schedule, format: :range) %>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <p class="text-sm font-semibold text-slate-700"><%= class_schedule_date_part(schedule) %></p>
+                        <p class="text-[11px] text-slate-400 mt-0.5"><%= class_schedule_time_part(schedule) %></p>
                       </td>
                       <td class="px-6 py-4 text-center">
                         <span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10">
