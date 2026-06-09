@@ -11,8 +11,9 @@ module PaginationHelper
 
     first = ((paginated.current_page - 1) * paginated.per_page) + 1
     last = [paginated.current_page * paginated.per_page, paginated.total_count].min
-    noun = entry_name.pluralize(paginated.total_count)
-
+    #noun = entry_name.pluralize(paginated.total_count)
+    noun = entry_name
+    
     if locale == :id
       "Menampilkan #{first}–#{last} dari #{paginated.total_count} #{noun}"
     else

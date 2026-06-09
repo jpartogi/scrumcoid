@@ -29,6 +29,20 @@ class Admin::BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href*='sort=title'][href*='direction=desc']"
   end
 
+  test "index defaults to published_at descending" do
+    get admin_blog_posts_path
+
+    assert_response :success
+    assert_select "a[href*='sort=published_at'][href*='direction=asc']"
+
+    published_index = response.body.index(blog_posts(:published_post).title)
+    related_index = response.body.index(blog_posts(:related_post).title)
+    draft_index = response.body.index(blog_posts(:draft_post).title)
+
+    assert_operator published_index, :<, related_index
+    assert_operator related_index, :<, draft_index
+  end
+
   test "index sorts by published_at descending" do
     get admin_blog_posts_path(sort: "published_at", direction: "desc")
 

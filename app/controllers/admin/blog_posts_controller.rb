@@ -6,14 +6,14 @@ class Admin::BlogPostsController < ApplicationController
   before_action :set_blog_post, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
 
   def index
-    sort_column    = %w[title published_at].include?(params[:sort]) ? params[:sort] : "created_at"
+    sort_column    = %w[title published_at].include?(params[:sort]) ? params[:sort] : "published_at"
     sort_direction = params[:direction] == "asc" ? "asc" : "desc"
 
     @sort_column    = sort_column
     @sort_direction = sort_direction
 
     @blog_posts = PaginatedScope.wrap(
-      BlogPost.order("#{sort_column} #{sort_direction}"),
+      ordered_blog_posts(sort_column, sort_direction),
       page: params[:page],
       per_page: params[:per_page].presence || INDEX_PER_PAGE
     )
@@ -63,6 +63,20 @@ class Admin::BlogPostsController < ApplicationController
   end
 
   private
+
+  def ordered_blog_posts(column, direction)
+    scope = BlogPost.all
+
+    if column == "published_at"
+      if direction == "desc"
+        scope.order(Arel.sql("published_at IS NULL")).order(published_at: :desc)
+      else
+        scope.order(Arel.sql("published_at IS NULL DESC")).order(published_at: :asc)
+      end
+    else
+      scope.order(column => direction)
+    end
+  end
 
   def set_blog_post
     @blog_post = BlogPost.find_by!(slug: params[:id])
