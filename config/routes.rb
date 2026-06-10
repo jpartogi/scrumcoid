@@ -6,10 +6,11 @@ Rails.application.routes.draw do
   resources :courses, only: [:index, :show]
   resource :about, only: [:show], controller: "about"
   resource :contact, only: [:new, :create], controller: "contact_messages"
-  resources :class_schedules, only: [:index, :show] do
+  resources :class_schedules, only: [:index] do
     resource :enrollment, only: [:destroy]
     resources :registrations, only: [:new, :create], controller: "class_schedules/registrations"
   end
+  get "class_schedules/:course_slug/:id", to: "class_schedules#show", as: :class_schedule
   resources :blog_posts, path: "blog", only: [:index, :show]
   resource :dashboard, only: [:show], controller: "dashboard"
 

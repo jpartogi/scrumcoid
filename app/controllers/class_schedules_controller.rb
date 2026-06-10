@@ -4,7 +4,10 @@ class ClassSchedulesController < ApplicationController
   end
 
   def show
-    @class_schedule = ClassSchedule.published.includes(:enrollments, course: [ :logo_attachment, :course_prices ]).find(params[:id])
+    course = Course.find_by!(slug: params[:course_slug])
+    @class_schedule = course.class_schedules.published
+      .includes(:enrollments, course: [ :logo_attachment, :course_prices ])
+      .find(params[:id])
     @enrollment = current_user&.enrollments&.find_by(class_schedule: @class_schedule)
     @related_blog_posts = @class_schedule.course.related_blog_posts
     @other_schedules = @class_schedule.course.class_schedules

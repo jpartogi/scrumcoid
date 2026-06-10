@@ -3,7 +3,7 @@ class SitemapsController < ApplicationController
 
   def show
     @courses = Course.published
-    @class_schedules = ClassSchedule.published
+    @class_schedules = ClassSchedule.available.includes(:course).order(:starts_at)
     @blog_posts = BlogPost.published
 
     respond_to do |format|

@@ -48,8 +48,8 @@ xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
     end
   end
 
-  # Dynamic Class Schedules
-  @class_schedules.find_each do |class_schedule|
+  # Dynamic Class Schedules (/class_schedules/:course_slug/:id)
+  @class_schedules.each do |class_schedule|
     xml.url do
       xml.loc class_schedule_url(class_schedule)
       xml.lastmod class_schedule.updated_at.to_date.to_s

@@ -7,7 +7,9 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :track_unique_visit
-  helper_method :current_currency
+  include ClassScheduleRouting
+
+  helper_method :current_currency, :class_schedule_path, :class_schedule_url
   layout :determine_layout
 
   private

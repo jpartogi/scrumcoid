@@ -1,4 +1,6 @@
 module ClassSchedulesHelper
+  include ClassScheduleRouting
+
   def local_class_time(schedule, format: :datetime, class_name: nil, prefix: nil)
     tag.time(
       server_formatted_class_time(schedule, format),
