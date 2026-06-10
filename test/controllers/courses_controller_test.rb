@@ -58,4 +58,20 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_no_match "Topik", response.body
     assert_select "a[href=?]", blog_posts_path(tag: "scrum"), count: 0
   end
+
+  test "show page hides edit button for guests" do
+    get course_path(courses(:ai_essentials))
+
+    assert_response :success
+    assert_select "a[href=?]", edit_admin_course_path(courses(:ai_essentials)), count: 0
+  end
+
+  test "show page displays edit button for admin" do
+    sign_in users(:admin)
+    course = courses(:ai_essentials)
+    get course_path(course)
+
+    assert_response :success
+    assert_select "a[href=?]", edit_admin_course_path(course), text: /Edit Course/, count: 2
+  end
 end
