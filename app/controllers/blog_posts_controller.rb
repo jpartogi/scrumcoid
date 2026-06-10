@@ -15,5 +15,6 @@ class BlogPostsController < ApplicationController
   def show
     @blog_post = BlogPost.published.find_by!(slug: params[:id])
     @related_posts = @blog_post.related_by_tags
+    track_page_view(@blog_post)
   end
 end

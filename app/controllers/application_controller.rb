@@ -56,14 +56,31 @@ class ApplicationController < ActionController::Base
               path.start_with?("/assets/") || path.start_with?("/packs/") ||
               path.start_with?("/up") || path == "/sitemap.xml"
 
-    # --- Cookie-based visitor ID (primary for "unique" tracking) ---
-    # A stable UUID per browser/device. Survives IP changes (NAT, mobile, VPN, office).
-    # We hash it before storing (consistent with previous IP-hashing for privacy).
-    # Falls back to IP hash only for clients that don't accept cookies (rare for real visitors).
+    fingerprint = visitor_fingerprint
+    return if fingerprint.blank?
+
+    UniqueVisit.create_or_find_by!(fingerprint: fingerprint, visited_on: Date.today)
+  rescue => e
+    logger.error "Failed to track unique visit: #{e.message}"
+  end
+
+  def track_page_view(viewable)
+    return if controller_path.start_with?("admin/")
+    return if devise_controller?
+    return if bot?
+
+    fingerprint = visitor_fingerprint
+    return if fingerprint.blank?
+
+    PageView.track!(viewable: viewable, fingerprint: fingerprint, viewed_on: Date.today)
+  rescue => e
+    logger.error "Failed to track page view: #{e.message}"
+  end
+
+  def visitor_fingerprint
     visitor_id = cookies.signed[:visitor_id]
     if visitor_id.blank?
       visitor_id = SecureRandom.uuid
-      # permanent cookie (~20y expiry), httponly+secure for safety
       cookies.signed.permanent[:visitor_id] = {
         value: visitor_id,
         httponly: true,
@@ -73,12 +90,7 @@ class ApplicationController < ActionController::Base
     end
 
     identifier = visitor_id.presence || client_ip.to_s
-    fingerprint = Digest::SHA256.hexdigest(identifier)
-    visited_on = Date.today
-
-    UniqueVisit.create_or_find_by!(fingerprint: fingerprint, visited_on: visited_on)
-  rescue => e
-    logger.error "Failed to track unique visit: #{e.message}"
+    Digest::SHA256.hexdigest(identifier)
   end
 
   def client_ip

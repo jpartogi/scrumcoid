@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_09_025230) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_10_110816) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -173,6 +173,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_025230) do
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
     t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id"
+  end
+
+  create_table "page_views", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "fingerprint", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "viewable_id", null: false
+    t.string "viewable_type", null: false
+    t.date "viewed_on", null: false
+    t.index ["viewable_type", "viewable_id", "fingerprint", "viewed_on"], name: "index_page_views_on_viewable_fingerprint_and_day", unique: true
+    t.index ["viewable_type", "viewable_id"], name: "index_page_views_on_viewable"
+    t.index ["viewed_on"], name: "index_page_views_on_viewed_on"
   end
 
   create_table "registrations", force: :cascade do |t|

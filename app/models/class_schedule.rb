@@ -1,4 +1,6 @@
 class ClassSchedule < ApplicationRecord
+  include PageViewable
+
   DEFAULT_TIMEZONE = "Asia/Jakarta"
 
   enum :status, { unpublished: 0, published: 1, cancelled: 2 }

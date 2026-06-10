@@ -1,4 +1,6 @@
 class BlogPost < ApplicationRecord
+  include PageViewable
+
   enum :status, { draft: 0, published: 1 }
 
   has_rich_text :body

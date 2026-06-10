@@ -21,6 +21,8 @@
     </div>
   </div>
 
+  <%= render "admin/shared/page_view_stats", stats: @page_view_stats %>
+
   <!-- Split Grid -->
   <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
     <!-- Left Column: Content Cards -->
@@ -38,6 +40,8 @@
           <%= @blog_post.body %>
         </div>
       </div>
+
+      <%= render "admin/shared/page_traffic_panel", stats: @page_view_stats, title: "Blog Post Traffic (7 Days)", gradient_id: "blog-post-chart-gradient" %>
     </div>
 
     <!-- Right Column: Sidebar metadata & Actions -->

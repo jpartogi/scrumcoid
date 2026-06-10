@@ -12,5 +12,6 @@ class ClassSchedulesController < ApplicationController
       .where.not(id: @class_schedule.id)
       .includes(course: [ :logo_attachment, :course_prices ])
       .order(:starts_at)
+    track_page_view(@class_schedule)
   end
 end

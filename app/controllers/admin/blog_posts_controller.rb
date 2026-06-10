@@ -12,14 +12,17 @@ class Admin::BlogPostsController < ApplicationController
     @sort_column    = sort_column
     @sort_direction = sort_direction
 
+    blog_posts = ordered_blog_posts(sort_column, sort_direction)
     @blog_posts = PaginatedScope.wrap(
-      ordered_blog_posts(sort_column, sort_direction),
+      blog_posts,
       page: params[:page],
       per_page: params[:per_page].presence || INDEX_PER_PAGE
     )
+    @page_view_counts = PageView.unique_view_counts_for("BlogPost", @blog_posts.map(&:id))
   end
 
   def show
+    @page_view_stats = @blog_post.page_view_stats
   end
 
   def new

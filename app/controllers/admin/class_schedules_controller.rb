@@ -5,9 +5,11 @@ class Admin::ClassSchedulesController < ApplicationController
 
   def index
     @class_schedules = ClassSchedule.includes(:course, :enrollments).order(:starts_at)
+    @page_view_counts = PageView.unique_view_counts_for("ClassSchedule", @class_schedules.map(&:id))
   end
 
   def show
+    @page_view_stats = @class_schedule.page_view_stats
   end
 
   def new

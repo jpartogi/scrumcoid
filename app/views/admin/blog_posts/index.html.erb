@@ -93,6 +93,9 @@
                 <% end %>
               </th>
 
+              <%# Page views %>
+              <th class="px-6 py-3.5 text-slate-400" scope="col">Views</th>
+
               <%# Status %>
               <th class="px-6 py-3.5 text-slate-400" scope="col">Status</th>
 
@@ -146,6 +149,14 @@
                   <% else %>
                     <span class="text-xs text-slate-400 italic">Not set</span>
                   <% end %>
+                </td>
+
+                <%# Page views %>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex items-center gap-1 rounded-md bg-purple-50 px-2.5 py-1 text-xs font-bold text-purple-700 ring-1 ring-inset ring-purple-600/10">
+                    <%= @page_view_counts[post.id] || 0 %>
+                  </span>
+                  <p class="text-[10px] text-slate-400 mt-1 font-medium">unique views</p>
                 </td>
 
                 <%# Status badge %>
