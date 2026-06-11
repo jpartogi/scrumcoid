@@ -26,49 +26,47 @@
 <div class="bg-slate-50 py-20">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
-    <div id="course-container" class="mx-auto mt-12 flex flex-col gap-8 lg:mx-0 max-w-4xl">
+    <div id="course-container" class="mx-auto mt-12 grid gap-8 md:grid-cols-2">
       <% @courses.each do |course| %>
-        <article class="relative isolate flex flex-col gap-8 rounded-[2rem] bg-white p-6 sm:p-8 border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_-12px_rgba(99,102,241,0.07)] hover:border-purple-500/40 hover:scale-[1.005] transition-all duration-300 lg:flex-row group">
+        <article class="relative isolate flex flex-col justify-between rounded-[2rem] bg-white p-6 sm:p-8 border border-slate-200/80 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_-12px_rgba(99,102,241,0.07)] hover:border-purple-500/40 hover:scale-[1.01] transition-all duration-300 group">
           
-          <div class="relative shrink-0 w-full lg:w-48 h-48 rounded-2xl bg-slate-50/50 border border-slate-100 p-6 flex items-center justify-center overflow-hidden">
-            <% if course.logo.attached? %>
-              <%= image_tag course.logo, alt: "#{course.title} logo", class: "h-full w-full object-contain group-hover:scale-105 transition-transform duration-300" %>
-            <% else %>
-              <div class="text-indigo-600 group-hover:scale-105 transition-transform duration-300">
-                <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                </svg>
+          <div>
+            <div class="flex items-center justify-between gap-4">
+              <div class="relative shrink-0 w-20 h-20 rounded-2xl bg-slate-50/50 border border-slate-100 p-3 flex items-center justify-center overflow-hidden">
+                <% if course.logo.attached? %>
+                  <%= image_tag course.logo, alt: "#{course.title} logo", class: "h-full w-full object-contain group-hover:scale-105 transition-transform duration-300" %>
+                <% else %>
+                  <div class="text-indigo-600 group-hover:scale-105 transition-transform duration-300">
+                    <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                    </svg>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
+              <span class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10 shadow-sm">Pelatihan Resmi</span>
+            </div>
+
+            <div id="course-desc" class="relative w-full mt-6">
+              <h3 class="text-xl font-bold leading-8 text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <%= link_to course_path(course) do %>
+                  <span class="absolute inset-0"></span>
+                  <%= course.title %>
+                <% end %>
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600 line-clamp-3"><%= course.excerpt %></p>
+            </div>
           </div>
 
-          <div class="flex-1 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-x-4">
-                <span class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10 shadow-sm">Pelatihan Resmi</span>
-              </div>
-              <div id="course-desc" class="relative w-full">
-                <h3 class="mt-4 text-2xl font-bold leading-8 text-slate-900 group-hover:text-indigo-600 transition-colors">
-                  <%= link_to course_path(course) do %>
-                    <span class="absolute inset-0"></span>
-                    <%= course.title %>
-                  <% end %>
-                </h3>
-                <p class="mt-3 text-sm leading-relaxed text-slate-600"><%= course.excerpt %></p>
-              </div>
+          <div class="mt-8 flex items-center justify-between border-t border-slate-100 pt-6">
+            <div class="text-sm">
+              <span class="text-slate-400 block text-xs font-semibold uppercase tracking-wider">Investasi Mulai</span>
+              <span class="font-bold text-slate-900 text-base">
+                <%= course.display_price_for(current_currency) %>
+              </span>
             </div>
-
-            <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-              <div class="text-sm">
-                <span class="text-slate-400 block text-xs font-semibold uppercase tracking-wider">Investasi Mulai</span>
-                <span class="font-bold text-slate-900 text-base">
-                  <%= course.display_price_for(current_currency) %>
-                </span>
-              </div>
-              <%= link_to course_path(course), class: "text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/btn relative z-20" do %>
-                Lihat detail <span class="group-hover/btn:translate-x-1 transition-transform duration-200">&rarr;</span>
-              <% end %>
-            </div>
+            <%= link_to course_path(course), class: "text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/btn relative z-20" do %>
+              Lihat detail <span class="group-hover/btn:translate-x-1 transition-transform duration-200">&rarr;</span>
+            <% end %>
           </div>
 
         </article>
