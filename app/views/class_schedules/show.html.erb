@@ -125,7 +125,6 @@
                 <dt class="font-bold text-slate-900">Tempat Pelatihan</dt>
                 <dd class="mt-1 text-slate-600 leading-relaxed font-medium">
                   <span class="block font-bold text-slate-800"><%= @class_schedule.venue_name %></span>
-                  <span class="block text-xs text-slate-500 mt-0.5"><%= @class_schedule.venue_address %></span>
                 </dd>
               </div>
             <% end %>
@@ -156,7 +155,7 @@
             <% elsif @class_schedule.available_for_registration? %>
               <div class="mb-4 flex items-center justify-between text-xs">
                 <span class="font-bold text-slate-500">Kursi tersedia:</span>
-                <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 font-bold text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/15 shadow-sm">
                   <%= @class_schedule.remaining_seats %> tersisa
                 </span>
               </div>
