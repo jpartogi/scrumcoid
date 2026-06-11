@@ -41,72 +41,90 @@
     </div>
   </div>
 </section>
-
 <article class="bg-slate-50 py-16">
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
-    <div class="bg-white rounded-[2.5rem] p-8 sm:p-12 border border-slate-200/80 shadow-[0_4px_30px_-10px_rgba(0,0,0,0.02)]">
-      <div class="max-w-3xl mx-auto">
-        <div class="text-xl sm:text-2xl font-semibold leading-relaxed text-slate-800 border-l-4 border-teal-500 pl-6 mb-10 italic bg-teal-50/30 py-4 pr-4 rounded-r-xl">
-          <%= @blog_post.excerpt %>
-        </div>
-        
-        <div class="text-slate-800 leading-relaxed space-y-6 prose max-w-none text-lg">
-          <%= @blog_post.body %>
+    <div class="grid gap-8 lg:grid-cols-[1fr_340px]">
+      
+      <!-- Left side: Blog Post Card -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-[2.5rem] p-8 sm:p-12 border border-slate-200/80 shadow-[0_4px_30px_-10px_rgba(0,0,0,0.02)]">
+          <div class="max-w-3xl mx-auto">
+            <div class="text-xl sm:text-2xl font-semibold leading-relaxed text-slate-800 border-l-4 border-teal-500 pl-6 mb-10 italic bg-teal-50/30 py-4 pr-4 rounded-r-xl">
+              <%= @blog_post.excerpt %>
+            </div>
+            
+            <div class="text-slate-800 leading-relaxed space-y-6 prose max-w-none text-lg">
+              <%= @blog_post.body %>
+            </div>
+          </div>
+
+          <div class="mt-16 pt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <%= link_to blog_posts_path, class: "text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/back" do %>
+              <span class="group-hover/back:-translate-x-1 transition-transform duration-200">&larr;</span> Kembali ke Blog
+            <% end %>
+            <div class="flex items-center gap-4">
+              <% if current_user&.admin? %>
+                <%= render "admin_edit_link", blog_post: @blog_post %>
+              <% end %>
+              <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">scrum.co.id</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <% if @related_posts.any? %>
-        <div class="mt-16 pt-10 border-t border-slate-100">
-          <h2 class="text-sm font-bold uppercase tracking-widest text-slate-400">Artikel Terkait</h2>
-          <div class="mt-6 grid gap-6 sm:grid-cols-2">
-            <% @related_posts.each do |post| %>
-              <article class="rounded-2xl border border-slate-200/80 bg-slate-50/50 p-6 hover:border-indigo-500/30 hover:bg-white transition-all group">
-                <time datetime="<%= post.published_at&.to_date %>" class="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  <%= post.published_at&.to_date&.to_fs(:long) %>
-                </time>
-                <h3 class="mt-3 text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                  <%= link_to post.title, blog_post_path(post) %>
-                </h3>
-                <p class="mt-2 text-sm text-slate-600 line-clamp-3"><%= post.excerpt %></p>
-                <%= render "tags", post: post, wrapper_class: "mt-4" %>
-              </article>
+      <!-- Right side: Sidebar -->
+      <aside class="lg:sticky lg:top-8 space-y-6 self-start">
+        <!-- Topic/Hashtag card -->
+        <div class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border-purple-500/40">
+          <h3 class="text-xs font-bold text-slate-950 border-b border-slate-100 pb-3 mb-4 uppercase tracking-widest text-slate-400">Topik Artikel</h3>
+          <div class="flex flex-wrap gap-2">
+            <% BlogPost.all_tags.each do |tag| %>
+              <%= link_to blog_posts_path(tag: tag), class: "inline-flex items-center rounded-xl bg-slate-50 border border-slate-200/60 px-3 py-1.5 text-xs font-bold text-slate-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/10 active:scale-[0.98] transition-all cursor-pointer shadow-sm" do %>
+                <span class="text-indigo-400 font-bold mr-0.5">#</span><%= tag %>
+              <% end %>
             <% end %>
           </div>
         </div>
-      <% end %>
 
-      <div class="mt-16 pt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
-        <%= link_to blog_posts_path, class: "text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group/back" do %>
-          <span class="group-hover/back:-translate-x-1 transition-transform duration-200">&larr;</span> Kembali ke Blog
-        <% end %>
-        <div class="flex items-center gap-4">
-          <% if current_user&.admin? %>
-            <%= render "admin_edit_link", blog_post: @blog_post %>
+        <!-- CTA Widget -->
+        <div class="rounded-3xl border border-slate-200/80 bg-slate-900 p-6 shadow-xl transition-all duration-300 hover:border-purple-500/40 text-white relative overflow-hidden">
+          <!-- Glow details -->
+          <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_right,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent opacity-60"></div>
+          <div class="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full bg-indigo-500/10 blur-2xl"></div>
+
+          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Pelatihan Live / In-House</span>
+          <h3 class="mt-3 text-lg font-black text-white leading-snug">Ingin mempelajari Professional Scrum dari Trainer resmi?</h3>
+          <p class="mt-2 text-xs text-slate-400 leading-relaxed font-medium">Pilih jadwal kelas publik terdekat kami atau hubungi kami untuk mendiskusikan kebutuhan pelatihan privat/in-house yang disesuaikan untuk organisasi Anda.</p>
+          <div class="mt-6 flex flex-col gap-3">
+            <%= link_to "Lihat Jadwal Kelas Publik", class_schedules_path, class: "w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all text-center" %>
+            <%= link_to "Hubungi Kami (Kelas Privat)", new_contact_path(jenis_inkuiri: "Quotation Pelatihan Privat"), class: "w-full inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-800/40 px-4 py-3 text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-600 transition-all text-center" %>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Related articles (full width at the bottom) -->
+    <% if @related_posts.any? %>
+      <div class="mt-16 pt-12 border-t border-slate-200/80">
+        <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">Artikel Terkait</h2>
+        <p class="mt-2 text-sm text-slate-600">Baca wawasan dan panduan lain yang relevan dengan topik ini.</p>
+        <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <% @related_posts.each do |post| %>
+            <article class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.02)] hover:border-indigo-500/30 hover:shadow-md transition-all group">
+              <time datetime="<%= post.published_at&.to_date %>" class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                <%= post.published_at&.to_date&.to_fs(:long) %>
+              </time>
+              <h3 class="mt-3 text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <%= link_to post.title, blog_post_path(post) %>
+              </h3>
+              <p class="mt-2 text-sm text-slate-600 line-clamp-3"><%= post.excerpt %></p>
+              <%= render "tags", post: post, wrapper_class: "mt-4" %>
+            </article>
           <% end %>
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">scrum.co.id</span>
         </div>
       </div>
-    </div>
+    <% end %>
 
-    <!-- CTA section -->
-    <div id="blog-show-cta" class="mt-12 border-t border-slate-200/80 pt-12">
-      <div class="relative overflow-hidden rounded-3xl bg-slate-900 px-8 py-10 shadow-2xl sm:px-12 sm:py-12 border border-slate-800">
-        <!-- Glow details -->
-        <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_right,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent opacity-60"></div>
-        <div class="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full bg-indigo-500/10 blur-2xl"></div>
-
-        <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-          <div class="max-w-2xl">
-            <span class="text-xs font-bold uppercase tracking-widest text-indigo-400">Pelatihan Publik &amp; In-House</span>
-            <h3 class="mt-3 text-xl sm:text-2xl font-black text-white leading-snug">Ingin mempelajari Professional Scrum dari seorang Professional Scrum Trainer langsung?</h3>
-            <p class="mt-2 text-sm text-slate-400">Pilih jadwal kelas publik terdekat kami atau hubungi kami untuk mendiskusikan kebutuhan pelatihan privat/in-house yang disesuaikan untuk perusahaan Anda.</p>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-4 shrink-0">
-            <%= link_to "Lihat Jadwal Kelas Publik", class_schedules_path, class: "inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all text-center" %>
-            <%= link_to "Hubungi Kami", new_contact_path(jenis_inkuiri: "Quotation Pelatihan Privat"), class: "inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-800/40 px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-600 transition-all text-center" %>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </article>
