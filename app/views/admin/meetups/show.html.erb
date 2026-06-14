@@ -1,9 +1,10 @@
 <% content_for :title, @meetup.slug %>
 
 <section class="px-8 py-10 max-w-7xl space-y-6">
+  <!-- Back Link & Action Header -->
   <div class="flex items-center justify-between border-b border-slate-200 pb-5">
     <div class="flex items-center gap-3">
-      <%= link_to admin_meetups_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm" do %>
+      <%= link_to admin_meetups_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
@@ -11,26 +12,22 @@
       <div>
         <div class="flex items-center gap-3 flex-wrap">
           <h1 class="text-3xl font-extrabold tracking-tight text-slate-900"><%= meetup_display_name(@meetup) %></h1>
-          <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold <%= @meetup.published? ? 'bg-emerald-50 text-emerald-700' : @meetup.cancelled? ? 'bg-rose-50 text-rose-700' : 'bg-slate-100 text-slate-600' %>">
-            <%= @meetup.status.capitalize %>
-          </span>
+          <% if @meetup.published? %>
+            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">Published</span>
+          <% elsif @meetup.cancelled? %>
+            <span class="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-bold text-rose-700 ring-1 ring-inset ring-rose-600/10">Cancelled</span>
+          <% else %>
+            <span class="inline-flex items-center rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-bold text-slate-500 ring-1 ring-inset ring-slate-500/10">Draft</span>
+          <% end %>
         </div>
-        <p class="text-xs text-slate-400 font-medium mt-1">Meetup Detail</p>
+        <p class="text-xs text-slate-400 font-medium mt-1">Slug: <%= @meetup.slug %></p>
       </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <%= link_to "Edit", edit_admin_meetup_path(@meetup), class: "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" %>
-      <%= link_to "View Public Page", meetup_path(@meetup), target: "_blank", class: "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" %>
-      <% if @meetup.published? %>
-        <%= button_to "Unpublish", unpublish_admin_meetup_path(@meetup), method: :patch, class: "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" %>
-      <% else %>
-        <%= button_to "Publish", publish_admin_meetup_path(@meetup), method: :patch, class: "rounded-lg bg-teal-700 px-4 py-2 text-sm font-bold text-white hover:bg-teal-800" %>
-      <% end %>
     </div>
   </div>
 
   <%= render "admin/shared/page_view_stats", stats: @page_view_stats %>
 
+  <!-- Stats Grid -->
   <div class="grid gap-6 sm:grid-cols-3">
     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Registrations</p>
@@ -47,52 +44,112 @@
     </div>
   </div>
 
+  <!-- Main Body Grid -->
   <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
-    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-      <div class="px-6 py-5 border-b border-slate-150 bg-slate-50/50">
-        <h2 class="text-lg font-bold text-slate-900">Registered Visitors</h2>
+    <!-- Left Column: Content Cards & Registrations -->
+    <div class="space-y-8">
+      <!-- Excerpt Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Meetup Excerpt</h2>
+        <p class="mt-4 text-base text-slate-600 leading-relaxed font-medium"><%= @meetup.excerpt %></p>
       </div>
-      <% if @registrations.any? %>
-        <table class="min-w-full divide-y divide-slate-100 text-sm">
-          <thead>
-            <tr>
-              <th class="px-6 py-3 text-left font-bold text-slate-500">Name</th>
-              <th class="px-6 py-3 text-left font-bold text-slate-500">Email</th>
-              <th class="px-6 py-3 text-left font-bold text-slate-500">Registered</th>
-              <th class="px-6 py-3 text-left font-bold text-slate-500">Emails</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100">
-            <% @registrations.each do |registration| %>
+
+      <!-- Description Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Detailed Description</h2>
+        <div class="mt-4 text-sm text-slate-600 leading-relaxed prose max-w-none">
+          <%= @meetup.description %>
+        </div>
+      </div>
+
+      <!-- Registrations Table -->
+      <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-150 bg-slate-50/50">
+          <h2 class="text-lg font-bold text-slate-900">Registered Visitors</h2>
+        </div>
+        <% if @registrations.any? %>
+          <table class="min-w-full divide-y divide-slate-100 text-sm">
+            <thead>
               <tr>
-                <td class="px-6 py-4 font-medium text-slate-900"><%= registration.visitor_name %></td>
-                <td class="px-6 py-4 text-slate-600"><%= registration.visitor_email %></td>
-                <td class="px-6 py-4 text-slate-600"><%= registration.created_at.to_fs(:short) %></td>
-                <td class="px-6 py-4 text-xs text-slate-500">
-                  <% if registration.confirmation_email_sent_at.present? %>✓ Confirm<% end %>
-                  <% if registration.follow_up_email_sent_at.present? %> · ✓ Follow-up<% end %>
-                </td>
+                <th class="px-6 py-3 text-left font-bold text-slate-500">Name</th>
+                <th class="px-6 py-3 text-left font-bold text-slate-500">Email</th>
+                <th class="px-6 py-3 text-left font-bold text-slate-500">Registered</th>
+                <th class="px-6 py-3 text-left font-bold text-slate-500">Emails</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p class="px-6 py-8 text-sm text-slate-500">No registrations yet.</p>
-      <% end %>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @registrations.each do |registration| %>
+                <tr>
+                  <td class="px-6 py-4 font-medium text-slate-900"><%= registration.visitor_name %></td>
+                  <td class="px-6 py-4 text-slate-600"><%= registration.visitor_email %></td>
+                  <td class="px-6 py-4 text-slate-600"><%= registration.created_at.to_fs(:short) %></td>
+                  <td class="px-6 py-4 text-xs text-slate-500">
+                    <% if registration.confirmation_email_sent_at.present? %>✓ Confirm<% end %>
+                    <% if registration.follow_up_email_sent_at.present? %> · ✓ Follow-up<% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="px-6 py-8 text-sm text-slate-500">No registrations yet.</p>
+        <% end %>
+      </div>
     </div>
 
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4 text-sm">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Join Link</p>
-        <p class="mt-1 break-all text-slate-700"><%= @meetup.join_link.presence || "Not set" %></p>
+    <!-- Right Column: Sidebar Details & Operations -->
+    <div class="space-y-6">
+      <!-- Details Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4 text-sm">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Meetup Details</h2>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Join Link</p>
+          <% if @meetup.join_link.present? %>
+            <%= link_to @meetup.join_link, @meetup.join_link, target: "_blank", class: "mt-1 block break-all text-indigo-600 hover:text-indigo-700 hover:underline font-medium" %>
+          <% else %>
+            <p class="mt-1 text-slate-500 font-medium">Not set</p>
+          <% end %>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">PayPal Donation URL</p>
+          <% if @meetup.donation_url.present? %>
+            <%= link_to @meetup.donation_url, @meetup.donation_url, target: "_blank", class: "mt-1 block break-all text-indigo-600 hover:text-indigo-700 hover:underline font-medium" %>
+          <% else %>
+            <p class="mt-1 text-slate-500 font-medium">Not set</p>
+          <% end %>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Registration Deadline</p>
+          <p class="mt-1 text-slate-700 font-medium"><%= @meetup.registration_deadline.in_time_zone(@meetup.time_zone).to_fs(:long) %></p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Timezone</p>
+          <p class="mt-1 text-slate-700 font-medium"><%= @meetup.timezone %></p>
+        </div>
       </div>
-      <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">PayPal Donation URL</p>
-        <p class="mt-1 break-all text-slate-700"><%= @meetup.donation_url.presence || "Not set" %></p>
-      </div>
-      <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Registration Deadline</p>
-        <p class="mt-1 text-slate-700"><%= @meetup.registration_deadline.in_time_zone(@meetup.time_zone).to_fs(:long) %></p>
+
+      <!-- Operations Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Operations</p>
+        
+        <%= link_to meetup_path(@meetup), target: "_blank", class: "flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
+          View Public Page
+          <svg class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
+
+        <%= link_to edit_admin_meetup_path(@meetup), class: "flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
+          Edit Details
+        <% end %>
+
+        <% if @meetup.published? %>
+          <%= button_to "Unpublish Meetup", unpublish_admin_meetup_path(@meetup), method: :patch, class: "w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+        <% else %>
+          <%= button_to "Publish Meetup", publish_admin_meetup_path(@meetup), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+        <% end %>
+
+        <%= button_to "Delete Meetup", admin_meetup_path(@meetup), method: :delete, data: { confirm: "Are you sure you want to delete this meetup event?" }, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
       </div>
     </div>
   </div>

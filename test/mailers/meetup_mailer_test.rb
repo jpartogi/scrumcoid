@@ -1,13 +1,17 @@
 require "test_helper"
 
 class MeetupMailerTest < ActionMailer::TestCase
-  test "confirmation includes join link" do
+  test "confirmation includes join link and ics attachment" do
     registration = meetup_registrations(:confirmed_visitor)
     mail = MeetupMailer.confirmation(registration)
 
     assert_equal [registration.visitor_email], mail.to
     assert_match registration.meetup.slug, mail.subject
     assert_match registration.meetup.join_link, mail.body.encoded
+    assert_match /\.ics$/, mail.attachments.first.filename
+    assert_equal "text/calendar", mail.attachments.first.mime_type
+    assert_includes mail.attachments.first.body.raw_source, "BEGIN:VCALENDAR"
+    assert_includes mail.attachments.first.body.raw_source, registration.meetup.slug
   end
 
   test "follow_up includes paypal donation link" do

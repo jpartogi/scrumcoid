@@ -4,6 +4,11 @@ class MeetupMailer < ApplicationMailer
     @registration = registration
     @meetup = registration.meetup
 
+    attachments["meetup-#{@meetup.slug}.ics"] = {
+      mime_type: "text/calendar; method=PUBLISH",
+      content: MeetupIcs.generate(registration)
+    }
+
     mail(
       to: registration.visitor_email,
       subject: "Konfirmasi pendaftaran meetup #{@meetup.slug}"
