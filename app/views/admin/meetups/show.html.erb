@@ -1,0 +1,99 @@
+<% content_for :title, @meetup.slug %>
+
+<section class="px-8 py-10 max-w-7xl space-y-6">
+  <div class="flex items-center justify-between border-b border-slate-200 pb-5">
+    <div class="flex items-center gap-3">
+      <%= link_to admin_meetups_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm" do %>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      <% end %>
+      <div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1 class="text-3xl font-extrabold tracking-tight text-slate-900"><%= meetup_display_name(@meetup) %></h1>
+          <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold <%= @meetup.published? ? 'bg-emerald-50 text-emerald-700' : @meetup.cancelled? ? 'bg-rose-50 text-rose-700' : 'bg-slate-100 text-slate-600' %>">
+            <%= @meetup.status.capitalize %>
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 font-medium mt-1">Meetup Detail</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <%= link_to "Edit", edit_admin_meetup_path(@meetup), class: "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" %>
+      <%= link_to "View Public Page", meetup_path(@meetup), target: "_blank", class: "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" %>
+      <% if @meetup.published? %>
+        <%= button_to "Unpublish", unpublish_admin_meetup_path(@meetup), method: :patch, class: "rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" %>
+      <% else %>
+        <%= button_to "Publish", publish_admin_meetup_path(@meetup), method: :patch, class: "rounded-lg bg-teal-700 px-4 py-2 text-sm font-bold text-white hover:bg-teal-800" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render "admin/shared/page_view_stats", stats: @page_view_stats %>
+
+  <div class="grid gap-6 sm:grid-cols-3">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Registrations</p>
+      <p class="mt-2 text-3xl font-extrabold text-slate-900"><%= @meetup.registration_count %></p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Remaining Seats</p>
+      <p class="mt-2 text-3xl font-extrabold text-slate-900"><%= @meetup.remaining_seats %></p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Schedule</p>
+      <p class="mt-2 text-sm font-bold text-slate-800"><%= meetup_date_part(@meetup) %></p>
+      <p class="text-xs text-slate-500"><%= meetup_time_part(@meetup) %></p>
+    </div>
+  </div>
+
+  <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
+    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      <div class="px-6 py-5 border-b border-slate-150 bg-slate-50/50">
+        <h2 class="text-lg font-bold text-slate-900">Registered Visitors</h2>
+      </div>
+      <% if @registrations.any? %>
+        <table class="min-w-full divide-y divide-slate-100 text-sm">
+          <thead>
+            <tr>
+              <th class="px-6 py-3 text-left font-bold text-slate-500">Name</th>
+              <th class="px-6 py-3 text-left font-bold text-slate-500">Email</th>
+              <th class="px-6 py-3 text-left font-bold text-slate-500">Registered</th>
+              <th class="px-6 py-3 text-left font-bold text-slate-500">Emails</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% @registrations.each do |registration| %>
+              <tr>
+                <td class="px-6 py-4 font-medium text-slate-900"><%= registration.visitor_name %></td>
+                <td class="px-6 py-4 text-slate-600"><%= registration.visitor_email %></td>
+                <td class="px-6 py-4 text-slate-600"><%= registration.created_at.to_fs(:short) %></td>
+                <td class="px-6 py-4 text-xs text-slate-500">
+                  <% if registration.confirmation_email_sent_at.present? %>✓ Confirm<% end %>
+                  <% if registration.follow_up_email_sent_at.present? %> · ✓ Follow-up<% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="px-6 py-8 text-sm text-slate-500">No registrations yet.</p>
+      <% end %>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4 text-sm">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Join Link</p>
+        <p class="mt-1 break-all text-slate-700"><%= @meetup.join_link.presence || "Not set" %></p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">PayPal Donation URL</p>
+        <p class="mt-1 break-all text-slate-700"><%= @meetup.donation_url.presence || "Not set" %></p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Registration Deadline</p>
+        <p class="mt-1 text-slate-700"><%= @meetup.registration_deadline.in_time_zone(@meetup.time_zone).to_fs(:long) %></p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,57 @@
+<% content_for :title, "Meetup Scrum & Agile" %>
+<% content_for :description, "Ikuti meetup gratis Scrum dan Agile dari Scrum.co.id. Daftar online dan bergabung langsung dari mana saja." %>
+
+<section class="relative isolate overflow-hidden bg-slate-950 py-16 sm:py-20">
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] from-indigo-950/40 via-slate-950 to-slate-950" aria-hidden="true"></div>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-indigo-400 ring-1 ring-inset ring-indigo-500/30">
+      Komunitas
+    </span>
+    <h1 class="mt-4 text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+      Meetup Scrum & Agile
+    </h1>
+    <p class="mt-4 max-w-2xl text-base text-slate-400">
+      Sesi meetup gratis untuk berbagi pengalaman, praktik, dan wawasan seputar Scrum dan Agile di Indonesia.
+    </p>
+  </div>
+</section>
+
+<div class="bg-slate-50 py-12">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <% if @meetups.any? %>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <% @meetups.each do |meetup| %>
+          <article class="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm hover:border-purple-500/40 transition-all">
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-emerald-600 ring-1 ring-inset ring-emerald-500/20">
+                  Pendaftaran Dibuka
+                </span>
+              </div>
+              <h2 class="mt-4 text-xl font-bold text-slate-900">
+                <%= link_to meetup_display_name(meetup), meetup_path(meetup), class: "hover:text-indigo-600 transition-colors" %>
+              </h2>
+              <p class="mt-2 text-sm text-slate-600 line-clamp-3"><%= meetup.excerpt %></p>
+              <div class="mt-4 flex flex-col gap-1 text-xs font-medium text-slate-500">
+                <span><%= meetup_date_part(meetup) %></span>
+                <span><%= meetup_time_part(meetup) %></span>
+              </div>
+            </div>
+            <div class="mt-8 flex items-center justify-between border-t border-slate-100 pt-6">
+              <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/15">
+                <%= meetup.remaining_seats %> kursi tersisa
+              </span>
+              <%= link_to "Daftar", meetup_path(meetup), class: "text-sm font-bold text-indigo-600 hover:text-indigo-700" %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center">
+        <h2 class="text-xl font-bold text-slate-900">Belum ada meetup yang dijadwalkan</h2>
+        <p class="mt-2 text-sm text-slate-600">Silakan kembali lagi nanti atau hubungi kami untuk informasi lebih lanjut.</p>
+        <%= link_to "Hubungi Kami", new_contact_path, class: "mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white hover:bg-indigo-500 transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</div>

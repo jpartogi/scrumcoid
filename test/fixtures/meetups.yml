@@ -1,0 +1,33 @@
+open_meetup:
+  slug: <%= 14.days.from_now.to_date.strftime("%Y-%m-%d") %>-1
+  excerpt: Free community session about Scrum practices in Indonesia.
+  starts_at: <%= 14.days.from_now.change(hour: 19, min: 0) %>
+  ends_at: <%= 14.days.from_now.change(hour: 21, min: 0) %>
+  timezone: Asia/Jakarta
+  join_link: https://zoom.us/j/123456789
+  paypal_donation_url: https://www.paypal.com/donate/?hosted_button_id=TEST123
+  registration_deadline: <%= 13.days.from_now %>
+  capacity: 50
+  status: 1
+
+ended_meetup:
+  slug: <%= 2.days.ago.to_date.strftime("%Y-%m-%d") %>-1
+  excerpt: A meetup that already ended.
+  starts_at: <%= 2.days.ago.change(hour: 19, min: 0) %>
+  ends_at: <%= 2.days.ago.change(hour: 21, min: 0) %>
+  timezone: Asia/Jakarta
+  join_link: https://zoom.us/j/987654321
+  paypal_donation_url: https://www.paypal.com/donate/?hosted_button_id=TEST456
+  registration_deadline: <%= 3.days.ago %>
+  capacity: 50
+  status: 1
+
+draft_meetup:
+  slug: <%= 30.days.from_now.to_date.strftime("%Y-%m-%d") %>-1
+  excerpt: Not yet published.
+  starts_at: <%= 30.days.from_now.change(hour: 19, min: 0) %>
+  ends_at: <%= 30.days.from_now.change(hour: 21, min: 0) %>
+  timezone: Asia/Jakarta
+  registration_deadline: <%= 29.days.from_now %>
+  capacity: 20
+  status: 0

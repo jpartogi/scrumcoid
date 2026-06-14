@@ -1,0 +1,13 @@
+confirmed_visitor:
+  meetup: open_meetup
+  visitor_name: Budi Santoso
+  visitor_email: budi@example.com
+  status: 0
+  confirmation_email_sent_at: <%= 1.day.ago %>
+
+pending_follow_up:
+  meetup: ended_meetup
+  visitor_name: Siti Rahayu
+  visitor_email: siti@example.com
+  status: 0
+  confirmation_email_sent_at: <%= 3.days.ago %>

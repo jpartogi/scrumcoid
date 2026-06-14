@@ -1,0 +1,87 @@
+<%= form_with model: [:admin, meetup], class: "space-y-6" do |form| %>
+  <% if meetup.errors.any? %>
+    <div class="rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
+      <svg class="h-5 w-5 text-rose-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+      <span><%= meetup.errors.full_messages.to_sentence %></span>
+    </div>
+  <% end %>
+
+  <% if meetup.persisted? %>
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm">
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-400">URL Slug</p>
+      <p class="mt-1 font-mono font-semibold text-slate-800"><%= meetup.slug %></p>
+      <p class="mt-1 text-xs text-slate-500">Generated automatically from the meetup date (yyyy-mm-dd-id).</p>
+    </div>
+  <% else %>
+    <div class="rounded-xl border border-indigo-100 bg-indigo-50/40 p-4 text-sm text-slate-600">
+      The URL slug will be generated automatically from the meetup date, e.g. <span class="font-mono font-semibold">2026-06-14-1</span>.
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :excerpt, class: "block text-sm font-bold text-slate-700" %>
+    <%= form.text_area :excerpt, rows: 2, placeholder: "Brief description of the meetup...", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+  </div>
+
+  <div>
+    <%= form.label :description, class: "block text-sm font-bold text-slate-700" %>
+    <div class="mt-1.5 block rounded-lg border border-slate-300 bg-white shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-teal-600/10 focus-within:border-teal-600 transition-all">
+      <%= form.rich_text_area :description, class: "rich-text-editor-tall p-3 min-h-[16rem] focus:outline-none" %>
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :starts_at, "Starts At", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.datetime_field :starts_at, value: meetup_time_field_value(meetup, :starts_at), step: 900, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+    <div>
+      <%= form.label :ends_at, "Ends At (same day)", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.datetime_field :ends_at, value: meetup_time_field_value(meetup, :ends_at), step: 900, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :timezone, "Timezone", class: "block text-sm font-bold text-slate-700" %>
+    <%= form.select :timezone, options_for_select(ActiveSupport::TimeZone.all.map { |zone| [zone.to_s, zone.tzinfo.name] }, meetup.timezone), {}, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    <p class="text-xs text-slate-400 font-medium mt-1.5">Meetups must start and end on the same calendar day in this timezone. Changing the date updates the slug.</p>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <%= form.label :join_link, "Join Link (Zoom/Teams)", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.url_field :join_link, placeholder: "https://zoom.us/j/...", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+    <div>
+      <%= form.label :paypal_donation_url, "PayPal Donation URL", class: "block text-sm font-bold text-slate-700" %>
+      <%= form.url_field :paypal_donation_url, placeholder: "https://www.paypal.com/donate/...", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-3">
+    <div>
+      <%= form.label :capacity, class: "block text-sm font-bold text-slate-700" %>
+      <%= form.number_field :capacity, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+    <div>
+      <%= form.label :registration_deadline, class: "block text-sm font-bold text-slate-700" %>
+      <%= form.datetime_field :registration_deadline, value: meetup_time_field_value(meetup, :registration_deadline), class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+    <div>
+      <%= form.label :status, class: "block text-sm font-bold text-slate-700" %>
+      <%= form.select :status, Meetup.statuses.keys.map { |k| [k.capitalize, k] }, {}, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :meta_keywords, "Meta Keywords (SEO)", class: "block text-sm font-bold text-slate-700" %>
+    <%= form.text_field :meta_keywords, placeholder: "e.g., scrum meetup, agile community", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+  </div>
+
+  <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+    <%= form.submit class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>
+    <%= link_to "Cancel", meetup.persisted? ? admin_meetup_path(meetup) : admin_meetups_path, class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+  </div>
+<% end %>

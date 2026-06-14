@@ -1,0 +1,57 @@
+<div style="background-color: #f8fafc; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px 20px; color: #334155; line-height: 1.6;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);">
+    <div style="height: 6px; background: linear-gradient(to right, #4f46e5, #0ea5e9);"></div>
+
+    <div style="padding: 32px 40px;">
+      <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9;">
+        <span style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px;">Scrum<span style="color: #4f46e5;">.co.id</span></span>
+        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">PT. Adaptiva Sinergi Asia</div>
+      </div>
+
+      <p style="font-size: 15px; margin-top: 0; color: #0f172a; font-weight: 600;">Halo <%= @registration.visitor_name %>,</p>
+
+      <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">
+        Terima kasih telah mendaftar untuk meetup kami. Berikut detail acara Anda:
+      </p>
+
+      <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <tr>
+            <td style="font-weight: 700; color: #64748b; padding-bottom: 8px; width: 140px; vertical-align: top;">Meetup</td>
+            <td style="color: #0f172a; padding-bottom: 8px; font-weight: 600;"><%= meetup_display_name(@meetup) %></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #64748b; padding-bottom: 8px; vertical-align: top;">Tanggal</td>
+            <td style="color: #0f172a; padding-bottom: 8px;"><%= meetup_date_part(@meetup) %></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #64748b; padding-bottom: 8px; vertical-align: top;">Waktu</td>
+            <td style="color: #0f172a; padding-bottom: 8px;"><%= meetup_time_part(@meetup) %></td>
+          </tr>
+        </table>
+      </div>
+
+      <% if @meetup.join_link.present? %>
+        <p style="font-size: 14px; color: #475569; margin-bottom: 16px;">
+          Gunakan tautan berikut untuk bergabung saat meetup dimulai:
+        </p>
+        <div style="text-align: center; margin-bottom: 24px;">
+          <a href="<%= @meetup.join_link %>" style="display: inline-block; background: linear-gradient(to right, #4f46e5, #7c3aed); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 14px 28px; border-radius: 12px;">
+            Gabung Meetup
+          </a>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8; word-break: break-all;">
+          Atau salin tautan ini: <%= @meetup.join_link %>
+        </p>
+      <% else %>
+        <p style="font-size: 14px; color: #475569;">
+          Tautan untuk bergabung akan dikirimkan lebih dekat ke tanggal acara.
+        </p>
+      <% end %>
+
+      <p style="font-size: 13px; color: #64748b; margin-top: 32px; margin-bottom: 0;">
+        Sampai jumpa di meetup!
+      </p>
+    </div>
+  </div>
+</div>

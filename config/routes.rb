@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     resource :enrollment, only: [:destroy]
     resources :registrations, only: [:new, :create], controller: "class_schedules/registrations"
   end
+  resources :meetups, only: [:index, :show] do
+    resources :registrations, only: [:new, :create], controller: "meetups/registrations"
+  end
   get "class_schedules/:course_slug/:id", to: "class_schedules#show", as: :class_schedule
   resources :blog_posts, path: "blog", only: [:index, :show]
   resource :dashboard, only: [:show], controller: "dashboard"
@@ -23,6 +26,12 @@ Rails.application.routes.draw do
       end
     end
     resources :class_schedules do
+      member do
+        patch :publish
+        patch :unpublish
+      end
+    end
+    resources :meetups do
       member do
         patch :publish
         patch :unpublish

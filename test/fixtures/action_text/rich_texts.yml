@@ -23,3 +23,18 @@ about_page_body:
   name: body
   body: <div>Pelatihan Scrum Profesional kami menggabungkan pengalaman praktis dan standar global.</div>
 
+open_meetup_description:
+  record: open_meetup (Meetup)
+  name: description
+  body: <div>Join us for a free Scrum community meetup.</div>
+
+ended_meetup_description:
+  record: ended_meetup (Meetup)
+  name: description
+  body: <div>A past community meetup.</div>
+
+draft_meetup_description:
+  record: draft_meetup (Meetup)
+  name: description
+  body: <div>Draft meetup description.</div>
+

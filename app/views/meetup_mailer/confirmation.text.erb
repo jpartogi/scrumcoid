@@ -1,0 +1,18 @@
+Halo <%= @registration.visitor_name %>,
+
+Terima kasih telah mendaftar untuk meetup kami.
+
+Meetup: <%= meetup_display_name(@meetup) %>
+Tanggal: <%= meetup_date_part(@meetup) %>
+Waktu: <%= meetup_time_part(@meetup) %>
+
+<% if @meetup.join_link.present? %>
+Gabung meetup di: <%= @meetup.join_link %>
+<% else %>
+Tautan untuk bergabung akan dikirimkan lebih dekat ke tanggal acara.
+<% end %>
+
+Sampai jumpa di meetup!
+
+Scrum.co.id
+PT. Adaptiva Sinergi Asia

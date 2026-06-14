@@ -23,3 +23,8 @@
       retention_days: 90
     schedule: every day at 3am
 
+  send_meetup_follow_up_emails:
+    class: SendMeetupFollowUpEmailsJob
+    queue: default
+    schedule: every hour
+

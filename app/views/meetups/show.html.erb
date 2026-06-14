@@ -1,0 +1,85 @@
+<% content_for :title, "Meetup #{meetup_date_part(@meetup)}" %>
+<% content_for :description, @meetup.excerpt %>
+<% content_for :keywords, @meetup.meta_keywords if @meetup.meta_keywords.present? %>
+
+<section class="relative isolate overflow-hidden bg-slate-950 py-16 sm:py-20">
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_left,_var(--tw-gradient-stops))] from-indigo-950/40 via-slate-950 to-slate-950" aria-hidden="true"></div>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <% if current_user&.admin? %>
+      <div class="mb-6 flex justify-end">
+        <%= link_to edit_admin_meetup_path(@meetup), class: "inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2 text-xs font-bold text-white" do %>
+          Edit Meetup
+        <% end %>
+      </div>
+    <% end %>
+    <div>
+      <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-indigo-400 ring-1 ring-inset ring-indigo-500/30">
+        Meetup
+      </span>
+      <% if @meetup.available_for_registration? %>
+        <span class="ml-2 inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-inset ring-emerald-500/30">
+          Pendaftaran Dibuka
+        </span>
+      <% end %>
+      <h1 class="mt-4 text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+        <%= meetup_display_name(@meetup) %>
+      </h1>
+      <p class="mt-3 text-sm text-slate-400"><%= @meetup.excerpt %></p>
+    </div>
+  </div>
+</section>
+
+<div class="bg-slate-50 py-12">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="grid gap-8 lg:grid-cols-[1fr_340px]">
+      <article class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-4 mb-6">Tentang Meetup</h2>
+        <div class="text-slate-700 leading-relaxed prose max-w-none text-base">
+          <%= @meetup.description %>
+        </div>
+      </article>
+
+      <aside class="lg:sticky lg:top-8 self-start">
+        <div class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-950 border-b border-slate-100 pb-3 mb-4">Detail Meetup</h3>
+          <dl class="space-y-4 text-sm">
+            <div>
+              <dt class="font-bold text-slate-900">Tanggal</dt>
+              <dd class="mt-1 text-slate-600 font-medium"><%= meetup_date_part(@meetup) %></dd>
+            </div>
+            <div>
+              <dt class="font-bold text-slate-900">Waktu</dt>
+              <dd class="mt-1 text-slate-600 font-medium"><%= meetup_time_part(@meetup) %></dd>
+            </div>
+            <% if @meetup.registration_deadline.present? %>
+              <div>
+                <dt class="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-400">Batas Pendaftaran</dt>
+                <dd class="mt-1 text-xs font-semibold text-rose-600"><%= @meetup.registration_deadline.in_time_zone(@meetup.time_zone).to_fs(:long) %></dd>
+              </div>
+            <% end %>
+          </dl>
+
+          <div class="mt-6 border-t border-slate-100 pt-6">
+            <% if @registration&.active? %>
+              <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-4 text-emerald-800 text-sm font-bold mb-4">
+                Anda sudah terdaftar untuk meetup ini.
+              </div>
+            <% elsif @meetup.available_for_registration? %>
+              <div class="mb-4 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-500">Kursi tersedia:</span>
+                <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/15">
+                  <%= @meetup.remaining_seats %> tersisa
+                </span>
+              </div>
+              <%= link_to "Daftar Meetup", new_meetup_registration_path(@meetup), class: "w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 text-sm font-bold text-white hover:shadow-lg transition-all" %>
+            <% else %>
+              <div class="rounded-xl bg-slate-50 border border-slate-100 p-4 text-slate-500 text-sm font-bold text-center">
+                Pendaftaran telah ditutup
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

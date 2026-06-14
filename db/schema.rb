@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_14_012716) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_14_115012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -173,6 +173,39 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_012716) do
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
     t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id"
+  end
+
+  create_table "meetup_registrations", force: :cascade do |t|
+    t.datetime "confirmation_email_sent_at"
+    t.datetime "created_at", null: false
+    t.datetime "follow_up_email_sent_at"
+    t.bigint "meetup_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.string "visitor_email", null: false
+    t.string "visitor_name", null: false
+    t.index ["follow_up_email_sent_at"], name: "index_meetup_registrations_on_follow_up_email_sent_at"
+    t.index ["meetup_id"], name: "index_meetup_registrations_on_meetup_id"
+    t.index ["visitor_email", "meetup_id"], name: "index_meetup_registrations_on_visitor_email_and_meetup_id", unique: true
+  end
+
+  create_table "meetups", force: :cascade do |t|
+    t.integer "capacity", default: 100, null: false
+    t.datetime "created_at", null: false
+    t.datetime "ends_at", null: false
+    t.text "excerpt", null: false
+    t.string "join_link"
+    t.string "meta_keywords"
+    t.string "paypal_donation_url"
+    t.datetime "registration_deadline", null: false
+    t.string "slug", null: false
+    t.datetime "starts_at", null: false
+    t.integer "status", default: 0, null: false
+    t.string "timezone", default: "Asia/Jakarta", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_meetups_on_slug", unique: true
+    t.index ["starts_at"], name: "index_meetups_on_starts_at"
+    t.index ["status"], name: "index_meetups_on_status"
   end
 
   create_table "page_views", force: :cascade do |t|
@@ -386,6 +419,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_012716) do
   add_foreign_key "enrollments", "class_schedules"
   add_foreign_key "enrollments", "registrations"
   add_foreign_key "enrollments", "users"
+  add_foreign_key "meetup_registrations", "meetups"
   add_foreign_key "registrations", "class_schedules"
   add_foreign_key "registrations", "customers"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
