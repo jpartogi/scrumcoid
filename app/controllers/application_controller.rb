@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
     fingerprint = visitor_fingerprint
     return if fingerprint.blank?
 
-    UniqueVisit.create_or_find_by!(fingerprint: fingerprint, visited_on: Date.today)
+    UniqueVisit.track!(fingerprint: fingerprint)
   rescue => e
     logger.error "Failed to track unique visit: #{e.message}"
   end

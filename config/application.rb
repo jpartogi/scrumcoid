@@ -28,7 +28,8 @@ module Scrumcoid
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    # Store timestamps in UTC; reporting timezones (e.g. Australia/Brisbane) are applied at display time.
+    config.time_zone = "UTC"
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end

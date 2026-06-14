@@ -9,33 +9,20 @@ class Admin::DashboardController < ApplicationController
     @upcoming_schedules = ClassSchedule.upcoming.includes(:course).limit(5)
     @latest_registrations = Registration.includes(:class_schedule => :course).order(created_at: :desc).limit(5)
 
-    # Visitor traffic statistics (cookie-based visitor IDs preferred; falls back to IP)
-    @today_visits = UniqueVisit.today.count
-    @yesterday_visits = UniqueVisit.yesterday.count
+    @reporting_timezone = UniqueVisit::REPORTING_TIMEZONE
+    @reporting_timezone_abbr = UniqueVisit.reporting_zone.now.strftime("%Z")
+    @reporting_today = UniqueVisit.reporting_today
 
-    # 7-day visitor traffic history (padded with 0s for empty days)
-    raw_visits = UniqueVisit.last_7_days.group(:visited_on).count
-    @daily_visits_7_days = ((Date.today - 6)..Date.today).map do |date|
-      {
-        date: date,
-        count: raw_visits[date] || 0
-      }
-    end.reverse # Show latest dates first in history
+    # Visitor traffic statistics (stored in UTC; displayed in Australia/Brisbane)
+    @today_visits = UniqueVisit.today_count
+    @yesterday_visits = UniqueVisit.yesterday_count
+    @daily_visits_7_days = UniqueVisit.daily_counts(7)
 
-    # --- More stats (expanded unique visitor metrics) ---
-    last_7_range = (Date.today - 6)..Date.today
-    last_30_range = (Date.today - 29)..Date.today
-
-    @unique_visitors_7d = UniqueVisit.distinct_count_in_range(last_7_range)
-    @unique_visitors_30d = UniqueVisit.distinct_count_in_range(last_30_range)
+    @unique_visitors_7d = UniqueVisit.distinct_visitors_in_days(7)
+    @unique_visitors_30d = UniqueVisit.distinct_visitors_in_days(30)
     @total_retained_visitors = UniqueVisit.distinct.count(:fingerprint)
 
-    # 30-day daily data + derived stats (avg / peak)
-    raw_30 = UniqueVisit.last_30_days.group(:visited_on).count
-    @daily_visits_30_days = ((Date.today - 29)..Date.today).map do |date|
-      { date: date, count: raw_30[date] || 0 }
-    end.reverse
-
+    @daily_visits_30_days = UniqueVisit.daily_counts(30)
     counts_30 = @daily_visits_30_days.map { |d| d[:count] }
     @avg_daily_visits_30d = counts_30.empty? ? 0 : (counts_30.sum.to_f / counts_30.size).round(1)
     @peak_daily_visits_30d = counts_30.max || 0

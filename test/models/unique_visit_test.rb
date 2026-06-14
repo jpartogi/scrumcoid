@@ -1,59 +1,132 @@
 require "test_helper"
 
 class UniqueVisitTest < ActiveSupport::TestCase
-  test "validations" do
+  setup do
+    UniqueVisit.destroy_all
+  end
+
+  test "requires fingerprint and visited_at" do
     visit = UniqueVisit.new
     assert_not visit.valid?
     assert_includes visit.errors[:fingerprint], "can't be blank"
-    assert_includes visit.errors[:visited_on], "can't be blank"
+    assert_includes visit.errors[:visited_at], "can't be blank"
+  end
 
-    # valid visit
-    visit.fingerprint = "somehash"
-    visit.visited_on = Date.today
-    assert visit.valid?
-    assert visit.save
+  test "defaults timezone to Australia/Brisbane" do
+    visit = UniqueVisit.new(fingerprint: "visitor-1", visited_at: Time.current)
+    assert_equal "Australia/Brisbane", visit.timezone
+  end
 
-    # DB unique index (not AR validates) prevents duplicate (fingerprint, visited_on).
-    # We rely on the index + create_or_find_by! (which catches RecordNotUnique).
-    duplicate = UniqueVisit.new(fingerprint: "somehash", visited_on: Date.today)
-    assert duplicate.valid? # no model uniqueness validator (intentionally removed)
-    assert_raises(ActiveRecord::RecordNotUnique) do
-      duplicate.save!
+  test "track! stores UTC timestamp and reporting timezone" do
+    brisbane = Time.find_zone("Australia/Brisbane")
+    travel_to brisbane.local(2026, 6, 14, 9, 30, 0) do
+      visit = UniqueVisit.track!(fingerprint: "visitor-1")
+
+      assert_equal "visitor-1", visit.fingerprint
+      assert_equal "Australia/Brisbane", visit.timezone
+      assert_equal Time.current, visit.visited_at
+      assert visit.visited_at.utc?
     end
   end
 
-  test "scopes" do
-    # clean table for exact scope testing
-    UniqueVisit.destroy_all
+  test "track! deduplicates visits within the same Brisbane calendar day" do
+    brisbane = Time.find_zone("Australia/Brisbane")
 
-    today_visit = UniqueVisit.create!(fingerprint: "ip1", visited_on: Date.today)
-    yesterday_visit = UniqueVisit.create!(fingerprint: "ip2", visited_on: Date.yesterday)
-    six_days_ago = UniqueVisit.create!(fingerprint: "ip6", visited_on: (Date.today - 6))
-    seven_days_ago = UniqueVisit.create!(fingerprint: "ip7", visited_on: (Date.today - 7))
-    old_visit = UniqueVisit.create!(fingerprint: "ip3", visited_on: 10.days.ago.to_date)
+    travel_to brisbane.local(2026, 6, 14, 9, 0, 0) do
+      first = UniqueVisit.track!(fingerprint: "visitor-1")
+      second = UniqueVisit.track!(fingerprint: "visitor-1")
 
-    assert_equal [today_visit], UniqueVisit.today
-    assert_equal [yesterday_visit], UniqueVisit.yesterday
-    
-    assert_includes UniqueVisit.last_7_days, today_visit
-    assert_includes UniqueVisit.last_7_days, yesterday_visit
-    assert_includes UniqueVisit.last_7_days, six_days_ago
-    assert_not_includes UniqueVisit.last_7_days, seven_days_ago
-    assert_not_includes UniqueVisit.last_7_days, old_visit
+      assert_equal first.id, second.id
+      assert_equal 1, UniqueVisit.count
+    end
+
+    travel_to brisbane.local(2026, 6, 14, 22, 0, 0) do
+      third = UniqueVisit.track!(fingerprint: "visitor-1")
+      assert_equal 1, UniqueVisit.count
+      refute_nil third
+    end
   end
 
-  test "prune_old! and distinct_count_in_range" do
-    UniqueVisit.destroy_all
+  test "track! creates a new record on the next Brisbane calendar day" do
+    brisbane = Time.find_zone("Australia/Brisbane")
 
-    UniqueVisit.create!(fingerprint: "a", visited_on: Date.today)
-    UniqueVisit.create!(fingerprint: "b", visited_on: Date.today - 10)
-    UniqueVisit.create!(fingerprint: "c", visited_on: Date.today - 100)
+    travel_to brisbane.local(2026, 6, 13, 23, 30, 0) do
+      UniqueVisit.track!(fingerprint: "visitor-1")
+    end
 
-    assert_equal 2, UniqueVisit.distinct_count_in_range((Date.today - 29)..Date.today)
-    assert_equal 3, UniqueVisit.distinct_count_in_range((Date.today - 200)..Date.today)
+    travel_to brisbane.local(2026, 6, 14, 0, 30, 0) do
+      assert_difference -> { UniqueVisit.count }, 1 do
+        UniqueVisit.track!(fingerprint: "visitor-1")
+      end
+    end
+  end
 
-    deleted = UniqueVisit.prune_old!(retention_days: 30)
-    assert_equal 1, deleted
-    assert_equal 2, UniqueVisit.count
+  test "late UTC evening still counts toward the next Brisbane day" do
+    # 2026-06-14 22:00 UTC = 2026-06-15 08:00 Brisbane
+    travel_to Time.utc(2026, 6, 14, 22, 0, 0) do
+      visit = UniqueVisit.track!(fingerprint: "visitor-utc")
+      assert_equal Date.new(2026, 6, 15), UniqueVisit.reporting_date_for(visit.visited_at, visit.timezone)
+      assert_equal 1, UniqueVisit.on_reporting_date(Date.new(2026, 6, 15)).count
+      assert_equal 0, UniqueVisit.on_reporting_date(Date.new(2026, 6, 14)).count
+    end
+  end
+
+  test "daily_counts groups visits by Brisbane calendar day" do
+    brisbane = Time.find_zone("Australia/Brisbane")
+
+    travel_to brisbane.local(2026, 6, 14, 10, 0, 0) do
+      UniqueVisit.track!(fingerprint: "a")
+      UniqueVisit.track!(fingerprint: "b")
+    end
+
+    travel_to brisbane.local(2026, 6, 13, 10, 0, 0) do
+      UniqueVisit.track!(fingerprint: "c")
+    end
+
+    travel_to brisbane.local(2026, 6, 14, 12, 0, 0) do
+      counts = UniqueVisit.daily_counts(7)
+      today_entry = counts.find { |day| day[:date] == Date.new(2026, 6, 14) }
+      yesterday_entry = counts.find { |day| day[:date] == Date.new(2026, 6, 13) }
+
+      assert_equal 2, today_entry[:count]
+      assert_equal 1, yesterday_entry[:count]
+      assert_equal 7, counts.size
+    end
+  end
+
+  test "distinct_visitors_in_days counts unique fingerprints across Brisbane days" do
+    brisbane = Time.find_zone("Australia/Brisbane")
+
+    travel_to brisbane.local(2026, 6, 14, 10, 0, 0) do
+      UniqueVisit.track!(fingerprint: "a")
+      UniqueVisit.track!(fingerprint: "b")
+    end
+
+    travel_to brisbane.local(2026, 6, 13, 10, 0, 0) do
+      UniqueVisit.track!(fingerprint: "a")
+    end
+
+    travel_to brisbane.local(2026, 6, 14, 12, 0, 0) do
+      assert_equal 2, UniqueVisit.distinct_visitors_in_days(7)
+    end
+  end
+
+  test "prune_old! removes visits before the Brisbane retention window" do
+    brisbane = Time.find_zone("Australia/Brisbane")
+
+    travel_to brisbane.local(2026, 6, 14, 10, 0, 0) do
+      UniqueVisit.track!(fingerprint: "recent")
+    end
+
+    travel_to brisbane.local(2026, 3, 1, 10, 0, 0) do
+      UniqueVisit.track!(fingerprint: "old")
+    end
+
+    travel_to brisbane.local(2026, 6, 14, 12, 0, 0) do
+      deleted = UniqueVisit.prune_old!(retention_days: 30)
+      assert_equal 1, deleted
+      assert_equal 1, UniqueVisit.count
+      assert_equal "recent", UniqueVisit.first.fingerprint
+    end
   end
 end
