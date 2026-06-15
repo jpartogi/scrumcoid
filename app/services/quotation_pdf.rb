@@ -103,8 +103,8 @@ class QuotationPdf
     @registration.enrollments.each_with_index do |enrollment, index|
       participant_data << [
         (index + 1).to_s, 
-        enrollment.visitor_name || enrollment.attendee_name || "", 
-        enrollment.visitor_email || enrollment.attendee_email || ""
+        enrollment.attendee_name || "",
+        enrollment.attendee_email || ""
       ]
     end
 

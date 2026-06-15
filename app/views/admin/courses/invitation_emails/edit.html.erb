@@ -1,0 +1,39 @@
+<section class="px-8 py-10 max-w-3xl space-y-6">
+  <div class="flex items-center gap-3 border-b border-slate-200 pb-5">
+    <%= link_to admin_course_invitation_email_path(@course), class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Invitation Email Template</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1"><%= @course.title %></p>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <%= form_with model: @course, url: admin_course_invitation_email_path(@course), method: :patch, class: "space-y-6" do |form| %>
+      <% if @course.errors.any? %>
+        <div class="rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span><%= @course.errors.full_messages.to_sentence %></span>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :invitation_email, "Template", class: "block text-sm font-bold text-slate-700" %>
+        <div class="mt-1.5 block rounded-lg border border-slate-300 bg-white shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-teal-600/10 focus-within:border-teal-600 transition-all">
+          <%= form.rich_text_area :invitation_email, class: "rich-text-editor-tall p-3 min-h-[16rem] focus:outline-none" %>
+        </div>
+        <p class="mt-1.5 text-xs text-slate-500">Used when sending class invitation emails from a schedule. Placeholders: {{first_name}}, {{last_name}}, {{full_name}}, {{email}}, {{course_title}}, {{class_date}}, {{class_time}}, {{class_location}}, {{venue_name}}, {{venue_address}}, {{class_schedule_url}}</p>
+      </div>
+
+      <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+        <%= form.submit "Save Template", class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>
+        <%= link_to "Cancel", admin_course_invitation_email_path(@course), class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+      </div>
+    <% end %>
+  </div>
+</section>

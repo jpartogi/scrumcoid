@@ -129,7 +129,7 @@
         </div>
 
         <div data-participants-target="participants">
-          <%= f.fields_for :enrollments, @registration.enrollments.build do |pf| %>
+          <%= f.fields_for :enrollments do |pf| %>
             <%= render "participant_fields", f: pf %>
           <% end %>
         </div>

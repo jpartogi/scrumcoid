@@ -1,0 +1,32 @@
+<section class="px-8 py-10 max-w-3xl space-y-6">
+  <div class="flex items-center gap-3 border-b border-slate-200 pb-5">
+    <%= link_to admin_class_schedule_path(@class_schedule), class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+        <%= @count == 1 ? "Add Registered Student" : "Add #{@count} Registered Students" %>
+      </h1>
+      <p class="text-sm font-medium text-slate-500 mt-1"><%= @class_schedule.course.title %></p>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <%= form_with url: admin_class_schedule_enrollments_path(@class_schedule), class: "space-y-6" do |form| %>
+      <div class="space-y-4">
+        <% @enrollments.each_with_index do |enrollment, index| %>
+          <%= fields_for "enrollments[#{index}]", enrollment do |enrollment_form| %>
+            <%= render "enrollment_fields", form: enrollment_form, enrollment: enrollment, index: index %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="flex items-center gap-4 border-t border-slate-100 pt-5">
+        <%= form.submit @count == 1 ? "Add Student" : "Add #{@count} Students", class: "rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-colors shadow-sm cursor-pointer" %>
+        <%= link_to "Cancel", admin_class_schedule_path(@class_schedule), class: "rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" %>
+      </div>
+    <% end %>
+  </div>
+</section>

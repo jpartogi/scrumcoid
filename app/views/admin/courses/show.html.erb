@@ -31,6 +31,27 @@
         <p class="mt-4 text-base text-slate-600 leading-relaxed font-medium"><%= @course.excerpt %></p>
       </div>
 
+      <!-- Invitation Email Template Card -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3 mb-3">Invitation Email Template</h2>
+          <p class="text-sm text-slate-600 font-medium">Configure the email template sent when inviting students to this course.</p>
+          <div class="mt-2 flex items-center gap-1.5">
+            <% if @course.invitation_email.present? %>
+              <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">Configured</span>
+            <% else %>
+              <span class="inline-flex items-center rounded-full bg-slate-50 px-2.5 py-0.5 text-xs font-bold text-slate-500 ring-1 ring-inset ring-slate-500/10">Not Configured</span>
+            <% end %>
+          </div>
+        </div>
+        <%= link_to admin_course_invitation_email_path(@course), class: "inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm active:scale-95 shrink-0" do %>
+          Manage Template
+          <svg class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        <% end %>
+      </div>
+
       <!-- Description Card -->
       <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-3">Detailed Curriculum</h2>
@@ -89,6 +110,10 @@
 
         <%= link_to edit_admin_course_path(@course), class: "flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
           Edit Details
+        <% end %>
+
+        <%= link_to admin_course_invitation_email_path(@course), class: "flex items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2.5 text-sm font-semibold text-indigo-700 hover:bg-indigo-100 hover:border-indigo-300 transition-all shadow-sm" do %>
+          Invitation Email Template
         <% end %>
 
         <%= button_to @course.published? ? "Unpublish Course" : "Publish Course", @course.published? ? unpublish_admin_course_path(@course) : publish_admin_course_path(@course), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>

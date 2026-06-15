@@ -75,6 +75,12 @@
             <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Full Name</p>
             <p class="mt-1 text-base font-semibold text-slate-900"><%= @enrollment.attendee_name %></p>
           </div>
+          <% unless @enrollment.user.present? %>
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Country</p>
+              <p class="mt-1 text-base font-semibold text-slate-900"><%= @enrollment.country.presence || "—" %></p>
+            </div>
+          <% end %>
           <div>
             <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Email Address</p>
             <p class="mt-1 text-base font-semibold text-slate-900">

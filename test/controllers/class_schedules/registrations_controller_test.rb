@@ -22,8 +22,9 @@ class ClassSchedules::RegistrationsControllerTest < ActionDispatch::IntegrationT
           company_phone: "123456789",
           enrollments_attributes: {
             "0" => {
-              visitor_name: "John Doe",
-              visitor_email: "john@doe.com"
+              first_name: "John",
+              last_name: "Doe",
+              email: "john@doe.com"
             }
           }
         }

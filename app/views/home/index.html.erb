@@ -151,9 +151,12 @@
             <span class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/15 shadow-sm">
               <%= schedule.remaining_seats %> kursi tersisa
             </span>
-            <%= link_to class_schedule_path(schedule), class: "inline-flex items-center gap-1 text-indigo-600 text-sm font-bold hover:text-indigo-700 transition-colors group/btn relative z-20" do %>
-              Daftar <span class="group-hover/btn:translate-x-1 transition-transform duration-200">&rarr;</span>
-            <% end %>
+            <div class="flex items-center gap-2 relative z-20">
+              <%= link_to "Detail", class_schedule_path(schedule), class: "rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all shadow-sm active:scale-95" %>
+              <%= link_to new_class_schedule_registration_path(schedule), class: "inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-700 transition-all shadow-sm active:scale-95 group/btn" do %>
+                Daftar <span class="group-hover/btn:translate-x-0.5 transition-transform duration-200">&rarr;</span>
+              <% end %>
+            </div>
           </div>
         </article>
       <% end %>

@@ -37,7 +37,7 @@ class ClassSchedules::RegistrationsController < ApplicationController
   def registration_params
     params.require(:registration).permit(
       :finance_name, :finance_email, :company_name, :company_address, :company_phone,
-      enrollments_attributes: [:id, :visitor_name, :visitor_email, :_destroy]
+      enrollments_attributes: [:id, :first_name, :last_name, :email, :_destroy]
     )
   end
 end

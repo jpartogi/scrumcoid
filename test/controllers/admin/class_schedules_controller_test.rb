@@ -1,6 +1,16 @@
 require "test_helper"
 
 class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
+  test "show page includes batch size form for adding students" do
+    sign_in users(:admin)
+    schedule = class_schedules(:open_online)
+
+    get admin_class_schedule_path(schedule)
+    assert_response :success
+    assert_select "input[name='count'][type=number]"
+    assert_select "input[type=submit][value='Add Students']"
+  end
+
   test "admin creates schedule times in selected timezone" do
     sign_in users(:admin)
 

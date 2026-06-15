@@ -43,13 +43,23 @@
       <% else %>
         <div class="grid gap-6 md:grid-cols-2">
           <div>
-            <%= form.label :visitor_name, "Student Name", class: "block text-sm font-bold text-slate-700" %>
-            <%= form.text_field :visitor_name, placeholder: "e.g., Jane Doe", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+            <%= form.label :first_name, "First Name", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.text_field :first_name, placeholder: "e.g., Jane", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
           </div>
-          
+
           <div>
-            <%= form.label :visitor_email, "Email Address", class: "block text-sm font-bold text-slate-700" %>
-            <%= form.email_field :visitor_email, placeholder: "e.g., jane@example.com", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+            <%= form.label :last_name, "Last Name", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.text_field :last_name, placeholder: "e.g., Doe", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+
+          <div>
+            <%= form.label :email, "Email Address", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.email_field :email, placeholder: "e.g., jane@example.com", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+
+          <div>
+            <%= form.label :country, "Country", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.text_field :country, placeholder: "e.g., Indonesia", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
           </div>
         </div>
       <% end %>

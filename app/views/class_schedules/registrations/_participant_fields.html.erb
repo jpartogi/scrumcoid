@@ -8,13 +8,18 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
-      <%= f.label :visitor_name, "Nama Lengkap Peserta", class: "block text-xs font-semibold text-slate-600 mb-1" %>
-      <%= f.text_field :visitor_name, required: true, class: "w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm" %>
+      <%= f.label :first_name, "Nama Depan", class: "block text-xs font-semibold text-slate-600 mb-1" %>
+      <%= f.text_field :first_name, required: true, class: "w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm" %>
     </div>
 
     <div>
-      <%= f.label :visitor_email, "Email Peserta", class: "block text-xs font-semibold text-slate-600 mb-1" %>
-      <%= f.email_field :visitor_email, required: true, class: "w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm" %>
+      <%= f.label :last_name, "Nama Belakang", class: "block text-xs font-semibold text-slate-600 mb-1" %>
+      <%= f.text_field :last_name, required: true, class: "w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :email, "Email Peserta", class: "block text-xs font-semibold text-slate-600 mb-1" %>
+      <%= f.email_field :email, required: true, class: "w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm" %>
     </div>
   </div>
 

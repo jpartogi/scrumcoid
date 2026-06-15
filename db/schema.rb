@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_14_115012) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_15_105621) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -157,22 +157,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_115012) do
     t.text "company_address"
     t.string "company_name"
     t.string "company_phone"
+    t.string "country"
     t.datetime "created_at", null: false
     t.string "currency"
+    t.string "email"
     t.string "finance_email"
     t.string "finance_name"
+    t.string "first_name"
+    t.string "last_name"
     t.datetime "paid_at"
     t.bigint "registration_id"
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.string "visitor_email"
-    t.string "visitor_name"
     t.index ["class_schedule_id"], name: "index_enrollments_on_class_schedule_id"
+    t.index ["email", "class_schedule_id"], name: "index_enrollments_on_email_and_class_schedule_id"
     t.index ["registration_id"], name: "index_enrollments_on_registration_id"
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"
-    t.index ["visitor_email", "class_schedule_id"], name: "index_enrollments_on_visitor_email_and_class_schedule_id"
   end
 
   create_table "meetup_registrations", force: :cascade do |t|

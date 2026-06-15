@@ -31,9 +31,7 @@ export default class extends Controller {
     } else {
       const firstWrapper = this.participantsTarget.querySelector("[data-participant-wrapper]")
       if (firstWrapper) {
-        const nameInput = firstWrapper.querySelector("input[name*='[visitor_name]']")
-        const emailInput = firstWrapper.querySelector("input[name*='[visitor_email]']")
-        if (nameInput) nameInput.value = ""
+        const emailInput = firstWrapper.querySelector("input[name*='[email]']")
         if (emailInput) emailInput.value = ""
       }
     }
@@ -41,14 +39,11 @@ export default class extends Controller {
 
   syncSameAsBilling() {
     if (this.hasSameAsBillingTarget && this.sameAsBillingTarget.checked) {
-      const nameVal = this.hasFinanceNameTarget ? this.financeNameTarget.value : ""
       const emailVal = this.hasFinanceEmailTarget ? this.financeEmailTarget.value : ""
 
       const firstWrapper = this.participantsTarget.querySelector("[data-participant-wrapper]")
       if (firstWrapper) {
-        const nameInput = firstWrapper.querySelector("input[name*='[visitor_name]']")
-        const emailInput = firstWrapper.querySelector("input[name*='[visitor_email]']")
-        if (nameInput) nameInput.value = nameVal
+        const emailInput = firstWrapper.querySelector("input[name*='[email]']")
         if (emailInput) emailInput.value = emailVal
       }
     }

@@ -1,0 +1,86 @@
+<div style="background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 48px 24px; color: #334155; line-height: 1.6;">
+  <!-- Styling for rich text content output -->
+  <style>
+    .email-body p {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 15px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .email-body a {
+      color: #0f766e;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .email-body ul, .email-body ol {
+      margin-top: 0;
+      margin-bottom: 16px;
+      padding-left: 20px;
+    }
+    .email-body li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #334155;
+    }
+    .email-body blockquote {
+      margin: 16px 0;
+      padding-left: 16px;
+      border-left: 4px solid #e2e8f0;
+      color: #64748b;
+      font-style: italic;
+    }
+    .email-body h1, .email-body h2, .email-body h3 {
+      color: #0f172a;
+      font-weight: 700;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .email-body h1 { font-size: 20px; }
+    .email-body h2 { font-size: 18px; }
+    .email-body h3 { font-size: 16px; }
+  </style>
+
+  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);">
+    <!-- Decorative top bar with corporate teal to indigo gradient -->
+    <div style="height: 8px; background: linear-gradient(135deg, #0f766e 0%, #4f46e5 100%);"></div>
+
+    <div style="padding: 40px 48px;">
+      <!-- Header / Logo -->
+      <div style="margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #f1f5f9;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td>
+              <span style="font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.75px;">
+                Scrum<span style="color: #0f766e;">.co.id</span>
+              </span>
+              <div style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">
+                PT. Adaptiva Sinergi Asia
+              </div>
+            </td>
+            <td align="right" style="vertical-align: middle;">
+              <span style="display: inline-block; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; font-size: 10px; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px;">
+                Class Invitation
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Rich Text Body Container -->
+      <div class="email-body" style="font-size: 15px; color: #334155;">
+        <%= @body_html.html_safe %>
+      </div>
+
+      <!-- Footer Info -->
+      <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid #f1f5f9; text-align: center;">
+        <p style="margin: 0; font-size: 12px; color: #94a3b8; font-weight: 500;">
+          This is an automated invitation regarding your registration at Scrum.co.id.
+        </p>
+        <p style="margin: 6px 0 0 0; font-size: 11px; color: #cbd5e1;">
+          © <%= Date.today.year %> PT. Adaptiva Sinergi Asia. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

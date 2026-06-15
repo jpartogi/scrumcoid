@@ -9,8 +9,8 @@ class RegistrationTest < ActiveSupport::TestCase
       finance_name: "Finance Manager",
       finance_email: "finance@company.com"
     )
-    registration.enrollments.build(visitor_name: "Participant One", visitor_email: "one@company.com")
-    registration.enrollments.build(visitor_name: "Participant Two", visitor_email: "two@company.com")
+    registration.enrollments.build(first_name: "Participant", last_name: "One", email: "one@company.com")
+    registration.enrollments.build(first_name: "Participant", last_name: "Two", email: "two@company.com")
 
     assert registration.valid?
     registration.enrollments.each do |enrollment|

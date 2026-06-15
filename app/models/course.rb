@@ -4,6 +4,7 @@ class Course < ApplicationRecord
   has_many :course_prices, dependent: :destroy
   has_many :class_schedules, dependent: :destroy
   has_rich_text :description
+  has_rich_text :invitation_email
   has_one_attached :logo
 
   accepts_nested_attributes_for :course_prices, allow_destroy: true, reject_if: :all_blank

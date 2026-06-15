@@ -10,6 +10,15 @@ class ClassSchedule < ApplicationRecord
 
   # Delegate so existing views using class_schedule.venue_name / .venue_address keep working
   delegate :name, :address, to: :venue, prefix: true, allow_nil: true
+
+  def start_date
+    starts_at.in_time_zone(time_zone).to_date
+  end
+
+  def end_date
+    ends_at.in_time_zone(time_zone).to_date
+  end
+
   has_many :enrollments, dependent: :destroy
   has_many :students, through: :enrollments, source: :user
 

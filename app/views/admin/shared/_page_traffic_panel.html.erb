@@ -64,47 +64,5 @@
         <% end %>
       </div>
     </div>
-
-    <div class="divide-y divide-slate-100 border-t border-slate-100 pt-2">
-      <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 mt-1">Daily unique views</p>
-      <% stats.daily_visits_7_days.each do |day| %>
-        <div class="flex items-center justify-between py-2.5 hover:bg-slate-50/50 rounded-lg px-2 -mx-2 transition-colors">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold px-2 py-1 rounded <%= day[:date] == Date.today ? 'bg-purple-100 text-purple-800 font-bold' : 'bg-slate-100 text-slate-600 font-medium' %>">
-              <%= day[:date].strftime("%a, %b %d") %>
-            </span>
-            <% if day[:date] == Date.today %>
-              <span class="text-[10px] uppercase font-bold tracking-wider text-purple-600 animate-pulse">Live</span>
-            <% end %>
-          </div>
-          <div class="flex items-center gap-1">
-            <span class="font-extrabold text-slate-800 text-sm"><%= day[:count] %></span>
-            <span class="text-xs text-slate-400 font-medium">views</span>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="mt-4 pt-4 border-t border-slate-100">
-      <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">30-day snapshot</p>
-      <div class="grid grid-cols-3 gap-3 text-center">
-        <div>
-          <div class="text-[10px] uppercase tracking-wider text-slate-400">Avg / day</div>
-          <div class="text-xl font-extrabold text-slate-900"><%= stats.avg_daily_visits_30d %></div>
-        </div>
-        <div>
-          <div class="text-[10px] uppercase tracking-wider text-slate-400">Peak day</div>
-          <div class="text-xl font-extrabold text-slate-900"><%= stats.peak_daily_visits_30d %></div>
-        </div>
-        <div>
-          <div class="text-[10px] uppercase tracking-wider text-slate-400">Unique (30d)</div>
-          <div class="text-xl font-extrabold text-slate-900"><%= stats.unique_visitors_30d %></div>
-        </div>
-      </div>
-      <p class="mt-2 text-[10px] text-slate-400">
-        Total unique views: <span class="font-semibold text-slate-600"><%= stats.total_unique_views %></span>
-        (same visitor counts once per day, matching site-wide dashboard metrics)
-      </p>
-    </div>
   </div>
 </div>

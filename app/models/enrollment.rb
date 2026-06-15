@@ -1,24 +1,36 @@
 class Enrollment < ApplicationRecord
   enum :status, { active: 0, cancelled: 1 }
 
+  attribute :first_name, :string
+  attribute :last_name, :string
+  attribute :email, :string
+  attribute :country, :string
+
   belongs_to :user, optional: true
   belongs_to :class_schedule
   belongs_to :registration, optional: true
 
+  attr_accessor :skip_registration_limits
+
   before_validation :copy_company_details_from_registration
 
   validates :user_id, uniqueness: { scope: :class_schedule_id }, allow_nil: true
-  validates :visitor_email, presence: true, if: -> { user.blank? }
+  validates :first_name, :last_name, :email, presence: true, if: -> { user.blank? }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validate :class_schedule_accepts_registration, on: :create
 
   delegate :course, to: :class_schedule
 
   def attendee_name
-    user&.name.presence || visitor_name
+    user&.name.presence || full_name
   end
 
   def attendee_email
-    user&.email.presence || visitor_email
+    user&.email.presence || email
+  end
+
+  def full_name
+    [first_name, last_name].compact_blank.join(" ")
   end
 
   private
@@ -34,6 +46,7 @@ class Enrollment < ApplicationRecord
   end
 
   def class_schedule_accepts_registration
+    return if skip_registration_limits
     return if class_schedule.blank?
 
     if class_schedule.full?

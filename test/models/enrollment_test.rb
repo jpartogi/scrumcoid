@@ -25,8 +25,10 @@ class EnrollmentTest < ActiveSupport::TestCase
   test "allows pending visitor enrollment without linked user" do
     enrollment = Enrollment.new(
       class_schedule: class_schedules(:open_online),
-      visitor_email: "visitor@example.com",
-      visitor_name: "Visitor Person"
+      first_name: "Visitor",
+      last_name: "Person",
+      email: "visitor@example.com",
+      country: "Indonesia"
     )
 
     assert enrollment.valid?
@@ -34,19 +36,21 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_equal "visitor@example.com", enrollment.attendee_email
   end
 
-  test "requires visitor email when user is not linked" do
-    enrollment = Enrollment.new(class_schedule: class_schedules(:open_online), visitor_name: "Visitor Person")
+  test "requires visitor fields when user is not linked" do
+    enrollment = Enrollment.new(class_schedule: class_schedules(:open_online), first_name: "Visitor")
 
     assert_not enrollment.valid?
-    assert_includes enrollment.errors[:visitor_email], "can't be blank"
+    assert_includes enrollment.errors[:last_name], "can't be blank"
+    assert_includes enrollment.errors[:email], "can't be blank"
   end
 
   test "copies company details from registration on validation" do
     registration = registrations(:one)
     enrollment = Enrollment.new(
       class_schedule: class_schedules(:open_online),
-      visitor_name: "John Doe",
-      visitor_email: "john.doe@example.com",
+      first_name: "John",
+      last_name: "Doe",
+      email: "john.doe@example.com",
       registration: registration
     )
 
@@ -64,17 +68,31 @@ class EnrollmentTest < ActiveSupport::TestCase
 
     enrollment1 = Enrollment.new(
       class_schedule: schedule,
-      visitor_name: "Visitor One",
-      visitor_email: "duplicate@example.com"
+      first_name: "Visitor",
+      last_name: "One",
+      email: "duplicate@example.com"
     )
     assert enrollment1.valid?
     enrollment1.save!
 
     enrollment2 = Enrollment.new(
       class_schedule: schedule,
-      visitor_name: "Visitor Two",
-      visitor_email: "duplicate@example.com"
+      first_name: "Visitor",
+      last_name: "Two",
+      email: "duplicate@example.com"
     )
     assert enrollment2.valid?
+  end
+
+  test "bypasses schedule limits when skip_registration_limits is set" do
+    enrollment = Enrollment.new(
+      class_schedule: class_schedules(:full_online),
+      first_name: "Admin",
+      last_name: "Added",
+      email: "admin-added@example.com"
+    )
+    enrollment.skip_registration_limits = true
+
+    assert enrollment.valid?
   end
 end

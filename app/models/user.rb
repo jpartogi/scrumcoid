@@ -16,7 +16,7 @@ class User < ApplicationRecord
   private
 
   def claim_paid_enrollments
-    Enrollment.where(user_id: nil, visitor_email: email).find_each do |enrollment|
+    Enrollment.where(user_id: nil, email: email).find_each do |enrollment|
       next if enrollments.exists?(class_schedule_id: enrollment.class_schedule_id)
 
       enrollment.update!(user: self)

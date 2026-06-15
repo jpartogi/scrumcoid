@@ -24,12 +24,15 @@ Rails.application.routes.draw do
         patch :publish
         patch :unpublish
       end
+      resource :invitation_email, only: [:show, :edit, :update], controller: "courses/invitation_emails"
     end
     resources :class_schedules do
       member do
         patch :publish
         patch :unpublish
       end
+      resources :enrollments, only: [:new, :create], controller: "class_schedules/enrollments"
+      resource :invitations, only: [:new, :create], controller: "class_schedules/invitations"
     end
     resources :meetups do
       member do

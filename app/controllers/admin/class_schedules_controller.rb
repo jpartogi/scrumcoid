@@ -10,6 +10,7 @@ class Admin::ClassSchedulesController < ApplicationController
 
   def show
     @page_view_stats = @class_schedule.page_view_stats
+    @max_batch_size = Admin::ClassSchedules::EnrollmentsController::MAX_BATCH_SIZE
   end
 
   def new

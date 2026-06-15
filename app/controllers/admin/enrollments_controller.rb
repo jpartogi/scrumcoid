@@ -31,7 +31,7 @@ class Admin::EnrollmentsController < ApplicationController
 
   def enrollment_params
     params.require(:enrollment).permit(
-      :status, :visitor_name, :visitor_email,
+      :status, :first_name, :last_name, :email, :country,
       :company_name, :company_address, :company_phone,
       :finance_name, :finance_email
     )
