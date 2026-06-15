@@ -5,7 +5,7 @@ class Admin::CoursesController < ApplicationController
 
   def index
     @courses = PaginatedScope.wrap(
-      Course.with_attached_logo.includes(:class_schedules).order(:title),
+      Course.with_attached_logo.with_attached_thumbnail.includes(:class_schedules).order(:title),
       page: params[:page],
       per_page: params[:per_page]
     )
@@ -63,7 +63,7 @@ class Admin::CoursesController < ApplicationController
   end
 
   def course_params
-    params.require(:course).permit(:title, :slug, :excerpt, :description, :status, :logo, :meta_keywords, :tags,
+    params.require(:course).permit(:title, :slug, :excerpt, :description, :status, :logo, :thumbnail, :meta_keywords, :tags,
       course_prices_attributes: [:id, :currency, :amount, :_destroy])
   end
 end

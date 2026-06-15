@@ -13,6 +13,7 @@ class Enrollment < ApplicationRecord
   attr_accessor :skip_registration_limits
 
   before_validation :copy_company_details_from_registration
+  before_create :generate_invitation_token
 
   validates :user_id, uniqueness: { scope: :class_schedule_id }, allow_nil: true
   validates :first_name, :last_name, :email, presence: true, if: -> { user.blank? }
@@ -43,6 +44,10 @@ class Enrollment < ApplicationRecord
       self.finance_name ||= registration.finance_name
       self.finance_email ||= registration.finance_email
     end
+  end
+
+  def generate_invitation_token
+    self.invitation_token ||= SecureRandom.hex(16)
   end
 
   def class_schedule_accepts_registration

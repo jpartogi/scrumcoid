@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_15_105621) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_15_121710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -164,6 +164,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_105621) do
     t.string "finance_email"
     t.string "finance_name"
     t.string "first_name"
+    t.datetime "invitation_opened_at"
+    t.datetime "invitation_sent_at"
+    t.string "invitation_token"
     t.string "last_name"
     t.datetime "paid_at"
     t.bigint "registration_id"
@@ -172,6 +175,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_105621) do
     t.bigint "user_id"
     t.index ["class_schedule_id"], name: "index_enrollments_on_class_schedule_id"
     t.index ["email", "class_schedule_id"], name: "index_enrollments_on_email_and_class_schedule_id"
+    t.index ["invitation_token"], name: "index_enrollments_on_invitation_token", unique: true
     t.index ["registration_id"], name: "index_enrollments_on_registration_id"
     t.index ["user_id", "class_schedule_id"], name: "index_enrollments_on_user_id_and_class_schedule_id", unique: true
     t.index ["user_id"], name: "index_enrollments_on_user_id"

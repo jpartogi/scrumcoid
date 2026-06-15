@@ -31,6 +31,7 @@ class Admin::ClassSchedules::InvitationsController < ApplicationController
 
     enrollments.find_each do |enrollment|
       InvitationMailer.class_invitation(enrollment, subject: subject).deliver_later
+      enrollment.update!(invitation_sent_at: Time.current, invitation_opened_at: nil)
     end
 
     notice = if enrollments.size == 1

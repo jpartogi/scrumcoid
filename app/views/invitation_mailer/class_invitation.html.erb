@@ -45,6 +45,16 @@
     <!-- Decorative top bar with corporate teal to indigo gradient -->
     <div style="height: 8px; background: linear-gradient(135deg, #0f766e 0%, #4f46e5 100%);"></div>
 
+    <% if @course.thumbnail.attached? %>
+      <div style="width: 100%; border-bottom: 1px solid #e2e8f0; line-height: 0;">
+        <%= image_tag @course.thumbnail, style: "width: 100%; height: auto; display: block; max-width: 100%;", alt: @course.title %>
+      </div>
+    <% elsif @course.logo.attached? %>
+      <div style="padding: 32px 0 0 0; text-align: center; line-height: 0;">
+        <%= image_tag @course.logo, style: "max-height: 60px; width: auto; display: inline-block;", alt: @course.title %>
+      </div>
+    <% end %>
+
     <div style="padding: 40px 48px;">
       <!-- Header / Logo -->
       <div style="margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #f1f5f9;">
@@ -83,4 +93,5 @@
       </div>
     </div>
   </div>
+  <img src="<%= track_invitation_url(token: @enrollment.invitation_token) %>" width="1" height="1" style="display: none !important;" alt="" />
 </div>

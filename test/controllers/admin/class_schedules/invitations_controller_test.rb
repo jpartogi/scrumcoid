@@ -27,6 +27,9 @@ class Admin::ClassSchedules::InvitationsControllerTest < ActionDispatch::Integra
   end
 
   test "admin can queue invitation emails for selected students" do
+    # Pre-set opened_at to test reset logic
+    @enrollment.update!(invitation_opened_at: Time.current)
+
     assert_enqueued_emails 1 do
       post admin_class_schedule_invitations_path(@schedule), params: {
         subject: "Welcome to class",
@@ -36,6 +39,10 @@ class Admin::ClassSchedules::InvitationsControllerTest < ActionDispatch::Integra
 
     assert_redirected_to admin_class_schedule_path(@schedule)
     assert_match "Invitation email queued", flash[:notice]
+    
+    @enrollment.reload
+    assert_not_nil @enrollment.invitation_sent_at
+    assert_nil @enrollment.invitation_opened_at
   end
 
   test "create requires at least one selected student" do

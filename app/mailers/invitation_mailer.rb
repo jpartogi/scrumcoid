@@ -3,6 +3,11 @@ class InvitationMailer < ApplicationMailer
 
   def class_invitation(enrollment, subject: nil)
     @enrollment = enrollment
+    if @enrollment.invitation_token.blank?
+      token = SecureRandom.hex(16)
+      @enrollment.update_column(:invitation_token, token)
+      @enrollment.invitation_token = token
+    end
     @class_schedule = enrollment.class_schedule
     @course = @class_schedule.course
     @body_html = InvitationEmailRenderer.render(enrollment, format: :html)

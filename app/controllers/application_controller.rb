@@ -56,7 +56,8 @@ class ApplicationController < ActionController::Base
               path == "/icon.svg" || path.start_with?("/icon-") ||
               path == "/apple-touch-icon.png" || path == "/manifest.json" ||
               path.start_with?("/assets/") || path.start_with?("/packs/") ||
-              path.start_with?("/up") || path == "/sitemap.xml"
+              path.start_with?("/up") || path == "/sitemap.xml" ||
+              path.start_with?("/invitations/track/")
 
     fingerprint = visitor_fingerprint
     return if fingerprint.blank?

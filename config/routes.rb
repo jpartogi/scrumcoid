@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     resources :customers
   end
 
+  get "invitations/track/:token" => "invitation_tracking#show", as: :track_invitation
   get "sitemap.xml" => "sitemaps#show", defaults: { format: "xml" }
   get "up" => "rails/health#show", as: :rails_health_check
 end

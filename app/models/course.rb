@@ -6,6 +6,7 @@ class Course < ApplicationRecord
   has_rich_text :description
   has_rich_text :invitation_email
   has_one_attached :logo
+  has_one_attached :thumbnail
 
   accepts_nested_attributes_for :course_prices, allow_destroy: true, reject_if: :all_blank
 
@@ -13,6 +14,7 @@ class Course < ApplicationRecord
 
   validates :title, :excerpt, :description, :slug, presence: true
   validate :logo_must_be_an_image
+  validate :thumbnail_must_be_an_image
   validates :slug, uniqueness: true
 
   scope :featured, -> { published.joins(:class_schedules).merge(ClassSchedule.available).distinct.limit(3) }
@@ -60,5 +62,12 @@ class Course < ApplicationRecord
     return if logo.content_type.in?(%w[image/png image/jpeg image/webp image/svg+xml])
 
     errors.add(:logo, "must be a PNG, JPG, WebP, or SVG image")
+  end
+
+  def thumbnail_must_be_an_image
+    return unless thumbnail.attached?
+    return if thumbnail.content_type.in?(%w[image/png image/jpeg image/webp image/svg+xml])
+
+    errors.add(:thumbnail, "must be a PNG, JPG, WebP, or SVG image")
   end
 end
