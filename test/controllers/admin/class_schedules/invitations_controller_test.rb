@@ -63,4 +63,43 @@ class Admin::ClassSchedules::InvitationsControllerTest < ActionDispatch::Integra
     get new_admin_class_schedule_invitations_path(@schedule)
     assert_redirected_to root_path
   end
+
+  test "admin sees test invitation form on send page" do
+    get new_admin_class_schedule_invitations_path(@schedule)
+    assert_response :success
+    assert_select "h2", text: "Send Test Invitation"
+    assert_select "textarea[name='test_emails']"
+    assert_select "form[action='#{test_admin_class_schedule_invitations_path(@schedule)}']"
+  end
+
+  test "admin can queue test invitation emails without updating enrollments" do
+    sent_at = 2.days.ago
+    @enrollment.update!(invitation_sent_at: sent_at, invitation_opened_at: Time.current)
+
+    assert_enqueued_emails 2 do
+      post test_admin_class_schedule_invitations_path(@schedule), params: {
+        subject: "Test Subject",
+        test_emails: "tester@example.com, reviewer@example.com"
+      }
+    end
+
+    assert_redirected_to new_admin_class_schedule_invitations_path(@schedule)
+    assert_match "Test invitation emails queued for 2 addresses", flash[:notice]
+
+    @enrollment.reload
+    assert_in_delta sent_at.to_i, @enrollment.invitation_sent_at.to_i, 2
+    assert_not_nil @enrollment.invitation_opened_at
+  end
+
+  test "test action requires at least one valid email address" do
+    assert_no_enqueued_emails do
+      post test_admin_class_schedule_invitations_path(@schedule), params: {
+        subject: "Test Subject",
+        test_emails: "not-an-email"
+      }
+    end
+
+    assert_redirected_to new_admin_class_schedule_invitations_path(@schedule)
+    assert_match "Enter at least one valid test email address", flash[:alert]
+  end
 end

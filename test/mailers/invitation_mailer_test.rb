@@ -36,6 +36,22 @@ class InvitationMailerTest < ActionMailer::TestCase
     assert_equal "Custom Subject", mail.subject
   end
 
+  test "class invitation test delivers to specified address using roster sample data" do
+    enrollment = enrollments(:existing_registration)
+    enrollment.update!(user: nil, first_name: "Jane", last_name: "Student", email: "jane@student.com")
+    enrollment.class_schedule.course.update!(invitation_email: "Halo {{full_name}}.")
+
+    mail = InvitationMailer.class_invitation_test(
+      enrollment.class_schedule_id,
+      subject: "Test Subject",
+      to: "tester@example.com"
+    )
+
+    assert_equal ["tester@example.com"], mail.to
+    assert_equal "Test Subject", mail.subject
+    assert_match "Halo Jane Student", mail.body.encoded
+  end
+
   test "class invitation renders thumbnail when attached" do
     enrollment = enrollments(:existing_registration)
     course = enrollment.course

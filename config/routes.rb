@@ -32,7 +32,9 @@ Rails.application.routes.draw do
         patch :unpublish
       end
       resources :enrollments, only: [:new, :create], controller: "class_schedules/enrollments"
-      resource :invitations, only: [:new, :create], controller: "class_schedules/invitations"
+      resource :invitations, only: [:new, :create], controller: "class_schedules/invitations" do
+        post :test
+      end
     end
     resources :meetups do
       member do

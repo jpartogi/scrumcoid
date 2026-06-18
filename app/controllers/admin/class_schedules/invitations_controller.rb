@@ -43,6 +43,38 @@ class Admin::ClassSchedules::InvitationsController < ApplicationController
     redirect_to admin_class_schedule_path(@class_schedule), notice: notice
   end
 
+  def test
+    @course = @class_schedule.course
+
+    if @course.invitation_email.blank?
+      redirect_to new_admin_class_schedule_invitations_path(@class_schedule),
+                  alert: "Invitation email template is not configured for this course."
+      return
+    end
+
+    test_emails = parsed_test_emails
+
+    if test_emails.empty?
+      redirect_to new_admin_class_schedule_invitations_path(@class_schedule),
+                  alert: "Enter at least one valid test email address."
+      return
+    end
+
+    subject = params[:subject].to_s.strip.presence || "Undangan: #{@course.title}"
+
+    test_emails.each do |email|
+      InvitationMailer.class_invitation_test(@class_schedule.id, subject: subject, to: email).deliver_later
+    end
+
+    notice = if test_emails.size == 1
+      "Test invitation email queued for 1 address."
+    else
+      "Test invitation emails queued for #{test_emails.size} addresses."
+    end
+
+    redirect_to new_admin_class_schedule_invitations_path(@class_schedule), notice: notice
+  end
+
   private
 
   def set_class_schedule
@@ -56,11 +88,20 @@ class Admin::ClassSchedules::InvitationsController < ApplicationController
   def sample_invitation_body(format: :text)
     return if @course.invitation_email.blank?
 
-    enrollment = @enrollments.first || @class_schedule.enrollments.build(
+    InvitationEmailRenderer.render(sample_enrollment, format: format)
+  end
+
+  def sample_enrollment
+    @enrollments&.first || @class_schedule.enrollments.build(
       first_name: "Jane",
       last_name: "Doe",
       email: "jane@example.com"
     )
-    InvitationEmailRenderer.render(enrollment, format: format)
+  end
+
+  def parsed_test_emails
+    params[:test_emails].to_s.split(/[\s,;]+/).map(&:strip).reject(&:blank?).uniq.select do |email|
+      email.match?(URI::MailTo::EMAIL_REGEXP)
+    end
   end
 end
