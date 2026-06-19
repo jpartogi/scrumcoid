@@ -1,0 +1,7 @@
+pending_download:
+  resource: free_resource
+  visitor_name: Budi Santoso
+  visitor_email: budi@example.com
+  job_title: 0
+  token: test-download-token-abc123
+  email_sent_at: <%= 1.hour.ago %>

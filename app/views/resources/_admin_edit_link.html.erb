@@ -1,0 +1,7 @@
+<% on_light = local_assigns.fetch(:on_light, false) %>
+<%= link_to edit_admin_resource_path(resource), class: "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all #{on_light ? 'bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100/60' : 'bg-white/10 text-white hover:bg-white/20'}" do %>
+  <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+  </svg>
+  Edit Resource
+<% end %>

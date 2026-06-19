@@ -1,0 +1,9 @@
+<% if resource.tag_list.any? %>
+  <div class="flex flex-wrap gap-2 <%= local_assigns.fetch(:wrapper_class, "") %>">
+    <% resource.tag_list.each do |tag| %>
+      <%= link_to resources_path(tag: tag), class: local_assigns.fetch(:link_class, resource_tag_link_class), title: "Lihat resource dengan tag #{tag}" do %>
+        <span class="text-indigo-400 font-bold mr-0.5">#</span><%= tag %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

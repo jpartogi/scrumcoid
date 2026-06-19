@@ -33,6 +33,12 @@ xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
   end
 
   xml.url do
+    xml.loc resources_url
+    xml.changefreq 'weekly'
+    xml.priority 0.8
+  end
+
+  xml.url do
     xml.loc blog_posts_url
     xml.changefreq 'daily'
     xml.priority 0.8
@@ -55,6 +61,16 @@ xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
       xml.lastmod class_schedule.updated_at.to_date.to_s
       xml.changefreq 'daily'
       xml.priority 0.8
+    end
+  end
+
+  # Dynamic Resources
+  @resources.find_each do |resource|
+    xml.url do
+      xml.loc resource_url(resource)
+      xml.lastmod resource.updated_at.to_date.to_s
+      xml.changefreq 'weekly'
+      xml.priority 0.7
     end
   end
 

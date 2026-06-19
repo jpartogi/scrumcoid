@@ -1,0 +1,35 @@
+published_resource:
+  title: Scrum Cheat Sheet
+  slug: scrum-cheat-sheet
+  meta_description: Panduan ringkas Scrum untuk tim produk.
+  meta_keywords: scrum, agile, cheat sheet
+  tags: scrum, agile
+  page_count: 12
+  price: 150000
+  currency: IDR
+  published_at: <%= 2.days.ago %>
+  status: 1
+
+free_resource:
+  title: Agile Glossary
+  slug: agile-glossary
+  meta_description: Glosarium istilah Agile dalam Bahasa Indonesia.
+  meta_keywords: agile, glossary
+  tags: agile
+  page_count: 8
+  price: 0
+  currency: IDR
+  published_at: <%= 4.days.ago %>
+  status: 1
+
+draft_resource:
+  title: Draft Resource
+  slug: draft-resource
+  meta_description: Hidden draft resource.
+  meta_keywords: draft
+  tags: draft-only
+  page_count: 5
+  price: 50000
+  currency: IDR
+  published_at:
+  status: 0

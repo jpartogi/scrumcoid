@@ -1,0 +1,17 @@
+<section class="px-8 py-10 max-w-3xl space-y-6">
+  <div class="flex items-center gap-3 border-b border-slate-200 pb-5">
+    <%= link_to admin_resources_path, class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Create Resource</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Upload a new softcopy resource for visitors to browse and purchase.</p>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <%= render "form", resource: @resource %>
+  </div>
+</section>

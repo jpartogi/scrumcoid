@@ -5,6 +5,7 @@ class SitemapsController < ApplicationController
     @courses = Course.published
     @class_schedules = ClassSchedule.available.includes(:course).order(:starts_at)
     @blog_posts = BlogPost.published
+    @resources = Resource.published
 
     respond_to do |format|
       format.xml

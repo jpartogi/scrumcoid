@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_15_121710) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_19_002750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -244,6 +244,37 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_121710) do
     t.index ["customer_id"], name: "index_registrations_on_customer_id"
   end
 
+  create_table "resource_download_requests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "email_sent_at"
+    t.integer "job_title", null: false
+    t.bigint "resource_id", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.string "visitor_email", null: false
+    t.string "visitor_name", null: false
+    t.index ["resource_id"], name: "index_resource_download_requests_on_resource_id"
+    t.index ["token"], name: "index_resource_download_requests_on_token", unique: true
+    t.index ["visitor_email"], name: "index_resource_download_requests_on_visitor_email"
+  end
+
+  create_table "resources", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "currency", default: "IDR", null: false
+    t.text "meta_description"
+    t.string "meta_keywords"
+    t.integer "page_count"
+    t.decimal "price", precision: 12, scale: 2, default: "0.0", null: false
+    t.datetime "published_at"
+    t.string "slug", null: false
+    t.integer "status", default: 0, null: false
+    t.text "tags"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_resources_on_slug", unique: true
+    t.index ["status", "published_at"], name: "index_resources_on_status_and_published_at"
+  end
+
   create_table "solid_cable_messages", force: :cascade do |t|
     t.binary "channel", null: false
     t.bigint "channel_hash", null: false
@@ -428,6 +459,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_121710) do
   add_foreign_key "meetup_registrations", "meetups"
   add_foreign_key "registrations", "class_schedules"
   add_foreign_key "registrations", "customers"
+  add_foreign_key "resource_download_requests", "resources"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

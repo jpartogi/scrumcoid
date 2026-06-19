@@ -53,6 +53,10 @@
             Tentang
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
           <% end %>
+          <%= link_to resources_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
+            Resources
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+          <% end %>
           <%= link_to blog_posts_path, class: "relative py-1.5 text-sm font-bold leading-6 text-slate-700 hover:text-indigo-600 transition-colors group" do %>
             Blog
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
@@ -90,6 +94,7 @@
           <%= link_to "Pelatihan", courses_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
           <%= link_to "Jadwal", class_schedules_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
           <%= link_to "Tentang", about_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
+          <%= link_to "Resources", resources_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
           <%= link_to "Blog", blog_posts_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
           <%= link_to "Kontak", new_contact_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>
           <%= link_to "Meetup", meetups_path, class: "rounded-lg px-3 py-3 text-base font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-600", data: { action: "mobile-menu#close" } %>

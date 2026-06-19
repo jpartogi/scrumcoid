@@ -19,6 +19,7 @@ class SitemapsControllerTest < ActionDispatch::IntegrationTest
     # Assert presence of resource indexes
     assert_match courses_url, response.body
     assert_match class_schedules_url, response.body
+    assert_match resources_url, response.body
     assert_match blog_posts_url, response.body
 
     # Assert presence of dynamic models
@@ -26,6 +27,7 @@ class SitemapsControllerTest < ActionDispatch::IntegrationTest
     assert_match class_schedule_url(class_schedules(:open_online)), response.body
     assert_match %r{/class_schedules/#{courses(:ai_essentials).slug}/#{class_schedules(:open_online).id}}, response.body
     assert_no_match %r{/class_schedules/#{class_schedules(:closed_online).id}(?:<|/)}, response.body
+    assert_match resource_url(resources(:published_resource)), response.body
     assert_match blog_post_url(blog_posts(:published_post)), response.body
   end
 

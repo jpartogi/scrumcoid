@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     resources :registrations, only: [:new, :create], controller: "meetups/registrations"
   end
   get "class_schedules/:course_slug/:id", to: "class_schedules#show", as: :class_schedule
+  resources :resources, only: [:index, :show] do
+    resources :download_requests, only: [:new, :create], controller: "resources/download_requests"
+  end
+  get "resource-downloads/:token", to: "resource_downloads#show", as: :resource_download
   resources :blog_posts, path: "blog", only: [:index, :show]
   resource :dashboard, only: [:show], controller: "dashboard"
 
@@ -48,6 +52,13 @@ Rails.application.routes.draw do
         patch :publish
         patch :unpublish
       end
+    end
+    resources :resources do
+      member do
+        patch :publish
+        patch :unpublish
+      end
+      resources :download_requests, only: [:index], controller: "resources/download_requests"
     end
     resource :about_page, only: [:edit, :update]
     resources :contact_messages, only: [:index, :show, :destroy] do

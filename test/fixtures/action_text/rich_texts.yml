@@ -38,3 +38,18 @@ draft_meetup_description:
   name: description
   body: <div>Draft meetup description.</div>
 
+published_resource_description:
+  record: published_resource (Resource)
+  name: description
+  body: <div>Panduan lengkap Scrum untuk Product Owner.</div>
+
+free_resource_description:
+  record: free_resource (Resource)
+  name: description
+  body: <div>Glosarium istilah Agile.</div>
+
+draft_resource_description:
+  record: draft_resource (Resource)
+  name: description
+  body: <div>Draft resource description.</div>
+

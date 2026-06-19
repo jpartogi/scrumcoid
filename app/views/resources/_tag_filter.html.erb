@@ -1,0 +1,18 @@
+<% if all_tags.any? %>
+  <% on_hero = local_assigns.fetch(:on_hero, false) %>
+  <div class="<%= on_hero ? "mt-8" : "mb-10" %> flex flex-wrap items-center gap-2">
+    <% if on_hero %>
+      <%= link_to "Semua", resources_path, class: resource_hero_all_tags_filter_class(current_tag) %>
+      <% all_tags.each do |tag| %>
+        <%= link_to resources_path(tag: tag), class: resource_hero_tag_filter_class(tag, current_tag) do %>
+          <span class="opacity-60">#</span><%= tag %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= link_to "Semua", resources_path, class: resource_all_tags_filter_class(current_tag) %>
+      <% all_tags.each do |tag| %>
+        <%= link_to tag, resources_path(tag: tag), class: resource_tag_filter_class(tag, current_tag) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
