@@ -1,29 +1,99 @@
-<div style="background-color: #f8fafc; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px 20px; color: #334155; line-height: 1.6;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);">
-    <div style="height: 6px; background: linear-gradient(to right, #4f46e5, #0ea5e9);"></div>
+<div style="background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 48px 24px; color: #334155; line-height: 1.6;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);">
+    <!-- Decorative top bar with corporate teal to indigo gradient -->
+    <div style="height: 8px; background: linear-gradient(135deg, #0f766e 0%, #4f46e5 100%);"></div>
 
-    <div style="padding: 32px 40px;">
-      <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9;">
-        <span style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px;">Scrum<span style="color: #4f46e5;">.co.id</span></span>
-        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">PT. Adaptiva Sinergi Asia</div>
+    <div style="padding: 40px 48px;">
+      <!-- Header / Logo -->
+      <div style="margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #f1f5f9;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td>
+              <span style="font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.75px;">
+                Scrum<span style="color: #0f766e;">.co.id</span>
+              </span>
+              <div style="font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">
+                PT. Adaptiva Sinergi Asia
+              </div>
+            </td>
+            <td align="right" style="vertical-align: middle;">
+              <span style="display: inline-block; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; font-size: 10px; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px;">
+                Resource Download
+              </span>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <p style="font-size: 15px; margin-top: 0; color: #0f172a; font-weight: 600;">Halo <%= @download_request.visitor_name %>,</p>
 
-      <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">
-        Terima kasih telah meminta resource kami. Berikut tautan untuk mengunduh <strong><%= @resource.title %></strong>.
+      <p style="font-size: 14px; color: #475569; margin-bottom: 20px; line-height: 1.6;">
+        Terima kasih telah mengajukan permintaan download di <strong>Scrum.co.id</strong>. Berikut adalah link untuk mengunduh resource materi yang Anda minta:
       </p>
 
-      <div style="text-align: center; margin-bottom: 24px;">
-        <a href="<%= @download_url %>" style="display: inline-block; background: linear-gradient(to right, #4f46e5, #7c3aed); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 14px 28px; border-radius: 12px;">
-          Download Resource
+      <!-- Resource Info Table -->
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px;">
+        <tr>
+          <td style="padding: 20px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr>
+                <% if @resource.thumbnail.attached? %>
+                  <td width="80" style="vertical-align: top; padding-right: 16px;">
+                    <%= image_tag @resource.thumbnail, style: "width: 80px; height: auto; border-radius: 6px; border: 1px solid #e2e8f0; display: block;", alt: @resource.title %>
+                  </td>
+                <% end %>
+                <td style="vertical-align: middle;">
+                  <div style="font-size: 11px; font-weight: 700; color: #0f766e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Materi Softcopy</div>
+                  <div style="font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.3;"><%= @resource.title %></div>
+                  <% if @resource.page_count.present? %>
+                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;"><%= @resource.page_count %> Halaman &bull; PDF/Excel Format</div>
+                  <% else %>
+                    <div style="font-size: 12px; color: #64748b; margin-top: 4px;">PDF/Excel Format</div>
+                  <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <div style="text-align: center; margin-bottom: 28px;">
+        <a href="<%= @download_url %>" style="display: inline-block; background: linear-gradient(135deg, #0f766e 0%, #4f46e5 100%); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 700; padding: 14px 32px; border-radius: 12px; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);">
+          Download Sekarang
         </a>
       </div>
 
-      <p style="font-size: 12px; color: #94a3b8; margin-bottom: 0;">
-        Jika tombol di atas tidak berfungsi, salin dan tempel tautan berikut ke browser Anda:<br>
-        <a href="<%= @download_url %>" style="color: #4f46e5; word-break: break-all;"><%= @download_url %></a>
+      <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 24px;">
+        Kalau ada pertanyaan lebih lanjut jangan sungkan untuk menghubungi saya.
       </p>
+
+      <div style="padding: 12px 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9; text-align: left; margin-bottom: 32px;">
+        <span style="font-size: 10px; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Link Download Alternatif:</span>
+        <a href="<%= @download_url %>" style="color: #0f766e; font-size: 12px; word-break: break-all; text-decoration: underline;"><%= @download_url %></a>
+      </div>
+
+      <!-- Footer contact box -->
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #f1f5f9; padding-top: 24px; text-align: center;">
+        <tr>
+          <td>
+            <div style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Butuh Bantuan atau Pelatihan Scrum?</div>
+            <div style="font-size: 13px; color: #475569; margin-bottom: 16px; line-height: 1.5;">
+              Hubungi <strong>Jessica Stella</strong> via WhatsApp:<br>
+              <a href="https://wa.me/6285643428348" style="display: inline-block; background-color: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; text-decoration: none; font-weight: 700; padding: 8px 16px; border-radius: 8px; margin-top: 6px; font-size: 12px;">
+                +62 856 4342 8348
+              </a>
+            </div>
+            
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">
+              Kunjungi website kami: <a href="https://scrum.co.id" style="color: #0f766e; text-decoration: underline; font-weight: 600;">Scrum.co.id</a>
+            </div>
+
+            <p style="margin: 0; font-size: 11px; color: #cbd5e1;">
+              © <%= Date.today.year %> PT. Adaptiva Sinergi Asia. All rights reserved.
+            </p>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>

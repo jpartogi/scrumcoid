@@ -156,38 +156,26 @@
             <h3 class="mt-3 text-lg font-black text-white leading-snug">Segera hadir</h3>
             <p class="mt-2 text-xs text-slate-400 leading-relaxed font-medium">File softcopy untuk resource ini sedang disiapkan.</p>
           <% end %>
-
-          <% if @resource.free? %>
-            <div class="mt-6 pt-5 border-t border-white/10">
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Butuh bantuan cepat?</p>
-              <p class="mt-2 text-xs text-slate-400 leading-relaxed">
-                Lebih suka chat langsung? Hubungi Jessica Stella via WhatsApp untuk pertanyaan seputar resource ini.
-              </p>
-              <%= link_to "https://wa.me/6285643428348", target: "_blank", rel: "noopener", class: "mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-xs font-bold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-500/20 hover:scale-[1.02] transition-all text-center" do %>
-                <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.739-1.456L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.48 2.012 14.005.992 11.37.992c-5.447 0-9.87 4.37-9.874 9.8.001 1.95.518 3.854 1.502 5.561l-.987 3.606 3.702-.97c1.644.896 3.23 1.365 4.834 1.365zm10.638-7.468c-.287-.143-1.696-.838-1.959-.933-.262-.095-.453-.143-.644.143-.19.287-.738.933-.905 1.124-.167.19-.333.214-.62.071-.287-.143-1.21-.446-2.305-1.424-.853-.76-1.428-1.7-1.595-1.986-.167-.286-.018-.44.125-.581.129-.127.287-.333.43-.5.143-.167.19-.286.287-.476.095-.19.047-.357-.024-.5-.071-.143-.644-1.547-.882-2.12-.232-.559-.467-.483-.644-.492-.167-.008-.358-.01-.55-.01-.19 0-.5.071-.762.357-.262.287-1 .977-1 2.38 0 1.405 1.023 2.762 1.166 2.953.143.19 2.013 3.074 4.877 4.31.681.294 1.213.47 1.627.601.684.218 1.307.187 1.8.114.55-.082 1.696-.692 1.935-1.36.239-.667.239-1.24.167-1.36-.072-.119-.262-.19-.549-.333z"/>
-                </svg>
-                Chat Jessica via WhatsApp
-              <% end %>
-              <p class="mt-3 text-center text-xs font-semibold text-slate-400">
-                Jessica Stella · <a href="https://wa.me/6285643428348" target="_blank" rel="noopener" class="text-emerald-400 hover:text-emerald-300 transition-colors">+62 856 4342 8348</a>
-              </p>
-            </div>
-          <% end %>
         </div>
 
-        <% if Resource.all_tags.any? %>
+        <% if @resource.free? %>
           <div class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
-            <h3 class="text-xs font-bold text-slate-400 border-b border-slate-100 pb-3 mb-4 uppercase tracking-widest">Topik Resource</h3>
-            <div class="flex flex-wrap gap-2">
-              <% Resource.all_tags.each do |tag| %>
-                <%= link_to resources_path(tag: tag), class: resource_tag_link_class do %>
-                  <span class="text-indigo-400 font-bold mr-0.5">#</span><%= tag %>
-                <% end %>
-              <% end %>
-            </div>
+            <h3 class="text-xs font-bold text-slate-400 border-b border-slate-100 pb-3 mb-4 uppercase tracking-widest">Butuh Bantuan?</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-medium">
+              Lebih suka bertanya langsung? Hubungi Jessica Stella via WhatsApp untuk pertanyaan seputar resource ini.
+            </p>
+            <%= link_to "https://wa.me/6285643428348", target: "_blank", rel: "noopener", class: "mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-xs font-bold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-500/20 hover:scale-[1.02] transition-all text-center" do %>
+              <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.739-1.456L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.48 2.012 14.005.992 11.37.992c-5.447 0-9.87 4.37-9.874 9.8.001 1.95.518 3.854 1.502 5.561l-.987 3.606 3.702-.97c1.644.896 3.23 1.365 4.834 1.365zm10.638-7.468c-.287-.143-1.696-.838-1.959-.933-.262-.095-.453-.143-.644.143-.19.287-.738.933-.905 1.124-.167.19-.333.214-.62.071-.287-.143-1.21-.446-2.305-1.424-.853-.76-1.428-1.7-1.595-1.986-.167-.286-.018-.44.125-.581.129-.127.287-.333.43-.5.143-.167.19-.286.287-.476.095-.19.047-.357-.024-.5-.071-.143-.644-1.547-.882-2.12-.232-.559-.467-.483-.644-.492-.167-.008-.358-.01-.55-.01-.19 0-.5.071-.762.357-.262.287-1 .977-1 2.38 0 1.405 1.023 2.762 1.166 2.953.143.19 2.013 3.074 4.877 4.31.681.294 1.213.47 1.627.601.684.218 1.307.187 1.8.114.55-.082 1.696-.692 1.935-1.36.239-.667.239-1.24.167-1.36-.072-.119-.262-.19-.549-.333z"/>
+              </svg>
+              Chat Jessica via WhatsApp
+            <% end %>
+            <p class="mt-3 text-center text-xs font-semibold text-slate-500">
+              Jessica Stella · <a href="https://wa.me/6285643428348" target="_blank" rel="noopener" class="text-emerald-600 hover:text-emerald-700 transition-colors">+62 856 4342 8348</a>
+            </p>
           </div>
         <% end %>
+
       </aside>
     </div>
 
