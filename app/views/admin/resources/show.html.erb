@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <%= render "admin/shared/page_view_stats", stats: @page_view_stats %>
+  <%= render "stats_cards", stats: @page_view_stats, download_count: @download_count %>
 
   <div class="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
     <div class="space-y-8">

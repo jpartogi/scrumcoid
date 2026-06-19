@@ -24,6 +24,9 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     # Assert visitor statistics are displayed
     assert_select "p", text: "Today's Visitors"
     assert_select "h2", text: /Visitor Traffic \(7 Days\)/
+    assert_select "p", text: "Total Downloads"
+    assert_select "p", text: "Unread Mail", count: 0
+    assert_select ".grid.gap-6 .rounded-2xl", count: 6
   end
 
   test "admin dashboard displays latest five registrations" do

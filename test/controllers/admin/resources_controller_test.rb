@@ -44,6 +44,22 @@ class Admin::ResourcesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", admin_resource_download_requests_path(resource), text: /View Downloaders/
   end
 
+  test "show displays view stats and total downloads card" do
+    resource = resources(:free_resource)
+    PageView.destroy_all
+    PageView.create!(viewable: resource, fingerprint: "fp1", viewed_on: Date.today)
+
+    get admin_resource_path(resource)
+
+    assert_response :success
+    assert_select "p", text: "Today's Views"
+    assert_select "p", text: "Total Unique Views"
+    assert_select "p", text: "Total Downloads"
+    assert_select "p", text: "Unique Views (30d)", count: 0
+    assert_select ".grid.gap-6 .rounded-2xl", count: 4
+    assert_match "1", response.body
+  end
+
   test "new renders form" do
     get new_admin_resource_path
     assert_response :success
