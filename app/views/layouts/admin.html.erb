@@ -22,25 +22,40 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex bg-slate-50 font-['Inter',sans-serif] text-slate-900 antialiased">
+  <body class="min-h-screen bg-slate-50 font-['Inter',sans-serif] text-slate-900 antialiased" data-controller="admin-sidebar">
+    <%# Tailwind compile helper: -translate-x-full %>
     <!-- Left Sidebar -->
-    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-slate-800 shadow-xl">
+    <aside
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col min-h-screen border-r border-slate-800 shadow-xl translate-x-0 transition-transform duration-300 ease-in-out"
+      data-admin-sidebar-target="sidebar"
+    >
       <!-- Brand Logo -->
-      <div class="h-20 flex items-center px-6 border-b border-slate-800 bg-slate-950">
-        <%= link_to admin_root_path, class: "text-xl font-black tracking-tighter text-white flex items-center gap-2" do %>
+      <div class="sidebar-header h-20 flex items-center justify-between gap-2 px-4 border-b border-slate-800 bg-slate-950 transition-all duration-300">
+        <%= link_to admin_root_path, class: "sidebar-logo min-w-0 text-xl font-black tracking-tighter text-white flex items-center gap-2 truncate" do %>
           scrum<span class="text-indigo-400">coid</span>
           <span class="rounded bg-indigo-500/10 px-2 py-0.5 text-xs font-bold text-indigo-400 uppercase tracking-widest ring-1 ring-inset ring-indigo-500/20">Admin</span>
         <% end %>
+        <button
+          type="button"
+          title="Toggle sidebar"
+          aria-label="Toggle sidebar"
+          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-slate-300 transition hover:border-slate-600 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+          data-action="admin-sidebar#toggle"
+        >
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
       </div>
 
       <!-- Navigation Menu -->
-      <nav class="flex-grow p-4 space-y-1.5 overflow-y-auto">
+      <nav class="flex-grow p-4 space-y-1.5 overflow-y-auto transition-all duration-300">
         <!-- Dashboard Link -->
         <%= link_to admin_root_path, class: "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all #{controller_name == 'dashboard' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'hover:bg-slate-800 hover:text-white'}" do %>
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
           </svg>
-          Dashboard
+          <span class="sidebar-text">Dashboard</span>
         <% end %>
 
         <!-- Courses Link -->
@@ -48,7 +63,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
           </svg>
-          Courses
+          <span class="sidebar-text">Courses</span>
         <% end %>
 
         <!-- Class Schedules Link -->
@@ -56,7 +71,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
           </svg>
-          Schedules
+          <span class="sidebar-text">Schedules</span>
         <% end %>
 
         <!-- Meetups Link -->
@@ -64,7 +79,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.998 5.998 0 00-12 0m12 0c0-1.24-.316-2.406-.867-3.414m-11.133 3.414a5.996 5.996 0 01-.867-3.414m1.954-4.819A5.991 5.991 0 0012 15h0a5.991 5.991 0 004.914-2.481m-9.828 0A5.996 5.996 0 0112 10h0c1.955 0 3.716.94 4.828 2.406m-9.656 0a6.012 6.012 0 001.666 1.71m9.656-1.71c-.562-.733-1.28-1.328-2.112-1.71" />
           </svg>
-          Meetups
+          <span class="sidebar-text">Meetups</span>
         <% end %>
 
         <!-- Registrations Link -->
@@ -72,7 +87,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.03 0 1.9.693 2.166 1.638m-7.377 2.24a4.12 4.12 0 0 0-1.53.48m12.452-2.235A4.119 4.119 0 0 1 20.25 6m-16.5 0a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 3.75 21h.75m0-18H6.75m-3 9h.008v.008H3.75V12Zm0 3h.008v.008H3.75V15Zm0 3h.008v.008H3.75V18Z" />
           </svg>
-          Registrations
+          <span class="sidebar-text">Registrations</span>
         <% end %>
 
         <!-- Venues Link -->
@@ -81,7 +96,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
           </svg>
-          Venues
+          <span class="sidebar-text">Venues</span>
         <% end %>
 
         <!-- Resources Link -->
@@ -89,7 +104,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
           </svg>
-          Resources
+          <span class="sidebar-text">Resources</span>
         <% end %>
 
         <!-- Blog Posts Link -->
@@ -97,7 +112,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
           </svg>
-          Blog Posts
+          <span class="sidebar-text">Blog Posts</span>
         <% end %>
 
         <!-- About Page Link -->
@@ -105,7 +120,7 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
           </svg>
-          About Page
+          <span class="sidebar-text">About Page</span>
         <% end %>
 
         <!-- Admin Emails Link -->
@@ -113,20 +128,20 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
           </svg>
-          Admin Contacts
+          <span class="sidebar-text">Admin Contacts</span>
         <% end %>
 
         <!-- Contact Messages Link -->
         <%= link_to admin_contact_messages_path, class: "flex items-center justify-between px-4 py-3 rounded-lg text-sm font-semibold transition-all #{controller_name == 'contact_messages' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'hover:bg-slate-800 hover:text-white'}" do %>
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 min-w-0">
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
-            <span>Messages</span>
+            <span class="sidebar-text">Messages</span>
           </div>
           <% unread_count = ContactMessage.unread.count %>
           <% if unread_count > 0 %>
-            <span class="rounded-full bg-rose-500/20 px-2 py-0.5 text-xs font-bold text-rose-400 ring-1 ring-inset ring-rose-500/30"><%= unread_count %></span>
+            <span class="sidebar-badge rounded-full bg-rose-500/20 px-2 py-0.5 text-xs font-bold text-rose-400 ring-1 ring-inset ring-rose-500/30"><%= unread_count %></span>
           <% end %>
         <% end %>
 
@@ -135,19 +150,20 @@
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
           </svg>
-          CRM / Customers
+          <span class="sidebar-text">CRM / Customers</span>
         <% end %>
       </nav>
 
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-grow flex flex-col min-h-screen overflow-x-hidden">
+    <div class="ml-64 flex flex-col min-h-screen overflow-x-hidden transition-[margin] duration-300 ease-in-out" data-admin-sidebar-target="main">
       <!-- Top Bar -->
       <header class="h-16 bg-white border-b border-slate-100 px-6 flex items-center justify-between sticky top-0 z-40 shadow-[0_1px_8px_-3px_rgba(0,0,0,0.05)]">
 
-        <%# ── Left: breadcrumb + page title ── %>
-        <div class="flex flex-col justify-center gap-0.5 min-w-0">
+        <%# ── Left: sidebar toggle + breadcrumb + page title ── %>
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="flex flex-col justify-center gap-0.5 min-w-0">
           <nav class="flex items-center gap-1.5 text-xs text-slate-400" aria-label="Breadcrumb">
             <%= link_to admin_root_path, class: "hover:text-indigo-500 transition-colors font-medium" do %>
               <svg class="inline h-3.5 w-3.5 mb-0.5 mr-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -163,6 +179,7 @@
           <h1 class="text-base font-bold text-slate-900 leading-tight tracking-tight truncate">
             <%= content_for?(:title) ? content_for(:title) : controller_name.humanize %>
           </h1>
+          </div>
         </div>
 
         <%# ── Right: actions + user identity ── %>

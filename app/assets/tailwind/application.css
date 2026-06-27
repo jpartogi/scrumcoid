@@ -45,3 +45,51 @@
   --color-teal-900: #134e4a;
   --color-teal-950: #042f2e;
 }
+
+/* Sidebar Collapse Transition and Styles */
+aside {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+aside.collapsed {
+  width: 5rem !important; /* w-20 */
+}
+
+aside.collapsed .sidebar-logo {
+  display: none !important;
+}
+
+aside.collapsed .sidebar-text {
+  display: none !important;
+}
+
+aside.collapsed .sidebar-badge {
+  display: none !important;
+}
+
+aside.collapsed .sidebar-header {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+aside.collapsed nav {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+aside.collapsed nav a {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  gap: 0 !important;
+}
+
+aside.collapsed nav a svg {
+  margin-right: 0 !important;
+}
+
+div[data-admin-sidebar-target="main"] {
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
