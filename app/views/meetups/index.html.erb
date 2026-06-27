@@ -24,16 +24,24 @@
           <article class="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm hover:border-purple-500/40 transition-all">
             <div>
               <div class="flex flex-wrap items-center gap-2">
-                <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-emerald-600 ring-1 ring-inset ring-emerald-500/20">
-                  Pendaftaran Dibuka
-                </span>
+                <% if meetup.available_for_registration? %>
+                  <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-emerald-600 ring-1 ring-inset ring-emerald-500/20">
+                    Pendaftaran Dibuka
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-slate-500 ring-1 ring-inset ring-slate-300/60">
+                    Pendaftaran Ditutup
+                  </span>
+                <% end %>
                 <%= meetup_online_pill(meetup) %>
                 <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-700/10 shadow-sm">
                   Free with Donation
                 </span>
-                <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/15 shadow-sm">
-                  <%= meetup.remaining_seats %> kursi tersisa
-                </span>
+                <% if meetup.available_for_registration? %>
+                  <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-700 ring-1 ring-inset ring-amber-600/15 shadow-sm">
+                    <%= meetup.remaining_seats %> kursi tersisa
+                  </span>
+                <% end %>
               </div>
               <h2 class="mt-4 text-xl font-bold text-slate-900">
                 <%= link_to meetup_display_name(meetup), meetup_path(meetup), class: "hover:text-indigo-600 transition-colors" %>
@@ -44,9 +52,11 @@
                 <span><%= meetup_time_part(meetup) %></span>
               </div>
             </div>
-            <div class="mt-8 grid grid-cols-2 gap-3 border-t border-slate-100 pt-6">
+            <div class="mt-8 grid <%= meetup.available_for_registration? ? 'grid-cols-2' : 'grid-cols-1' %> gap-3 border-t border-slate-100 pt-6">
               <%= link_to "Detail", meetup_path(meetup), class: "inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all text-center" %>
-              <%= link_to "Daftar", new_meetup_registration_path(meetup), class: "inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-indigo-500 hover:scale-[1.02] shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 transition-all text-center" %>
+              <% if meetup.available_for_registration? %>
+                <%= link_to "Daftar", new_meetup_registration_path(meetup), class: "inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-indigo-500 hover:scale-[1.02] shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 transition-all text-center" %>
+              <% end %>
             </div>
           </article>
         <% end %>

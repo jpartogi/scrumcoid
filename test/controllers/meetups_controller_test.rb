@@ -1,14 +1,25 @@
 require "test_helper"
 
 class MeetupsControllerTest < ActionDispatch::IntegrationTest
-  test "index lists available meetups" do
+  test "index lists upcoming published meetups" do
     get meetups_path
 
     assert_response :success
     assert_select "h1", text: "Meetup Scrum & Agile"
     assert_match meetups(:open_meetup).excerpt, response.body
+    assert_match meetups(:upcoming_closed_registration_meetup).excerpt, response.body
     assert_no_match meetups(:draft_meetup).excerpt, response.body
+    assert_no_match meetups(:ended_meetup).excerpt, response.body
     assert_match "Live Online", response.body
+  end
+
+  test "index shows closed registration badge for upcoming meetups with closed registration" do
+    get meetups_path
+
+    assert_response :success
+    assert_match "Pendaftaran Ditutup", response.body
+    assert_match meetups(:upcoming_closed_registration_meetup).excerpt, response.body
+    assert_no_match new_meetup_registration_path(meetups(:upcoming_closed_registration_meetup)), response.body
   end
 
   test "index omits online pill when meetup is not online" do

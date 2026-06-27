@@ -1,6 +1,6 @@
 class MeetupsController < ApplicationController
   def index
-    @meetups = Meetup.available
+    @meetups = Meetup.published.upcoming
   end
 
   def show
