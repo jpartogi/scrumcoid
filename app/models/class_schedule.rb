@@ -31,6 +31,7 @@ class ClassSchedule < ApplicationRecord
   validate :ends_after_start
 
   scope :upcoming, -> { where("starts_at >= ?", Time.current).order(:starts_at) }
+  scope :past, -> { where("starts_at < ?", Time.current).order(starts_at: :desc) }
   scope :available, -> { published.upcoming.where("registration_deadline >= ?", Time.current) }
 
   def available_for_registration?

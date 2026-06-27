@@ -60,4 +60,18 @@ class ClassScheduleTest < ActiveSupport::TestCase
 
     assert schedule.valid?
   end
+
+  test "upcoming scope excludes past schedules" do
+    upcoming_ids = ClassSchedule.upcoming.pluck(:id)
+
+    assert_includes upcoming_ids, class_schedules(:open_online).id
+    assert_not_includes upcoming_ids, class_schedules(:past_online).id
+  end
+
+  test "past scope includes only past schedules" do
+    past_ids = ClassSchedule.past.pluck(:id)
+
+    assert_includes past_ids, class_schedules(:past_online).id
+    assert_not_includes past_ids, class_schedules(:open_online).id
+  end
 end

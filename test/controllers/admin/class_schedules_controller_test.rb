@@ -1,6 +1,29 @@
 require "test_helper"
 
 class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
+  test "index shows only upcoming schedules by default" do
+    sign_in users(:admin)
+
+    get admin_class_schedules_path
+    assert_response :success
+
+    assert_select "a[href=?]", admin_class_schedule_path(class_schedules(:open_online))
+    assert_select "a[href=?]", admin_class_schedule_path(class_schedules(:past_online)), count: 0
+    assert_select "a[href=?]", admin_class_schedules_path(past: 1), text: /Past Schedules/
+  end
+
+  test "index with past param shows only past schedules" do
+    sign_in users(:admin)
+
+    get admin_class_schedules_path(past: 1)
+    assert_response :success
+
+    assert_select "h1", text: "Past Class Schedules"
+    assert_select "a[href=?]", admin_class_schedule_path(class_schedules(:past_online))
+    assert_select "a[href=?]", admin_class_schedule_path(class_schedules(:open_online)), count: 0
+    assert_select "a[href=?]", admin_class_schedules_path, text: /Upcoming Schedules/
+  end
+
   test "show page includes batch size form for adding students" do
     sign_in users(:admin)
     schedule = class_schedules(:open_online)

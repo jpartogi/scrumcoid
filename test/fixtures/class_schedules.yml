@@ -42,3 +42,14 @@ unpublished:
   capacity: 20
   status: 0
   venue: brisbane_hub
+
+past_online:
+  course: ai_essentials
+  starts_at: <%= 14.days.ago %>
+  ends_at: <%= 14.days.ago + 8.hours %>
+  location: Live online via Zoom
+  online: true
+  timezone: Etc/UTC
+  registration_deadline: <%= 21.days.ago %>
+  capacity: 20
+  status: 1

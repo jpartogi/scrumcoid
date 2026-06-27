@@ -4,7 +4,12 @@ class Admin::ClassSchedulesController < ApplicationController
   before_action :set_class_schedule, only: [ :show, :edit, :update, :destroy, :publish, :unpublish ]
 
   def index
-    @class_schedules = ClassSchedule.includes(:course, :enrollments).order(:starts_at)
+    @showing_past = params[:past].present?
+    scope = ClassSchedule.includes(:course, :enrollments)
+
+    @class_schedules = @showing_past ? scope.past : scope.upcoming
+    @upcoming_schedules_count = ClassSchedule.upcoming.count
+    @past_schedules_count = ClassSchedule.past.count
     @page_view_counts = PageView.unique_view_counts_for("ClassSchedule", @class_schedules.map(&:id))
   end
 
