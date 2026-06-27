@@ -73,7 +73,7 @@ class Admin::MeetupsController < ApplicationController
   def meetup_params
     params.require(:meetup).permit(
       :excerpt, :description, :starts_at, :ends_at, :timezone,
-      :join_link, :paypal_donation_url, :capacity, :registration_deadline, :status, :meta_keywords
+      :join_link, :paypal_donation_url, :capacity, :registration_deadline, :status, :meta_keywords, :online
     )
   end
 

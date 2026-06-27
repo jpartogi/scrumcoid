@@ -9,6 +9,7 @@ open_meetup:
   registration_deadline: <%= 13.days.from_now %>
   capacity: 50
   status: 1
+  online: true
 
 ended_meetup:
   slug: <%= 2.days.ago.to_date.strftime("%Y-%m-%d") %>-1

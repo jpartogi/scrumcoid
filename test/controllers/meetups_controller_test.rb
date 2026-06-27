@@ -8,6 +8,16 @@ class MeetupsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", text: "Meetup Scrum & Agile"
     assert_match meetups(:open_meetup).excerpt, response.body
     assert_no_match meetups(:draft_meetup).excerpt, response.body
+    assert_match "Live Online", response.body
+  end
+
+  test "index omits online pill when meetup is not online" do
+    meetups(:open_meetup).update!(online: false)
+
+    get meetups_path
+
+    assert_response :success
+    assert_no_match "Live Online", response.body
   end
 
   test "show displays published meetup" do
@@ -17,5 +27,16 @@ class MeetupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match meetup.slug, response.body
     assert_match meetup.excerpt, response.body
+    assert_match "Live Online", response.body
+  end
+
+  test "show omits online pill when meetup is not online" do
+    meetup = meetups(:open_meetup)
+    meetup.update!(online: false)
+
+    get meetup_path(meetup)
+
+    assert_response :success
+    assert_no_match "Live Online", response.body
   end
 end

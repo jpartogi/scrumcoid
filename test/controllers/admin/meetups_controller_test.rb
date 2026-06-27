@@ -61,13 +61,15 @@ class Admin::MeetupsControllerTest < ActionDispatch::IntegrationTest
           join_link: "https://zoom.us/j/111222333",
           paypal_donation_url: "https://www.paypal.com/donate/?hosted_button_id=ABC",
           capacity: 80,
-          status: "published"
+          status: "published",
+          online: true
         }
       }
     end
 
     meetup = Meetup.order(:created_at).last
     assert_equal "2026-06-14-1", meetup.slug
+    assert meetup.online?
     assert_redirected_to admin_meetup_path(meetup)
   end
 

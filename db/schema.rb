@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_19_002750) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_27_093521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -202,6 +202,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_002750) do
     t.text "excerpt", null: false
     t.string "join_link"
     t.string "meta_keywords"
+    t.boolean "online", default: false, null: false
     t.string "paypal_donation_url"
     t.datetime "registration_deadline", null: false
     t.string "slug", null: false
