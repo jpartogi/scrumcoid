@@ -1,4 +1,4 @@
-<% content_for :title, "Meetup Scrum & Agile" %>
+<% content_for :title, "Meetup Scrum, Agile dan Manajemen Produk" %>
 <% content_for :description, "Ikuti meetup gratis Scrum dan Agile dari Scrum.co.id. Daftar online dan bergabung langsung dari mana saja." %>
 
 <section class="relative isolate overflow-hidden bg-slate-950 py-16 sm:py-20">
@@ -8,10 +8,10 @@
       Komunitas
     </span>
     <h1 class="mt-4 text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-      Meetup Scrum & Agile
+      Meetup Scrum, Agile dan Manajemen Produk
     </h1>
     <p class="mt-4 max-w-2xl text-base text-slate-400">
-      Sesi meetup gratis untuk berbagi pengalaman, praktik, dan wawasan seputar Scrum dan Agile di Indonesia.
+      Sesi meetup gratis untuk berbagi pengalaman, praktik, dan wawasan seputar Scrum, Agile dan Manajemen Produk di Indonesia bersama praktisi lainnya.
     </p>
   </div>
 </section>
@@ -21,15 +21,62 @@
     <% if @meetups.any? %>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <% @meetups.each do |meetup| %>
-          <article class="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm hover:border-purple-500/40 transition-all">
+          <article class="flex flex-col justify-between rounded-3xl border border-slate-200/80 bg-white p-8 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all duration-300">
             <div>
-              <div class="flex flex-wrap items-center gap-2">
+              <!-- Title at the Top -->
+              <h2 class="text-xl font-bold text-slate-900 leading-snug">
+                <%= link_to meetup.name, meetup_path(meetup), class: "hover:text-indigo-600 transition-colors" %>
+              </h2>
+              
+              <!-- Excerpt -->
+              <p class="mt-3 text-sm text-slate-500 line-clamp-3 leading-relaxed"><%= meetup.excerpt %></p>
+              
+              <!-- Date & Time details (intuitive layout) -->
+              <div class="mt-5 space-y-3">
+                <!-- Date & Time -->
+                <div class="flex items-start gap-2.5 text-sm text-slate-600">
+                  <div class="h-8 w-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 shadow-inner">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-800"><%= meetup_date_part(meetup) %></p>
+                    <p class="text-xs font-semibold text-slate-400 mt-0.5"><%= meetup_time_part(meetup) %></p>
+                  </div>
+                </div>
+
+                <!-- Registration Deadline -->
                 <% if meetup.available_for_registration? %>
-                  <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-emerald-600 ring-1 ring-inset ring-emerald-500/20">
-                    Pendaftaran Dibuka
+                  <div class="flex items-center gap-2.5 rounded-xl bg-amber-50/50 border border-slate-200/50 p-3 text-xs">
+                    <svg class="h-4 w-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div class="text-amber-800">
+                      <span class="font-medium">Batas pendaftaran:</span>
+                      <span class="font-bold"><%= meetup_registration_deadline_part(meetup) %></span>
+                    </div>
+                  </div>
+                <% else %>
+                  <div class="flex items-center gap-2.5 rounded-xl bg-slate-50 border border-slate-200/30 p-3 text-xs text-slate-400">
+                    <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <span class="font-medium">Pendaftaran telah ditutup</span>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Status & Format Pills (below details) -->
+              <div class="mt-6 flex flex-wrap gap-2">
+                <% if meetup.available_for_registration? %>
+                  <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/10 shadow-sm">
+                    Pendaftaran Terbuka
                   </span>
                 <% else %>
-                  <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-slate-500 ring-1 ring-inset ring-slate-300/60">
+                  <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500 ring-1 ring-inset ring-slate-300/60 shadow-sm">
                     Pendaftaran Ditutup
                   </span>
                 <% end %>
@@ -42,14 +89,6 @@
                     <%= meetup.remaining_seats %> kursi tersisa
                   </span>
                 <% end %>
-              </div>
-              <h2 class="mt-4 text-xl font-bold text-slate-900">
-                <%= link_to meetup_display_name(meetup), meetup_path(meetup), class: "hover:text-indigo-600 transition-colors" %>
-              </h2>
-              <p class="mt-2 text-sm text-slate-600 line-clamp-3"><%= meetup.excerpt %></p>
-              <div class="mt-4 flex flex-col gap-1 text-xs font-medium text-slate-500">
-                <span><%= meetup_date_part(meetup) %></span>
-                <span><%= meetup_time_part(meetup) %></span>
               </div>
             </div>
             <div class="mt-8 grid <%= meetup.available_for_registration? ? 'grid-cols-2' : 'grid-cols-1' %> gap-3 border-t border-slate-100 pt-6">

@@ -1,6 +1,20 @@
 require "test_helper"
 
 class MeetupTest < ActiveSupport::TestCase
+  test "display_name includes meetup name and event date" do
+    meetup = meetups(:open_meetup)
+
+    assert_equal "Scrum Meetup · #{meetup.event_date.strftime('%Y-%m-%d')}", meetup.display_name
+  end
+
+  test "defaults name to Scrum Meetup" do
+    meetup = Meetup.new
+
+    meetup.valid?
+
+    assert_equal Meetup::DEFAULT_NAME, meetup.name
+  end
+
   test "available_for_registration when published with seats and open deadline" do
     meetup = meetups(:open_meetup)
 
@@ -30,7 +44,7 @@ class MeetupTest < ActiveSupport::TestCase
     end
   end
 
-  test "generates slug from meetup date with sequential suffix" do
+  test "generates slug from meetup name and date with sequential suffix" do
     time_zone = Time.find_zone!(Meetup::DEFAULT_TIMEZONE)
     starts_at = time_zone.local(2026, 6, 14, 19, 0, 0)
     ends_at = starts_at.change(hour: 21)
@@ -47,7 +61,7 @@ class MeetupTest < ActiveSupport::TestCase
     )
 
     assert first.save!
-    assert_equal "2026-06-14-1", first.slug
+    assert_equal "scrum-meetup-2026-06-14", first.slug
 
     second = Meetup.new(
       excerpt: "Second session",
@@ -61,7 +75,7 @@ class MeetupTest < ActiveSupport::TestCase
     )
 
     assert second.save!
-    assert_equal "2026-06-14-2", second.slug
+    assert_equal "scrum-meetup-2026-06-14-2", second.slug
   end
 
   test "regenerates slug when starts_at date changes" do
@@ -71,8 +85,17 @@ class MeetupTest < ActiveSupport::TestCase
     meetup.ends_at = new_starts_at.change(hour: meetup.ends_at.hour)
     meetup.valid?
 
-    expected_prefix = new_starts_at.in_time_zone(meetup.time_zone).to_date.strftime("%Y-%m-%d")
-    assert_match /\A#{expected_prefix}-\d+\z/, meetup.slug
+    expected_prefix = "scrum-meetup-#{new_starts_at.in_time_zone(meetup.time_zone).to_date.strftime('%Y-%m-%d')}"
+    assert_equal expected_prefix, meetup.slug
+  end
+
+  test "regenerates slug when name changes" do
+    meetup = meetups(:open_meetup)
+    meetup.name = "Agile Leaders Meetup"
+    meetup.valid?
+
+    expected_prefix = "agile-leaders-meetup-#{meetup.event_date.strftime('%Y-%m-%d')}"
+    assert_equal expected_prefix, meetup.slug
   end
 
   private

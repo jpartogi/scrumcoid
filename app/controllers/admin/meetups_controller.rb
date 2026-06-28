@@ -19,6 +19,7 @@ class Admin::MeetupsController < ApplicationController
     ends_at = starts_at.change(hour: 21, min: 0)
 
     @meetup = Meetup.new(
+      name: Meetup::DEFAULT_NAME,
       starts_at: starts_at,
       ends_at: ends_at,
       registration_deadline: starts_at - 1.day,
@@ -72,7 +73,7 @@ class Admin::MeetupsController < ApplicationController
 
   def meetup_params
     params.require(:meetup).permit(
-      :excerpt, :description, :starts_at, :ends_at, :timezone,
+      :name, :excerpt, :description, :starts_at, :ends_at, :timezone,
       :join_link, :paypal_donation_url, :capacity, :registration_deadline, :status, :meta_keywords, :online
     )
   end

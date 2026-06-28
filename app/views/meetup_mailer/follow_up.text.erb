@@ -2,6 +2,8 @@ Halo <%= @registration.visitor_name %>,
 
 Terima kasih telah menghadiri meetup pada <%= meetup_display_name(@meetup) %>. Kami harap Anda mendapatkan wawasan yang bermanfaat dari sesi ini.
 
+Jika Anda ingin terus bergabung, pertimbangkan untuk mendaftar meetup berikutnya<% if @next_meetup %> pada <%= meetup_display_name(@next_meetup) %><% end %>. Jadwal meetup terbaru tersedia di <%= meetups_url %>.
+
 Jika Anda merasa meetup ini bermanfaat, pertimbangkan untuk mendukung komunitas kami melalui donasi PayPal:
 <%= @donation_url %>
 

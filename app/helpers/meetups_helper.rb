@@ -11,7 +11,7 @@ module MeetupsHelper
   end
 
   def meetup_display_name(meetup)
-    "#{meetup_date_part(meetup)}, #{meetup_time_part(meetup)}"
+    "#{meetup.display_name}, #{meetup_time_part(meetup)}"
   end
 
   def meetup_online_pill(meetup)
@@ -33,5 +33,12 @@ module MeetupsHelper
     tz_abbr = starts_at.strftime("%Z")
 
     "#{starts_at.strftime('%-l:%M %p')} – #{ends_at.strftime('%-l:%M %p')} #{tz_abbr}"
+  end
+
+  def meetup_registration_deadline_part(meetup)
+    deadline = meetup.registration_deadline.in_time_zone(meetup.time_zone || Time.zone)
+    tz_abbr = deadline.strftime("%Z")
+
+    "#{deadline.strftime('%-d %b %Y')}, #{deadline.strftime('%-l:%M %p')} #{tz_abbr}"
   end
 end

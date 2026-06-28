@@ -19,6 +19,7 @@ class MeetupMailer < ApplicationMailer
     @registration = registration
     @meetup = registration.meetup
     @donation_url = @meetup.donation_url
+    @next_meetup = Meetup.published.upcoming.where.not(id: @meetup.id).first
 
     mail(
       to: registration.visitor_email,

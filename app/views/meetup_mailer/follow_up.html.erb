@@ -15,6 +15,10 @@
       </p>
 
       <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">
+        Jika Anda ingin terus bergabung, pertimbangkan untuk mendaftar meetup berikutnya<% if @next_meetup %> pada <strong><%= meetup_display_name(@next_meetup) %></strong><% end %>. Jadwal meetup terbaru tersedia di <%= link_to "halaman meetup", meetups_url, style: "color: #4f46e5; font-weight: 600;" %> kami.
+      </p>
+
+      <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">
         Jika Anda merasa meetup ini bermanfaat, pertimbangkan untuk mendukung komunitas kami melalui donasi PayPal. Kontribusi Anda membantu kami menyelenggarakan lebih banyak meetup gratis di masa mendatang.
       </p>
 

@@ -22,5 +22,10 @@ class MeetupMailerTest < ActionMailer::TestCase
     assert_match "hosted_button_id", mail.body.encoded
     assert_match "TEST456", mail.body.encoded
     assert_match "PayPal", mail.body.encoded
+    body = mail.text_part.body.decoded
+    assert_includes body, "http://example.com/meetups"
+    next_meetup = Meetup.published.upcoming.where.not(id: registration.meetup_id).first
+    assert_includes body, next_meetup.display_name
+    assert_includes body, "meetup berikutnya"
   end
 end

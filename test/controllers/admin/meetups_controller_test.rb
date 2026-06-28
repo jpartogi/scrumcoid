@@ -33,6 +33,7 @@ class Admin::MeetupsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", text: "New Meetup"
+    assert_select "input[name='meetup[name]'][value=?]", Meetup::DEFAULT_NAME
     assert_no_match /name="meetup\[title\]"/, response.body
   end
 
@@ -68,7 +69,8 @@ class Admin::MeetupsControllerTest < ActionDispatch::IntegrationTest
     end
 
     meetup = Meetup.order(:created_at).last
-    assert_equal "2026-06-14-1", meetup.slug
+    assert_equal Meetup::DEFAULT_NAME, meetup.name
+    assert_equal "scrum-meetup-2026-06-14", meetup.slug
     assert meetup.online?
     assert_redirected_to admin_meetup_path(meetup)
   end

@@ -1,18 +1,20 @@
 class Meetup < ApplicationRecord
   include PageViewable
 
+  DEFAULT_NAME = "Scrum Meetup"
   DEFAULT_TIMEZONE = "Asia/Jakarta"
-  SLUG_PATTERN = /\A\d{4}-\d{2}-\d{2}-\d+\z/
+  SLUG_PATTERN = /\A[a-z0-9]+(?:-[a-z0-9]+)*-\d{4}-\d{2}-\d{2}(?:-\d+)?\z/
 
   enum :status, { draft: 0, published: 1, cancelled: 2 }
 
   has_many :meetup_registrations, dependent: :destroy
   has_rich_text :description
 
+  before_validation :set_default_name
   before_validation :set_default_timezone
   before_validation :assign_slug
 
-  validates :excerpt, :description, :slug, :starts_at, :ends_at,
+  validates :name, :excerpt, :description, :slug, :starts_at, :ends_at,
             :registration_deadline, :timezone, presence: true
   validates :slug, uniqueness: true, format: { with: SLUG_PATTERN }
   validates :capacity, numericality: { greater_than: 0 }
@@ -28,7 +30,7 @@ class Meetup < ApplicationRecord
   end
 
   def display_name
-    "#{event_date.strftime('%Y-%m-%d')} · #{event_date.strftime('%-d %b %Y')}"
+    "#{name} · #{event_date.strftime('%Y-%m-%d')}"
   end
 
   def available_for_registration?
@@ -70,19 +72,29 @@ class Meetup < ApplicationRecord
   private
 
   def assign_slug
-    return if starts_at.blank? || time_zone.blank?
-    return if persisted? && !starts_at_changed? && !timezone_changed?
+    return if starts_at.blank? || time_zone.blank? || name.blank?
+    return if persisted? && !starts_at_changed? && !timezone_changed? && !name_changed?
 
-    date_prefix = event_date.strftime("%Y-%m-%d")
-    scope = self.class.where("slug LIKE ?", "#{date_prefix}-%")
+    slug_prefix = "#{name.parameterize}-#{event_date.strftime('%Y-%m-%d')}"
+    scope = self.class.where("slug = ? OR slug LIKE ?", slug_prefix, "#{slug_prefix}-%")
     scope = scope.where.not(id: id) if persisted?
 
-    used_suffixes = scope.pluck(:slug).filter_map do |existing_slug|
-      suffix = existing_slug.delete_prefix("#{date_prefix}-")
-      suffix.to_i if suffix.match?(/\A\d+\z/)
-    end
+    if scope.empty?
+      self.slug = slug_prefix
+    else
+      used_suffixes = scope.pluck(:slug).filter_map do |existing_slug|
+        next 1 if existing_slug == slug_prefix
 
-    self.slug = "#{date_prefix}-#{used_suffixes.max.to_i + 1}"
+        suffix = existing_slug.delete_prefix("#{slug_prefix}-")
+        suffix.to_i if suffix.match?(/\A\d+\z/)
+      end
+
+      self.slug = "#{slug_prefix}-#{used_suffixes.max.to_i + 1}"
+    end
+  end
+
+  def set_default_name
+    self.name = DEFAULT_NAME if name.blank?
   end
 
   def set_default_timezone
