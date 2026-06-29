@@ -21,6 +21,8 @@ class Admin::CrmLeadsControllerTest < ActionDispatch::IntegrationTest
     assert_select "td", text: /budi@example.com/
     assert_select "td", text: /Agile Glossary/
     assert_select "td", text: /Scrum Meetup/
+    assert_select "td", text: /Siti Rahayu/
+    assert_select "td", text: /siti@example.com/
   end
 
   test "admin can search leads by email" do

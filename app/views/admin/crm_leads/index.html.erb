@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">CRM / Lead Management</h1>
-      <p class="text-sm font-medium text-slate-500 mt-1">Visitors who downloaded a resource and also registered for a meetup.</p>
+      <p class="text-sm font-medium text-slate-500 mt-1">Visitors who downloaded a resource or registered for a meetup.</p>
     </div>
   </div>
 
@@ -62,26 +62,34 @@
                   <p class="text-slate-700 font-medium select-all"><%= lead.visitor_email %></p>
                 </td>
                 <td class="px-6 py-4">
-                  <% if lead.latest_resource_title.present? %>
-                    <p class="font-semibold text-indigo-600"><%= lead.latest_resource_title %></p>
-                  <% end %>
-                  <p class="text-xs text-slate-500 mt-0.5">
-                    <%= pluralize(lead.resource_download_count, "download") %>
-                    <% if lead.last_resource_download_at.present? %>
-                      · <%= lead.last_resource_download_at.strftime("%d %b %Y") %>
+                  <% if lead.resource_download_count.to_i.positive? %>
+                    <% if lead.latest_resource_title.present? %>
+                      <p class="font-semibold text-indigo-600"><%= lead.latest_resource_title %></p>
                     <% end %>
-                  </p>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                      <%= pluralize(lead.resource_download_count, "download") %>
+                      <% if lead.last_resource_download_at.present? %>
+                        · <%= lead.last_resource_download_at.strftime("%d %b %Y") %>
+                      <% end %>
+                    </p>
+                  <% else %>
+                    <span class="text-slate-300 italic text-xs">No downloads</span>
+                  <% end %>
                 </td>
                 <td class="px-6 py-4">
-                  <% if lead.latest_meetup_name.present? %>
-                    <p class="font-semibold text-indigo-600"><%= lead.latest_meetup_name %></p>
-                  <% end %>
-                  <p class="text-xs text-slate-500 mt-0.5">
-                    <%= pluralize(lead.meetup_registration_count, "registration") %>
-                    <% if lead.last_meetup_registration_at.present? %>
-                      · <%= lead.last_meetup_registration_at.strftime("%d %b %Y") %>
+                  <% if lead.meetup_registration_count.to_i.positive? %>
+                    <% if lead.latest_meetup_name.present? %>
+                      <p class="font-semibold text-indigo-600"><%= lead.latest_meetup_name %></p>
                     <% end %>
-                  </p>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                      <%= pluralize(lead.meetup_registration_count, "registration") %>
+                      <% if lead.last_meetup_registration_at.present? %>
+                        · <%= lead.last_meetup_registration_at.strftime("%d %b %Y") %>
+                      <% end %>
+                    </p>
+                  <% else %>
+                    <span class="text-slate-300 italic text-xs">No meetup registrations</span>
+                  <% end %>
                 </td>
                 <td class="px-6 py-4 text-slate-600 font-medium">
                   <% last_activity = [lead.last_resource_download_at, lead.last_meetup_registration_at].compact.max %>
@@ -109,8 +117,8 @@
         <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
         </svg>
-        <p class="mt-4 font-semibold text-base">No cross-engaged leads found</p>
-        <p class="text-xs text-slate-400 mt-1">Leads appear here once a visitor has both downloaded a resource and registered for a meetup with the same email.</p>
+        <p class="mt-4 font-semibold text-base">No leads found</p>
+        <p class="text-xs text-slate-400 mt-1">Leads appear here once a visitor downloads a resource or registers for a meetup.</p>
       </div>
     <% end %>
   </div>
