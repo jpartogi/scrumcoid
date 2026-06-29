@@ -1,23 +1,12 @@
 require "csv"
 
 class EnrollmentRosterCsvExporter
-  HEADERS = [
-    "Name",
-    "Email",
-    "Country",
-    "Company",
-    "Status",
-    "Invitation",
-    "Registered At"
-  ].freeze
-
   def initialize(class_schedule)
     @class_schedule = class_schedule
   end
 
   def to_csv
     CSV.generate do |csv|
-      csv << HEADERS
       enrollments.each do |enrollment|
         csv << row_for(enrollment)
       end
@@ -38,23 +27,18 @@ class EnrollmentRosterCsvExporter
 
   def row_for(enrollment)
     [
-      enrollment.attendee_name,
+      first_name_for(enrollment),
+      last_name_for(enrollment),
       enrollment.attendee_email,
-      enrollment.country,
-      enrollment.company_name,
-      enrollment.status,
-      invitation_status(enrollment),
-      enrollment.created_at.iso8601
+      enrollment.country
     ]
   end
 
-  def invitation_status(enrollment)
-    if enrollment.invitation_opened_at.present?
-      "Opened"
-    elsif enrollment.invitation_sent_at.present?
-      "Sent"
-    else
-      "Not Sent"
-    end
+  def first_name_for(enrollment)
+    enrollment.first_name.presence || enrollment.user&.name.to_s.split(/\s+/, 2).first.to_s
+  end
+
+  def last_name_for(enrollment)
+    enrollment.last_name.presence || enrollment.user&.name.to_s.split(/\s+/, 2).last.to_s
   end
 end

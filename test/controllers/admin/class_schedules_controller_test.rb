@@ -54,8 +54,7 @@ class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_match(/attachment; filename="#{schedule.course.slug}-\d{4}-\d{2}-\d{2}-roster.csv"/, response.headers["Content-Disposition"])
 
     rows = CSV.parse(response.body)
-    assert_equal EnrollmentRosterCsvExporter::HEADERS, rows.first
-    assert rows.any? { |row| row[1] == enrollment.attendee_email }
+    assert rows.any? { |row| row[2] == enrollment.attendee_email }
   end
 
   test "guest cannot export registered students as csv" do
