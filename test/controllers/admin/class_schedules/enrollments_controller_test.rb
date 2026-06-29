@@ -19,6 +19,14 @@ class Admin::ClassSchedules::EnrollmentsControllerTest < ActionDispatch::Integra
     assert_select "input[name^='enrollments'][name$='[company_name]']", count: 2
   end
 
+  test "new student form defaults country to Indonesia" do
+    get new_admin_class_schedule_enrollment_path(@schedule, count: 2)
+
+    assert_response :success
+    assert_select "input[name='enrollments[0][country]'][value=?]", "Indonesia"
+    assert_select "input[name='enrollments[1][country]'][value=?]", "Indonesia"
+  end
+
   test "batch size is capped at maximum" do
     get new_admin_class_schedule_enrollment_path(@schedule, count: 99)
     assert_response :success

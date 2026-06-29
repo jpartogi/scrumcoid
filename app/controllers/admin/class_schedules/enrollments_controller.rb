@@ -1,5 +1,6 @@
 class Admin::ClassSchedules::EnrollmentsController < ApplicationController
   MAX_BATCH_SIZE = 20
+  DEFAULT_COUNTRY = "Indonesia"
 
   before_action :authenticate_user!
   before_action :authorize_admin!
@@ -12,7 +13,7 @@ class Admin::ClassSchedules::EnrollmentsController < ApplicationController
     end
 
     @count = batch_count(params[:count])
-    @enrollments = Array.new(@count) { @class_schedule.enrollments.build }
+    @enrollments = Array.new(@count) { @class_schedule.enrollments.build(country: DEFAULT_COUNTRY) }
   end
 
   def create
