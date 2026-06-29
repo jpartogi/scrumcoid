@@ -22,6 +22,25 @@ class Admin::EnrollmentsControllerTest < ActionDispatch::IntegrationTest
     assert_match enrollment.attendee_name, response.body
   end
 
+  test "admin can view course history for student with multiple enrollments" do
+    sign_in users(:admin)
+    enrollment = enrollments(:existing_registration)
+    other_enrollment = Enrollment.create!(
+      user: users(:student),
+      class_schedule: class_schedules(:closed_online),
+      skip_registration_limits: true
+    )
+
+    get admin_enrollment_path(enrollment)
+    assert_response :success
+    assert_select "h2", text: /Course History/
+    assert_select "td", text: enrollment.class_schedule.course.title
+    assert_select "td", text: other_enrollment.class_schedule.course.title
+    assert_select "span", text: "Viewing"
+  ensure
+    other_enrollment&.destroy
+  end
+
   test "admin can view edit registration form" do
     sign_in users(:admin)
     enrollment = enrollments(:existing_registration)
@@ -63,6 +82,25 @@ class Admin::EnrollmentsControllerTest < ActionDispatch::IntegrationTest
       delete admin_enrollment_path(enrollment)
     end
     assert_redirected_to admin_class_schedule_path(enrollment.class_schedule)
+  end
+
+  test "admin can set company name on enrollment without existing company details" do
+    sign_in users(:admin)
+    enrollment = enrollments(:existing_registration)
+    enrollment.update!(company_name: nil, registration: nil)
+
+    get edit_admin_enrollment_path(enrollment)
+    assert_response :success
+    assert_select "input[name='enrollment[company_name]']"
+
+    patch admin_enrollment_path(enrollment), params: {
+      enrollment: {
+        company_name: "New Company Ltd"
+      }
+    }
+
+    assert_redirected_to admin_class_schedule_path(enrollment.class_schedule)
+    assert_equal "New Company Ltd", enrollment.reload.company_name
   end
 
   test "admin can update company details directly on enrollment" do

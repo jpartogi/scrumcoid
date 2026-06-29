@@ -34,6 +34,37 @@ class Admin::ClassSchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[type=submit][value='Add Students']"
   end
 
+  test "show page includes export to csv button" do
+    sign_in users(:admin)
+    schedule = class_schedules(:open_online)
+
+    get admin_class_schedule_path(schedule)
+    assert_response :success
+    assert_select "a[href=?]", export_enrollments_admin_class_schedule_path(schedule), text: "Export to CSV"
+  end
+
+  test "admin can export registered students as csv" do
+    sign_in users(:admin)
+    schedule = class_schedules(:open_online)
+    enrollment = enrollments(:existing_registration)
+
+    get export_enrollments_admin_class_schedule_path(schedule)
+    assert_response :success
+    assert_equal "text/csv", response.media_type
+    assert_match(/attachment; filename="#{schedule.course.slug}-\d{4}-\d{2}-\d{2}-roster.csv"/, response.headers["Content-Disposition"])
+
+    rows = CSV.parse(response.body)
+    assert_equal EnrollmentRosterCsvExporter::HEADERS, rows.first
+    assert rows.any? { |row| row[1] == enrollment.attendee_email }
+  end
+
+  test "guest cannot export registered students as csv" do
+    schedule = class_schedules(:open_online)
+
+    get export_enrollments_admin_class_schedule_path(schedule)
+    assert_redirected_to new_user_session_path
+  end
+
   test "admin creates schedule times in selected timezone" do
     sign_in users(:admin)
 

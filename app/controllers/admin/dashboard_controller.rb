@@ -3,8 +3,8 @@ class Admin::DashboardController < ApplicationController
   before_action :authorize_admin!
 
   def show
-    @published_schedule_count = ClassSchedule.published.count
-    @active_enrollment_count = Enrollment.active.count
+    @published_schedule_count = ClassSchedule.published.upcoming.count
+    @active_enrollment_count = Enrollment.active.joins(:class_schedule).merge(ClassSchedule.upcoming).count
     @total_resource_downloads = ResourceDownloadRequest.count
     @upcoming_schedules = ClassSchedule.upcoming.includes(:course).limit(5)
     @latest_registrations = Registration.includes(:class_schedule => :course).order(created_at: :desc).limit(5)

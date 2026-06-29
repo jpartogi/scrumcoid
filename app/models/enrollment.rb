@@ -34,6 +34,22 @@ class Enrollment < ApplicationRecord
     [first_name, last_name].compact_blank.join(" ")
   end
 
+  def course_history
+    scope = Enrollment.includes(class_schedule: :course).order(created_at: :desc)
+
+    if user_id.present?
+      scope.where(user_id: user_id)
+    else
+      normalized_email = attendee_email.to_s.strip.downcase
+      return Enrollment.none if normalized_email.blank?
+
+      scope.left_joins(:user).where(
+        "LOWER(enrollments.email) = :email OR LOWER(users.email) = :email",
+        email: normalized_email
+      )
+    end
+  end
+
   private
 
   def copy_company_details_from_registration

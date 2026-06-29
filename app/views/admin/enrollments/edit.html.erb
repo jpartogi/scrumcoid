@@ -8,7 +8,7 @@
     <% end %>
     <div>
       <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Edit Student Registration</h1>
-      <p class="text-sm font-medium text-slate-500 mt-1">Modify registration status and edit guest credentials.</p>
+      <p class="text-sm font-medium text-slate-500 mt-1">Modify registration status, company affiliation, and guest credentials.</p>
     </div>
   </div>
 
@@ -72,39 +72,42 @@
         </div>
       </div>
 
-      <% if @enrollment.registration_id.present? || @enrollment.company_name.present? %>
-        <!-- Corporate Registration Details -->
-        <div class="border-t border-slate-200 pt-6 space-y-6">
-          <h2 class="text-base font-bold text-slate-900">Corporate Registration Details</h2>
-          
-          <div class="grid gap-6 md:grid-cols-2">
-            <div>
-              <%= form.label :company_name, "Company Name", class: "block text-sm font-bold text-slate-700" %>
-              <%= form.text_field :company_name, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
-            </div>
-            
+      <!-- Company Details -->
+      <div class="border-t border-slate-200 pt-6 space-y-6">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Company Details</h2>
+          <p class="mt-1 text-sm text-slate-500">Set or update the company this student is associated with for this enrollment.</p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="md:col-span-2">
+            <%= form.label :company_name, "Company Name", class: "block text-sm font-bold text-slate-700" %>
+            <%= form.text_field :company_name, placeholder: "e.g., Acme Corp", class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all placeholder:text-slate-400" %>
+          </div>
+
+          <% if @enrollment.registration_id.present? || @enrollment.company_phone.present? || @enrollment.company_address.present? || @enrollment.finance_name.present? || @enrollment.finance_email.present? %>
             <div>
               <%= form.label :company_phone, "Company Phone", class: "block text-sm font-bold text-slate-700" %>
               <%= form.text_field :company_phone, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
             </div>
-            
+
             <div class="md:col-span-2">
               <%= form.label :company_address, "Company Address", class: "block text-sm font-bold text-slate-700" %>
               <%= form.text_area :company_address, rows: 3, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
             </div>
-            
+
             <div>
               <%= form.label :finance_name, "Finance Contact Name", class: "block text-sm font-bold text-slate-700" %>
               <%= form.text_field :finance_name, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
             </div>
-            
+
             <div>
               <%= form.label :finance_email, "Finance Contact Email", class: "block text-sm font-bold text-slate-700" %>
               <%= form.email_field :finance_email, class: "mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10 transition-all" %>
             </div>
-          </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
 
       <!-- Form Actions -->
       <div class="flex items-center gap-4 border-t border-slate-100 pt-5">

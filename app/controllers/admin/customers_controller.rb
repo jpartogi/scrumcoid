@@ -4,6 +4,9 @@ class Admin::CustomersController < ApplicationController
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
 
   def index
+    @customers_count = Customer.count
+    @students_count = Enrollment.count
+
     @customers = Customer.left_joins(:registrations)
                          .group(:id)
                          .select("customers.*, COUNT(registrations.id) as registrations_count")

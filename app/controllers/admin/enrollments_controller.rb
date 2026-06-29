@@ -4,6 +4,7 @@ class Admin::EnrollmentsController < ApplicationController
   before_action :set_enrollment, only: [:show, :edit, :update, :destroy]
 
   def show
+    @student_enrollments = @enrollment.course_history
   end
 
   def edit

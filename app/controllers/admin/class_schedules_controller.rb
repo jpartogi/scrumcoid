@@ -1,7 +1,7 @@
 class Admin::ClassSchedulesController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_admin!
-  before_action :set_class_schedule, only: [ :show, :edit, :update, :destroy, :publish, :unpublish ]
+  before_action :set_class_schedule, only: [ :show, :edit, :update, :destroy, :publish, :unpublish, :export_enrollments ]
 
   def index
     @showing_past = params[:past].present?
@@ -69,6 +69,15 @@ class Admin::ClassSchedulesController < ApplicationController
   def unpublish
     @class_schedule.unpublished!
     redirect_to admin_class_schedule_path(@class_schedule), notice: "Class schedule unpublished."
+  end
+
+  def export_enrollments
+    exporter = EnrollmentRosterCsvExporter.new(@class_schedule)
+
+    send_data exporter.to_csv,
+      filename: exporter.filename,
+      type: "text/csv; charset=utf-8",
+      disposition: "attachment"
   end
 
   private

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       member do
         patch :publish
         patch :unpublish
+        get :export_enrollments
       end
       resources :enrollments, only: [:new, :create], controller: "class_schedules/enrollments"
       resource :invitations, only: [:new, :create], controller: "class_schedules/invitations" do
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :show, :destroy]
     resources :admin_contacts
     resources :customers
+    resources :students, only: [:index]
   end
 
   get "invitations/track/:token" => "invitation_tracking#show", as: :track_invitation

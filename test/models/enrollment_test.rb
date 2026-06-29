@@ -84,6 +84,52 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert enrollment2.valid?
   end
 
+  test "course_history returns all enrollments for linked user across schedules" do
+    student = users(:student)
+    existing = enrollments(:existing_registration)
+    other = Enrollment.create!(
+      user: student,
+      class_schedule: class_schedules(:closed_online),
+      skip_registration_limits: true
+    )
+
+    history = existing.course_history
+
+    assert_includes history, existing
+    assert_includes history, other
+    assert_equal 2, history.size
+  ensure
+    other&.destroy
+  end
+
+  test "course_history matches guest enrollments by email" do
+    schedule_one = class_schedules(:open_online)
+    schedule_two = class_schedules(:closed_online)
+
+    enrollment_one = Enrollment.create!(
+      class_schedule: schedule_one,
+      first_name: "Guest",
+      last_name: "Learner",
+      email: "guest.learner@example.com",
+      skip_registration_limits: true
+    )
+    enrollment_two = Enrollment.create!(
+      class_schedule: schedule_two,
+      first_name: "Guest",
+      last_name: "Learner",
+      email: "guest.learner@example.com",
+      skip_registration_limits: true
+    )
+
+    history = enrollment_one.course_history
+
+    assert_includes history, enrollment_one
+    assert_includes history, enrollment_two
+  ensure
+    enrollment_one&.destroy
+    enrollment_two&.destroy
+  end
+
   test "bypasses schedule limits when skip_registration_limits is set" do
     enrollment = Enrollment.new(
       class_schedule: class_schedules(:full_online),

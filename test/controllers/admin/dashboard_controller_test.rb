@@ -29,6 +29,32 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select ".grid.gap-4 .rounded-2xl", count: 6
   end
 
+  test "live classes and total bookings exclude past schedules" do
+    sign_in users(:admin)
+
+    past_enrollment = Enrollment.create!(
+      class_schedule: class_schedules(:past_online),
+      first_name: "Past",
+      last_name: "Student",
+      email: "past.student@example.com",
+      skip_registration_limits: true
+    )
+
+    get admin_root_path
+    assert_response :success
+
+    live_classes_label = css_select("p").find { |element| element.text.strip == "Live Classes" }
+    bookings_label = css_select("p").find { |element| element.text.strip == "Total Bookings" }
+
+    assert_equal ClassSchedule.published.upcoming.count.to_s,
+      live_classes_label.parent.at_css("p.text-3xl").text.strip
+    assert_equal Enrollment.active.joins(:class_schedule).merge(ClassSchedule.upcoming).count.to_s,
+      bookings_label.parent.at_css("p.text-3xl").text.strip
+    assert_not_includes Enrollment.active.joins(:class_schedule).merge(ClassSchedule.upcoming).pluck(:id), past_enrollment.id
+  ensure
+    past_enrollment&.destroy
+  end
+
   test "admin dashboard displays latest five registrations" do
     sign_in users(:admin)
 
