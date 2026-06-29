@@ -58,7 +58,7 @@ class CrmCrossEngagedContact < ApplicationRecord
         SELECT resources.title
         FROM resource_download_requests latest_download
         INNER JOIN resources ON resources.id = latest_download.resource_id
-        WHERE LOWER(latest_download.visitor_email) = LOWER(d.visitor_email)
+        WHERE LOWER(latest_download.visitor_email) = cross_engaged.normalized_email
         ORDER BY latest_download.created_at DESC
         LIMIT 1
       )
@@ -69,7 +69,7 @@ class CrmCrossEngagedContact < ApplicationRecord
         SELECT meetups.name
         FROM meetup_registrations latest_registration
         INNER JOIN meetups ON meetups.id = latest_registration.meetup_id
-        WHERE LOWER(latest_registration.visitor_email) = LOWER(d.visitor_email)
+        WHERE LOWER(latest_registration.visitor_email) = cross_engaged.normalized_email
         ORDER BY latest_registration.created_at DESC
         LIMIT 1
       )
@@ -77,20 +77,31 @@ class CrmCrossEngagedContact < ApplicationRecord
 
     <<~SQL.squish
       SELECT
-        LOWER(d.visitor_email) AS normalized_email,
-        MAX(d.visitor_name) AS resource_visitor_name,
-        MAX(d.visitor_email) AS visitor_email,
-        COUNT(DISTINCT d.id) AS resource_download_count,
-        MAX(d.created_at) AS last_resource_download_at,
+        cross_engaged.normalized_email,
+        cross_engaged.resource_visitor_name,
+        cross_engaged.visitor_email,
+        cross_engaged.resource_download_count,
+        cross_engaged.last_resource_download_at,
         #{latest_resource_title_sql} AS latest_resource_title,
-        MAX(m.visitor_name) AS meetup_visitor_name,
-        COUNT(DISTINCT m.id) AS meetup_registration_count,
-        MAX(m.created_at) AS last_meetup_registration_at,
+        cross_engaged.meetup_visitor_name,
+        cross_engaged.meetup_registration_count,
+        cross_engaged.last_meetup_registration_at,
         #{latest_meetup_name_sql} AS latest_meetup_name
-      FROM resource_download_requests d
-      INNER JOIN meetup_registrations m
-        ON LOWER(m.visitor_email) = LOWER(d.visitor_email)
-      GROUP BY LOWER(d.visitor_email)
+      FROM (
+        SELECT
+          LOWER(d.visitor_email) AS normalized_email,
+          MAX(d.visitor_name) AS resource_visitor_name,
+          MAX(d.visitor_email) AS visitor_email,
+          COUNT(DISTINCT d.id) AS resource_download_count,
+          MAX(d.created_at) AS last_resource_download_at,
+          MAX(m.visitor_name) AS meetup_visitor_name,
+          COUNT(DISTINCT m.id) AS meetup_registration_count,
+          MAX(m.created_at) AS last_meetup_registration_at
+        FROM resource_download_requests d
+        INNER JOIN meetup_registrations m
+          ON LOWER(m.visitor_email) = LOWER(d.visitor_email)
+        GROUP BY LOWER(d.visitor_email)
+      ) AS cross_engaged
     SQL
   end
 end
