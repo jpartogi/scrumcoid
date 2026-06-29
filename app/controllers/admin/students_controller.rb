@@ -6,8 +6,18 @@ class Admin::StudentsController < ApplicationController
     @customers_count = Customer.count
     @students_count = Enrollment.count
 
+    sort_column    = %w[student training_schedule].include?(params[:sort]) ? params[:sort] : nil
+    sort_direction = params[:direction] == "asc" ? "asc" : "desc"
+
+    @sort_column    = sort_column
+    @sort_direction = sort_direction
+
     scope = Enrollment.includes(:user, class_schedule: :course, registration: :customer)
-                      .order(created_at: :desc)
+    scope = if sort_column
+      scope.ordered_for_admin(sort_column, sort_direction)
+    else
+      scope.order(created_at: :desc)
+    end
 
     scope = scope.matching_student_query(params[:query]) if params[:query].present?
 

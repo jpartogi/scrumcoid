@@ -64,6 +64,36 @@ class Admin::EnrollmentsControllerTest < ActionDispatch::IntegrationTest
     assert enrollment.reload.cancelled?
   end
 
+  test "admin update redirects back to students page when edit came from students" do
+    sign_in users(:admin)
+    enrollment = enrollments(:existing_registration)
+    students_path = admin_students_path(query: "Alice", sort: "student", direction: "asc")
+
+    patch admin_enrollment_path(enrollment), params: {
+      return_to: students_path,
+      enrollment: {
+        status: "cancelled"
+      }
+    }
+
+    assert_redirected_to students_path
+    assert enrollment.reload.cancelled?
+  end
+
+  test "admin update ignores unsafe return_to values" do
+    sign_in users(:admin)
+    enrollment = enrollments(:existing_registration)
+
+    patch admin_enrollment_path(enrollment), params: {
+      return_to: "//evil.example/admin/students",
+      enrollment: {
+        status: "cancelled"
+      }
+    }
+
+    assert_redirected_to admin_class_schedule_path(enrollment.class_schedule)
+  end
+
   test "student cannot delete enrollment" do
     sign_in users(:student)
     enrollment = enrollments(:existing_registration)

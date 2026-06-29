@@ -1,4 +1,5 @@
 <% content_for :title, "Enrollment ##{@enrollment.id}" %>
+<% enrollment_return = enrollment_return_query(params[:return_to]) %>
 
 <%# ── Delete confirmation dialog ── %>
 <dialog id="delete-enrollment-dialog"
@@ -43,7 +44,7 @@
   <!-- Back Link & Action Header -->
   <div class="flex items-center justify-between border-b border-slate-200 pb-5">
     <div class="flex items-center gap-3">
-      <%= link_to admin_class_schedule_path(@enrollment.class_schedule), class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
+      <%= link_to safe_enrollment_return_to(params[:return_to]) || admin_class_schedule_path(@enrollment.class_schedule), class: "p-2 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-slate-700 shadow-sm hover:shadow transition-all" do %>
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
@@ -244,14 +245,14 @@
       <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Operations</p>
         
-        <%= link_to edit_admin_enrollment_path(@enrollment), class: "flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
+        <%= link_to edit_admin_enrollment_path(@enrollment, enrollment_return), class: "flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm" do %>
           Edit Registration
         <% end %>
 
         <% if @enrollment.active? %>
-          <%= button_to "Cancel Registration", admin_enrollment_path(@enrollment, enrollment: { status: "cancelled" }), method: :patch, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+          <%= button_to "Cancel Registration", admin_enrollment_path(@enrollment, enrollment_return.merge(enrollment: { status: "cancelled" })), method: :patch, class: "w-full rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
         <% else %>
-          <%= button_to "Restore Registration", admin_enrollment_path(@enrollment, enrollment: { status: "active" }), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
+          <%= button_to "Restore Registration", admin_enrollment_path(@enrollment, enrollment_return.merge(enrollment: { status: "active" })), method: :patch, class: "w-full rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-teal-800 transition-all cursor-pointer shadow-sm", form_class: "w-full" %>
         <% end %>
 
         <!-- Danger Zone -->

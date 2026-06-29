@@ -134,4 +134,81 @@ class Admin::StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "a[href=?]", admin_students_path, text: /Students/
   end
+
+  test "index lists students with sortable headers" do
+    sign_in @admin
+    get admin_students_path
+
+    assert_response :success
+    assert_select "a[href*='sort=student']", text: /Student/
+    assert_select "a[href*='sort=training_schedule']", text: /Training Schedule/
+  end
+
+  test "index sorts by student ascending" do
+    sign_in @admin
+    @enrollment.update_columns(user_id: nil)
+
+    other_enrollment = Enrollment.create!(
+      class_schedule: class_schedules(:open_online),
+      registration: registrations(:two),
+      first_name: "Zara",
+      last_name: "Zulu",
+      email: "zara@example.com",
+      company_name: "Globex",
+      skip_registration_limits: true
+    )
+
+    get admin_students_path(sort: "student", direction: "asc")
+
+    assert_response :success
+    assert_select "a[href*='sort=student'][href*='direction=desc']"
+
+    admin_index = response.body.index("Admin User")
+    alice_index = response.body.index("Alice Student")
+    zara_index = response.body.index("Zara Zulu")
+
+    assert_operator admin_index, :<, alice_index
+    assert_operator alice_index, :<, zara_index
+  ensure
+    other_enrollment&.destroy
+    @enrollment.update_columns(user_id: users(:student).id)
+  end
+
+  test "index sorts by training schedule descending" do
+    sign_in @admin
+
+    earlier_schedule = ClassSchedule.create!(
+      course: courses(:ai_essentials),
+      starts_at: 10.days.from_now,
+      ends_at: 10.days.from_now + 8.hours,
+      location: "Live online via Zoom",
+      online: true,
+      timezone: "Etc/UTC",
+      registration_deadline: 5.days.from_now,
+      capacity: 20,
+      status: :published
+    )
+    later_enrollment = Enrollment.create!(
+      class_schedule: earlier_schedule,
+      registration: registrations(:two),
+      first_name: "Earlier",
+      last_name: "Schedule",
+      email: "earlier@example.com",
+      company_name: "Globex",
+      skip_registration_limits: true
+    )
+
+    get admin_students_path(sort: "training_schedule", direction: "desc")
+
+    assert_response :success
+    assert_select "a[href*='sort=training_schedule'][href*='direction=asc']"
+
+    open_online_index = response.body.index(class_schedules(:open_online).starts_at.strftime("%d %b"))
+    earlier_index = response.body.index(earlier_schedule.starts_at.strftime("%d %b"))
+
+    assert_operator open_online_index, :<, earlier_index
+  ensure
+    later_enrollment&.destroy
+    earlier_schedule&.destroy
+  end
 end

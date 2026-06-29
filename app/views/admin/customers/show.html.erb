@@ -129,6 +129,7 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
+            <% customer_return_to = admin_customer_path(@customer) %>
             <% @enrollments.each do |enrollment| %>
               <tr class="hover:bg-slate-50/50 transition-colors">
                 <td class="px-6 py-4 font-semibold text-slate-900">
@@ -149,8 +150,8 @@
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="inline-flex gap-2">
-                    <%= link_to "View", admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
-                    <%= link_to "Edit", edit_admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
+                    <%= link_to "View", admin_enrollment_path(enrollment, return_to: customer_return_to), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
+                    <%= link_to "Edit", edit_admin_enrollment_path(enrollment, return_to: customer_return_to), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
                   </div>
                 </td>
               </tr>

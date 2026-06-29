@@ -12,7 +12,7 @@ class Admin::EnrollmentsController < ApplicationController
 
   def update
     if @enrollment.update(enrollment_params)
-      redirect_to admin_class_schedule_path(@enrollment.class_schedule), notice: "Student registration updated successfully."
+      redirect_to enrollment_return_destination, notice: "Student registration updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,5 +36,10 @@ class Admin::EnrollmentsController < ApplicationController
       :company_name, :company_address, :company_phone,
       :finance_name, :finance_email
     )
+  end
+
+  def enrollment_return_destination
+    helpers.safe_enrollment_return_to(params[:return_to]) ||
+      admin_class_schedule_path(@enrollment.class_schedule)
   end
 end

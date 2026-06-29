@@ -1,3 +1,16 @@
+<%
+  def sort_link_params(column, current_sort, current_dir)
+    new_dir = (current_sort == column && current_dir == "asc") ? "desc" : "asc"
+    { sort: column, direction: new_dir }
+  end
+
+  table_extra_params = {
+    query: params[:query].presence,
+    sort: params[:sort].presence,
+    direction: params[:direction].presence
+  }.compact
+  students_return_to = admin_students_path(table_extra_params)
+%>
 <section class="px-8 py-10 max-w-7xl space-y-6">
   <!-- Page Header -->
   <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -12,6 +25,10 @@
   <!-- Search Filter Container -->
   <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row items-center gap-4">
     <%= form_tag admin_students_path, method: :get, class: "w-full flex flex-col sm:flex-row items-center gap-4" do %>
+      <% if params[:sort].present? %>
+        <%= hidden_field_tag :sort, params[:sort] %>
+        <%= hidden_field_tag :direction, params[:direction] %>
+      <% end %>
       <div class="relative flex-grow w-full">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -36,7 +53,7 @@
         <%= render "shared/per_page_selector",
           paginated: @enrollments,
           url: admin_students_path,
-          extra_params: { query: params[:query].presence } %>
+          extra_params: table_extra_params %>
         <% if @enrollments.total_pages > 1 %>
           <p class="text-xs font-medium text-slate-500">
             <%= page_entries_info_for(@enrollments, entry_name: "student") %>
@@ -48,9 +65,47 @@
         <table class="w-full text-left border-collapse text-sm">
           <thead>
             <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
-              <th class="px-6 py-4">Student</th>
+              <th class="px-6 py-4" scope="col">
+                <%
+                  s_active = @sort_column == "student"
+                  s_asc    = s_active && @sort_direction == "asc"
+                  s_params = sort_link_params("student", @sort_column, @sort_direction)
+                %>
+                <%= link_to admin_students_path(s_params.merge(per_page: params[:per_page], query: params[:query].presence).compact),
+                    class: "group inline-flex items-center gap-1.5 rounded-md px-2 py-1 -ml-2 transition-all #{s_active ? 'text-indigo-600 bg-indigo-50 ring-1 ring-inset ring-indigo-100' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'}" do %>
+                  <span>Student</span>
+                  <% if s_active %>
+                    <svg class="h-3.5 w-3.5 <%= s_asc ? '' : 'rotate-180' %> transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                    </svg>
+                  <% else %>
+                    <svg class="h-3.5 w-3.5 opacity-40 group-hover:opacity-70 transition-opacity" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                    </svg>
+                  <% end %>
+                <% end %>
+              </th>
               <th class="px-6 py-4">Company</th>
-              <th class="px-6 py-4">Training Schedule</th>
+              <th class="px-6 py-4" scope="col">
+                <%
+                  t_active = @sort_column == "training_schedule"
+                  t_asc    = t_active && @sort_direction == "asc"
+                  t_params = sort_link_params("training_schedule", @sort_column, @sort_direction)
+                %>
+                <%= link_to admin_students_path(t_params.merge(per_page: params[:per_page], query: params[:query].presence).compact),
+                    class: "group inline-flex items-center gap-1.5 rounded-md px-2 py-1 -ml-2 transition-all #{t_active ? 'text-indigo-600 bg-indigo-50 ring-1 ring-inset ring-indigo-100' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'}" do %>
+                  <span>Training Schedule</span>
+                  <% if t_active %>
+                    <svg class="h-3.5 w-3.5 <%= t_asc ? '' : 'rotate-180' %> transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                    </svg>
+                  <% else %>
+                    <svg class="h-3.5 w-3.5 opacity-40 group-hover:opacity-70 transition-opacity" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                    </svg>
+                  <% end %>
+                <% end %>
+              </th>
               <th class="px-6 py-4">Status</th>
               <th class="px-6 py-4 text-right">Actions</th>
             </tr>
@@ -61,7 +116,7 @@
               <tr class="hover:bg-slate-50/50 transition-colors">
                 <td class="px-6 py-4">
                   <p class="font-semibold text-slate-900 leading-tight">
-                    <%= link_to enrollment.attendee_name, admin_enrollment_path(enrollment), class: "hover:text-indigo-600 transition-colors" %>
+                    <%= link_to enrollment.attendee_name, admin_enrollment_path(enrollment, return_to: students_return_to), class: "hover:text-indigo-600 transition-colors" %>
                   </p>
                   <p class="text-xs text-slate-400 mt-1 font-medium"><%= enrollment.attendee_email %></p>
                 </td>
@@ -93,8 +148,8 @@
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="inline-flex gap-2">
-                    <%= link_to "View", admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
-                    <%= link_to "Edit", edit_admin_enrollment_path(enrollment), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
+                    <%= link_to "View", admin_enrollment_path(enrollment, return_to: students_return_to), class: "inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors" %>
+                    <%= link_to "Edit", edit_admin_enrollment_path(enrollment, return_to: students_return_to), class: "inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-500 bg-indigo-50/50 px-2.5 py-1.5 rounded-lg border border-indigo-100 transition-colors" %>
                   </div>
                 </td>
               </tr>
@@ -111,7 +166,7 @@
           <%= render "shared/pagination",
             paginated: @enrollments,
             path: method(:admin_students_path),
-            extra_params: { query: params[:query].presence } %>
+            extra_params: table_extra_params %>
         </div>
       <% end %>
     <% else %>

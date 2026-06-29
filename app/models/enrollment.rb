@@ -30,6 +30,20 @@ class Enrollment < ApplicationRecord
     left_joins(:user, registration: :customer).where(student_search_sql, q: pattern)
   }
 
+  scope :ordered_for_admin, ->(column, direction = "desc") {
+    dir = direction.to_s.downcase == "asc" ? "ASC" : "DESC"
+    rel = left_joins(:user, class_schedule: :course)
+
+    case column.to_s
+    when "student"
+      rel.order(Arel.sql("#{Enrollment.attendee_name_order_sql} #{dir}"))
+    when "training_schedule"
+      rel.order(Arel.sql("class_schedules.starts_at #{dir}"), Arel.sql("courses.title #{dir}"))
+    else
+      rel.order(created_at: :desc)
+    end
+  }
+
   def self.student_search_sql
     student_search_clauses.join(" OR ")
   end
@@ -68,6 +82,16 @@ class Enrollment < ApplicationRecord
     else
       "CASE WHEN instr(users.name, ' ') > 0 THEN substr(users.name, instr(users.name, ' ') + 1) ELSE '' END"
     end
+  end
+
+  def self.attendee_name_order_sql
+    full_name = if connection.adapter_name.match?(/PostgreSQL/i)
+      "NULLIF(TRIM(CONCAT(COALESCE(enrollments.first_name, ''), ' ', COALESCE(enrollments.last_name, ''))), '')"
+    else
+      "NULLIF(TRIM(COALESCE(enrollments.first_name, '') || CASE WHEN enrollments.last_name IS NOT NULL AND enrollments.last_name != '' THEN ' ' || enrollments.last_name ELSE '' END), '')"
+    end
+
+    "LOWER(COALESCE(NULLIF(users.name, ''), #{full_name}, ''))"
   end
 
   private_class_method :student_search_clauses, :like_operator, :user_first_name_sql, :user_last_name_sql
