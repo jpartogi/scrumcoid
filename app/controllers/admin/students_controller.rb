@@ -7,11 +7,13 @@ class Admin::StudentsController < ApplicationController
     @students_count = Enrollment.count
     @leads_count = CrmCrossEngagedContact.total_count
 
-    sort_column    = %w[student training_schedule].include?(params[:sort]) ? params[:sort] : nil
+    sort_column    = %w[student company training_schedule].include?(params[:sort]) ? params[:sort] : nil
     sort_direction = params[:direction] == "asc" ? "asc" : "desc"
 
     @sort_column    = sort_column
     @sort_direction = sort_direction
+
+    @courses = Course.order(:title)
 
     scope = Enrollment.includes(:user, class_schedule: :course, registration: :customer)
     scope = if sort_column
@@ -21,6 +23,10 @@ class Admin::StudentsController < ApplicationController
     end
 
     scope = scope.matching_student_query(params[:query]) if params[:query].present?
+    scope = scope.for_course(params[:course_id]) if params[:course_id].present?
+    if params[:starts_on_from].present? || params[:starts_on_to].present?
+      scope = scope.with_schedule_starts_between(params[:starts_on_from], params[:starts_on_to])
+    end
 
     @enrollments = PaginatedScope.wrap(
       scope,

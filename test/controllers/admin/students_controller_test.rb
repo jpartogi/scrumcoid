@@ -88,6 +88,53 @@ class Admin::StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_select "td", text: /Acme Corp/
   end
 
+  test "admin can filter students by course" do
+    sign_in @admin
+
+    get admin_students_path, params: { course_id: courses(:ai_essentials).id }
+    assert_response :success
+    assert_select "td", text: /Scrum.org AI Essentials/
+    assert_select "select[name='course_id'] option[selected][value='#{courses(:ai_essentials).id}']"
+
+    get admin_students_path, params: { course_id: courses(:draft_course).id }
+    assert_response :success
+    assert_select "td", text: /Student User/, count: 0
+  end
+
+  test "search query shows record count at bottom of table" do
+    sign_in @admin
+
+    get admin_students_path, params: { query: "Alice" }
+
+    assert_response :success
+    assert_select "nav[aria-label='Pagination']", count: 0
+    assert_match(/Showing \d+–\d+ of \d+ student/, response.body)
+  end
+
+  test "admin can filter students by schedule date range" do
+    sign_in @admin
+    schedule_date = @enrollment.class_schedule.starts_at.to_date
+
+    get admin_students_path, params: {
+      starts_on_from: schedule_date - 1.day,
+      starts_on_to: schedule_date + 1.day
+    }
+
+    assert_response :success
+    assert_select "td", text: /Student User/
+    assert_select "input[name='starts_on_from'][value='#{(schedule_date - 1.day).iso8601}']"
+    assert_select "input[name='starts_on_to'][value='#{(schedule_date + 1.day).iso8601}']"
+
+    get admin_students_path, params: {
+      starts_on_from: schedule_date + 10.days,
+      starts_on_to: schedule_date + 11.days
+    }
+
+    assert_response :success
+    assert_select "td", text: /Student User/, count: 0
+    assert_select "p", text: /No students found/
+  end
+
   test "index paginates students and respects per_page parameter" do
     sign_in @admin
     @original_per_page = PaginatedScope.default_per_page
@@ -141,7 +188,34 @@ class Admin::StudentsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "a[href*='sort=student']", text: /Student/
+    assert_select "a[href*='sort=company']", text: /Company/
     assert_select "a[href*='sort=training_schedule']", text: /Training Schedule/
+  end
+
+  test "index sorts by company ascending" do
+    sign_in @admin
+
+    globex_enrollment = Enrollment.create!(
+      class_schedule: class_schedules(:open_online),
+      registration: registrations(:two),
+      first_name: "Bob",
+      last_name: "Other",
+      email: "bob@globex.com",
+      company_name: "Globex",
+      skip_registration_limits: true
+    )
+
+    get admin_students_path(sort: "company", direction: "asc")
+
+    assert_response :success
+    assert_select "a[href*='sort=company'][href*='direction=desc']"
+
+    acme_index = response.body.index("Acme Corp")
+    globex_index = response.body.index("Globex")
+
+    assert_operator acme_index, :<, globex_index
+  ensure
+    globex_enrollment&.destroy
   end
 
   test "index sorts by student ascending" do

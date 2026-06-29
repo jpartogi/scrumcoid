@@ -168,6 +168,56 @@ class EnrollmentTest < ActiveSupport::TestCase
     assert_not_includes Enrollment.matching_student_query("Nobody"), enrollment
   end
 
+  test "for_course limits enrollments to the selected course" do
+    enrollment = enrollments(:existing_registration)
+
+    assert_includes Enrollment.for_course(courses(:ai_essentials).id), enrollment
+    assert_not_includes Enrollment.for_course(courses(:draft_course).id), enrollment
+  end
+
+  test "with_schedule_starts_between filters enrollments by class schedule start date" do
+    enrollment = enrollments(:existing_registration)
+    schedule_date = enrollment.class_schedule.starts_at.to_date
+
+    assert_includes Enrollment.with_schedule_starts_between(schedule_date - 1.day, schedule_date + 1.day), enrollment
+    assert_not_includes Enrollment.with_schedule_starts_between(schedule_date + 10.days, schedule_date + 11.days), enrollment
+  end
+
+  test "ordered_for_admin sorts by company name using customer registration and enrollment values" do
+    acme_enrollment = enrollments(:existing_registration)
+    acme_enrollment.update!(company_name: "Acme Corp", registration: registrations(:one))
+
+    globex_enrollment = Enrollment.create!(
+      class_schedule: class_schedules(:open_online),
+      registration: registrations(:two),
+      first_name: "Bob",
+      last_name: "Other",
+      email: "bob@globex.com",
+      company_name: "Globex",
+      skip_registration_limits: true
+    )
+
+    companies = Enrollment.ordered_for_admin("company", "asc").map do |enrollment|
+      enrollment.registration&.customer&.company_name.presence ||
+        enrollment.registration&.company_name.presence ||
+        enrollment.company_name
+    end.compact_blank
+
+    assert_operator companies.index("Acme Corp"), :<, companies.index("Globex")
+  ensure
+    globex_enrollment&.destroy
+  end
+
+  test "with_schedule_starts_between supports open-ended ranges" do
+    enrollment = enrollments(:existing_registration)
+    schedule_date = enrollment.class_schedule.starts_at.to_date
+
+    assert_includes Enrollment.with_schedule_starts_between(schedule_date, nil), enrollment
+    assert_not_includes Enrollment.with_schedule_starts_between(schedule_date + 1.day, nil), enrollment
+    assert_includes Enrollment.with_schedule_starts_between(nil, schedule_date), enrollment
+    assert_not_includes Enrollment.with_schedule_starts_between(nil, schedule_date - 1.day), enrollment
+  end
+
   test "bypasses schedule limits when skip_registration_limits is set" do
     enrollment = Enrollment.new(
       class_schedule: class_schedules(:full_online),
