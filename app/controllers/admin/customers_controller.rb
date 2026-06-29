@@ -6,6 +6,7 @@ class Admin::CustomersController < ApplicationController
   def index
     @customers_count = Customer.count
     @students_count = Enrollment.count
+    @leads_count = CrmCrossEngagedContact.total_count
 
     @customers = Customer.left_joins(:registrations)
                          .group(:id)

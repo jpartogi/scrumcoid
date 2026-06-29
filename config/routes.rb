@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     resources :admin_contacts
     resources :customers
     resources :students, only: [:index]
+    resources :leads, only: [:index], controller: "crm_leads"
   end
 
   get "invitations/track/:token" => "invitation_tracking#show", as: :track_invitation

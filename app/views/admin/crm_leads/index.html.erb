@@ -1,0 +1,117 @@
+<section class="px-8 py-10 max-w-7xl space-y-6">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">CRM / Lead Management</h1>
+      <p class="text-sm font-medium text-slate-500 mt-1">Visitors who downloaded a resource and also registered for a meetup.</p>
+    </div>
+  </div>
+
+  <%= render "admin/customers/crm_tabs" %>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row items-center gap-4">
+    <%= form_tag admin_leads_path, method: :get, class: "w-full flex flex-col sm:flex-row items-center gap-4" do %>
+      <div class="relative flex-grow w-full">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+        </div>
+        <%= text_field_tag :query, params[:query], placeholder: "Search by name or email...", class: "block w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm shadow-sm" %>
+      </div>
+      <div class="flex gap-2 w-full sm:w-auto">
+        <%= submit_tag "Search", class: "w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors cursor-pointer" %>
+        <% if params[:query].present? %>
+          <%= link_to "Clear", admin_leads_path, class: "w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-slate-50 border border-slate-300 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-100 shadow-sm transition-colors" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+    <% if @leads.any? %>
+      <div class="flex flex-col gap-3 border-b border-slate-100 bg-slate-50/50 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <%= render "shared/per_page_selector",
+          paginated: @leads,
+          url: admin_leads_path,
+          extra_params: { query: params[:query].presence } %>
+        <% if @leads.total_pages > 1 %>
+          <p class="text-xs font-medium text-slate-500">
+            <%= page_entries_info_for(@leads, entry_name: "lead") %>
+          </p>
+        <% end %>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold">
+              <th class="px-6 py-4">Name</th>
+              <th class="px-6 py-4">Email</th>
+              <th class="px-6 py-4">Resource Download</th>
+              <th class="px-6 py-4">Meetup Registration</th>
+              <th class="px-6 py-4">Last Activity</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <% @leads.each do |lead| %>
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4">
+                  <p class="font-semibold text-slate-900 leading-tight"><%= lead.display_name %></p>
+                </td>
+                <td class="px-6 py-4">
+                  <p class="text-slate-700 font-medium select-all"><%= lead.visitor_email %></p>
+                </td>
+                <td class="px-6 py-4">
+                  <% if lead.latest_resource_title.present? %>
+                    <p class="font-semibold text-indigo-600"><%= lead.latest_resource_title %></p>
+                  <% end %>
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    <%= pluralize(lead.resource_download_count, "download") %>
+                    <% if lead.last_resource_download_at.present? %>
+                      · <%= lead.last_resource_download_at.strftime("%d %b %Y") %>
+                    <% end %>
+                  </p>
+                </td>
+                <td class="px-6 py-4">
+                  <% if lead.latest_meetup_name.present? %>
+                    <p class="font-semibold text-indigo-600"><%= lead.latest_meetup_name %></p>
+                  <% end %>
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    <%= pluralize(lead.meetup_registration_count, "registration") %>
+                    <% if lead.last_meetup_registration_at.present? %>
+                      · <%= lead.last_meetup_registration_at.strftime("%d %b %Y") %>
+                    <% end %>
+                  </p>
+                </td>
+                <td class="px-6 py-4 text-slate-600 font-medium">
+                  <% last_activity = [lead.last_resource_download_at, lead.last_meetup_registration_at].compact.max %>
+                  <%= last_activity&.strftime("%d %b %Y") || "—" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <% if @leads.total_pages > 1 %>
+        <div class="flex flex-col gap-3 border-t border-slate-100 bg-slate-50/50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-xs font-medium text-slate-500">
+            <%= page_entries_info_for(@leads, entry_name: "lead") %>
+          </p>
+          <%= render "shared/pagination",
+            paginated: @leads,
+            path: method(:admin_leads_path),
+            extra_params: { query: params[:query].presence } %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="px-6 py-16 text-center text-slate-400">
+        <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+        <p class="mt-4 font-semibold text-base">No cross-engaged leads found</p>
+        <p class="text-xs text-slate-400 mt-1">Leads appear here once a visitor has both downloaded a resource and registered for a meetup with the same email.</p>
+      </div>
+    <% end %>
+  </div>
+</section>
