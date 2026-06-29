@@ -22,6 +22,56 @@ class Enrollment < ApplicationRecord
 
   delegate :course, to: :class_schedule
 
+  scope :matching_student_query, ->(query) {
+    term = query.to_s.strip
+    next all if term.blank?
+
+    pattern = "%#{sanitize_sql_like(term)}%"
+    left_joins(:user, registration: :customer).where(student_search_sql, q: pattern)
+  }
+
+  def self.student_search_sql
+    student_search_clauses.join(" OR ")
+  end
+
+  def self.student_search_clauses
+    op = like_operator
+    [
+      "enrollments.first_name #{op} :q",
+      "enrollments.last_name #{op} :q",
+      "enrollments.email #{op} :q",
+      "enrollments.company_name #{op} :q",
+      "registrations.company_name #{op} :q",
+      "customers.company_name #{op} :q",
+      "users.name #{op} :q",
+      "users.email #{op} :q",
+      "#{user_first_name_sql} #{op} :q",
+      "#{user_last_name_sql} #{op} :q"
+    ]
+  end
+
+  def self.like_operator
+    connection.adapter_name.match?(/PostgreSQL/i) ? "ILIKE" : "LIKE"
+  end
+
+  def self.user_first_name_sql
+    if connection.adapter_name.match?(/PostgreSQL/i)
+      "split_part(users.name, ' ', 1)"
+    else
+      "CASE WHEN instr(users.name, ' ') > 0 THEN substr(users.name, 1, instr(users.name, ' ') - 1) ELSE users.name END"
+    end
+  end
+
+  def self.user_last_name_sql
+    if connection.adapter_name.match?(/PostgreSQL/i)
+      "NULLIF(split_part(users.name, ' ', 2), '')"
+    else
+      "CASE WHEN instr(users.name, ' ') > 0 THEN substr(users.name, instr(users.name, ' ') + 1) ELSE '' END"
+    end
+  end
+
+  private_class_method :student_search_clauses, :like_operator, :user_first_name_sql, :user_last_name_sql
+
   def attendee_name
     user&.name.presence || full_name
   end

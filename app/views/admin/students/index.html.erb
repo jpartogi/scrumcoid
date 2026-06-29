@@ -18,7 +18,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
         </div>
-        <%= text_field_tag :query, params[:query], placeholder: "Search by student name, email, or company...", class: "block w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm shadow-sm" %>
+        <%= text_field_tag :query, params[:query], placeholder: "Search by first name, last name, email, or company...", class: "block w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm shadow-sm" %>
       </div>
       <div class="flex gap-2 w-full sm:w-auto">
         <%= submit_tag "Search", class: "w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-indigo-500 shadow-sm transition-colors cursor-pointer" %>
@@ -32,6 +32,18 @@
   <!-- Table Container Card -->
   <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
     <% if @enrollments.any? %>
+      <div class="flex flex-col gap-3 border-b border-slate-100 bg-slate-50/50 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <%= render "shared/per_page_selector",
+          paginated: @enrollments,
+          url: admin_students_path,
+          extra_params: { query: params[:query].presence } %>
+        <% if @enrollments.total_pages > 1 %>
+          <p class="text-xs font-medium text-slate-500">
+            <%= page_entries_info_for(@enrollments, entry_name: "student") %>
+          </p>
+        <% end %>
+      </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-sm">
           <thead>
@@ -90,6 +102,18 @@
           </tbody>
         </table>
       </div>
+
+      <% if @enrollments.total_pages > 1 %>
+        <div class="flex flex-col gap-3 border-t border-slate-100 bg-slate-50/50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-xs font-medium text-slate-500">
+            <%= page_entries_info_for(@enrollments, entry_name: "student") %>
+          </p>
+          <%= render "shared/pagination",
+            paginated: @enrollments,
+            path: method(:admin_students_path),
+            extra_params: { query: params[:query].presence } %>
+        </div>
+      <% end %>
     <% else %>
       <div class="px-6 py-16 text-center text-slate-400">
         <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -16,6 +16,7 @@ class Admin::ClassSchedules::EnrollmentsControllerTest < ActionDispatch::Integra
     assert_response :success
     assert_select "h1", "Add 2 Registered Students"
     assert_select "input[name^='enrollments'][name$='[first_name]']", count: 2
+    assert_select "input[name^='enrollments'][name$='[company_name]']", count: 2
   end
 
   test "batch size is capped at maximum" do
@@ -32,7 +33,8 @@ class Admin::ClassSchedules::EnrollmentsControllerTest < ActionDispatch::Integra
             first_name: "Manual",
             last_name: "Entry",
             email: "manual@example.com",
-            country: "Australia"
+            country: "Australia",
+            company_name: "Acme Corp"
           }
         }
       }
@@ -42,6 +44,7 @@ class Admin::ClassSchedules::EnrollmentsControllerTest < ActionDispatch::Integra
     enrollment = Enrollment.order(:created_at).last
     assert_equal "Manual Entry", enrollment.full_name
     assert_equal "Australia", enrollment.country
+    assert_equal "Acme Corp", enrollment.company_name
     assert_nil enrollment.registration_id
   end
 

@@ -54,7 +54,7 @@ class Admin::ClassSchedules::EnrollmentsController < ApplicationController
 
   def enrollment_batch_params
     params.fetch(:enrollments, {}).values.map do |attrs|
-      attrs.permit(:first_name, :last_name, :email, :country).to_h
+      attrs.permit(:first_name, :last_name, :email, :country, :company_name).to_h
     end
   end
 end

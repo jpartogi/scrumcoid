@@ -1,5 +1,8 @@
-<%# locals: (paginated:, url:) %>
+<%# locals: (paginated:, url:, extra_params: {}) %>
 <%= form_with url: url, method: :get, class: "inline-flex items-center gap-2" do |form| %>
+  <% extra_params.compact.each do |key, value| %>
+    <%= hidden_field_tag key, value %>
+  <% end %>
   <%= form.label :per_page, "Items per page", class: "text-xs font-semibold text-slate-500 whitespace-nowrap" %>
   <%= form.number_field :per_page,
     value: paginated.per_page,

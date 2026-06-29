@@ -130,6 +130,44 @@ class EnrollmentTest < ActiveSupport::TestCase
     enrollment_two&.destroy
   end
 
+  test "matching_student_query finds enrollments by first name" do
+    enrollment = Enrollment.create!(
+      class_schedule: class_schedules(:open_online),
+      first_name: "Jane",
+      last_name: "Roster",
+      email: "jane.roster@example.com",
+      skip_registration_limits: true
+    )
+
+    assert_includes Enrollment.matching_student_query("Jane"), enrollment
+    assert_not_includes Enrollment.matching_student_query("RosterOnly"), enrollment
+  ensure
+    enrollment&.destroy
+  end
+
+  test "matching_student_query finds enrollments by last name" do
+    enrollment = Enrollment.create!(
+      class_schedule: class_schedules(:open_online),
+      first_name: "Jane",
+      last_name: "Roster",
+      email: "jane.roster@example.com",
+      skip_registration_limits: true
+    )
+
+    assert_includes Enrollment.matching_student_query("Roster"), enrollment
+    assert_not_includes Enrollment.matching_student_query("JaneOnly"), enrollment
+  ensure
+    enrollment&.destroy
+  end
+
+  test "matching_student_query finds account-linked enrollments by user first name" do
+    enrollment = enrollments(:existing_registration)
+    enrollment.update_columns(first_name: nil, last_name: nil)
+
+    assert_includes Enrollment.matching_student_query("Student"), enrollment
+    assert_not_includes Enrollment.matching_student_query("Nobody"), enrollment
+  end
+
   test "bypasses schedule limits when skip_registration_limits is set" do
     enrollment = Enrollment.new(
       class_schedule: class_schedules(:full_online),
