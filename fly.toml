@@ -56,8 +56,6 @@ console_command = '/rails/bin/rails console'
       X-Forwarded-Proto = 'https'
 
 [[vm]]
-  memory = '1gb'
-  cpus = 1
-  memory_mb = 2048
-  size = "performance-2x"
+  size = "shared-cpu-2x"
+  memory_mb = 1024
   restart_policy = "on-fail"
