@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # check=error=true
 
-# Production Dockerfile for Fly.io (and other Docker platforms).
+# Production Dockerfile for Fly.io, Railway, and other Docker platforms.
 # Build with: docker build -t scrumcoid .
 # Run locally: docker run -d -p 80:80 -e RAILS_MASTER_KEY=... scrumcoid
 
@@ -72,7 +72,6 @@ COPY --chown=rails:rails --from=build /rails /rails
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start via Thruster (recommended for Fly + Rails). Thruster wraps Puma.
-# We pass -b 0.0.0.0 so Puma listens on all interfaces inside the container.
+# Start via Thruster (Fly + Railway). bin/server-start maps Railway's PORT correctly.
 EXPOSE 8080
-CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["./bin/server-start"]

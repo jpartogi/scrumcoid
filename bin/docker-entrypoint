@@ -2,7 +2,8 @@
 
 # If we are starting the web server, run db:prepare first.
 # This works with the Thruster-wrapped `rails server` command.
-if [[ "${@}" == *"rails server"* ]]; then
+# Set SKIP_DB_PREPARE=true when restoring a database dump before first boot.
+if [[ "${SKIP_DB_PREPARE:-}" != "true" ]] && [[ "${@}" == *"rails server"* ]]; then
   ./bin/rails db:prepare
 fi
 

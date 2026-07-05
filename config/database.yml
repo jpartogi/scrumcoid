@@ -87,16 +87,17 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  # Fly.io (and most PaaS) provide DATABASE_URL.
-  # We use a single database for primary + Solid Cache/Queue/Cable for simplicity
-  # with Fly's legacy Postgres offering.
+  # Railway scrumcoid project → Postgres service.
+  # On the web service set: DATABASE_URL=${{Postgres.DATABASE_URL}}
+  # For local restore/admin from your machine, use DATABASE_PUBLIC_URL from Postgres.
+  # We use a single database for primary + Solid Cache/Queue/Cable.
   primary:
     <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
-    # Fallbacks (only used if DATABASE_URL is not present)
-    database: scrumcoid_production
-    username: scrumcoid
-    password: <%= ENV["SCRUMCOID_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] || ENV["DATABASE_PUBLIC_URL"] %>
+    # Fallbacks (only used if neither URL env var is present)
+    database: <%= ENV.fetch("PGDATABASE", "railway") %>
+    username: <%= ENV.fetch("PGUSER", "postgres") %>
+    password: <%= ENV["POSTGRES_PASSWORD"] %>
 
   # NOTE: Solid Cache, Queue, and Cable now use the primary database connection.
   # The separate cache/queue/cable database definitions below are intentionally
