@@ -28,8 +28,11 @@ class Admin::TrafficControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", text: "Traffic Breakdown"
+    assert_select "h2", text: /Visitor Traffic/
     assert_select "h2", text: "Top Pages"
     assert_select "h2", text: "Visitors by Country"
+    assert_select "svg"
+    assert_select "p", text: /Daily unique visits/
     assert_match "Home", response.body
     assert_match "Courses", response.body
     assert_match "Indonesia", response.body

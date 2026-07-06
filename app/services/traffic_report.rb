@@ -28,6 +28,27 @@ class TrafficReport
     UniqueVisit.reporting_today
   end
 
+  def reporting_today
+    UniqueVisit.reporting_today
+  end
+
+  def daily_visits
+    @daily_visits ||= UniqueVisit.daily_counts(@days)
+  end
+
+  def avg_daily_visits
+    counts = daily_visits.map { |day| day[:count] }
+    counts.empty? ? 0 : (counts.sum.to_f / counts.size).round(1)
+  end
+
+  def peak_daily_visits
+    daily_visits.map { |day| day[:count] }.max || 0
+  end
+
+  def total_retained_visitors
+    UniqueVisit.distinct.count(:fingerprint)
+  end
+
   def total_unique_visitors
     UniqueVisit.in_reporting_period(@days).distinct.count(:fingerprint)
   end

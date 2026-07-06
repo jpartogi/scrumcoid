@@ -276,129 +276,19 @@
         </div>
       </div>
 
-      <!-- Visitor Traffic (7 Days) -->
-      <div class="space-y-4">
-        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <svg class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
-          </svg>
-          Visitor Traffic (7 Days)
-        </h2>
-        <p class="text-xs font-medium text-slate-400 -mt-2">Daily counts in <%= @reporting_timezone %> (<%= @reporting_timezone_abbr %>)</p>
-
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm space-y-6">
-          <%
-            # Get chronological order (oldest to newest)
-            chart_days = @daily_visits_7_days.reverse
-            max_count = [chart_days.map { |d| d[:count] }.max, 1].max # Avoid division by zero
-            
-            # SVG Dimensions
-            width = 500
-            height = 120
-            padding_x = 15
-            padding_y = 15
-            chart_width = width - (padding_x * 2)
-            chart_height = height - (padding_y * 2)
-            
-            # Calculate points (robust to number of days; normally 7)
-            num_points = chart_days.size
-            intervals = [num_points - 1, 1].max
-            points = chart_days.each_with_index.map do |day, i|
-              x = (padding_x + i * (chart_width.to_f / intervals)).round(1)
-              y = (height - padding_y - (day[:count].to_f / max_count * chart_height)).round(1)
-              [x, y]
-            end
-            
-            # Path strings
-            line_path = points.each_with_index.map { |p, i| "#{i == 0 ? 'M' : 'L'} #{p[0]} #{p[1]}" }.join(" ")
-            
-            # Area path (for a gradient fill underneath the line)
-            area_path = "#{line_path} L #{points[-1][0]} #{height} L #{points[0][0]} #{height} Z"
-          %>
-
-          <!-- SVG Line Chart -->
-          <div class="relative w-full">
-            <svg viewBox="0 0 <%= width %> <%= height %>" class="w-full h-24 sm:h-32 overflow-visible" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#c084fc" stop-opacity="0.4" />
-                  <stop offset="100%" stop-color="#c084fc" stop-opacity="0.0" />
-                </linearGradient>
-              </defs>
-              
-              <!-- Grid lines -->
-              <line x1="<%= padding_x %>" y1="<%= padding_y %>" x2="<%= width - padding_x %>" y2="<%= padding_y %>" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="<%= padding_x %>" y1="<%= height / 2 %>" x2="<%= width - padding_x %>" y2="<%= height / 2 %>" stroke="#f1f5f9" stroke-width="1" />
-              <line x1="<%= padding_x %>" y1="<%= height - padding_y %>" x2="<%= width - padding_x %>" y2="<%= height - padding_y %>" stroke="#e2e8f0" stroke-width="1" />
-
-              <!-- Area underneath line -->
-              <path d="<%= area_path %>" fill="url(#chart-gradient)" />
-              
-              <!-- Line -->
-              <path d="<%= line_path %>" fill="none" stroke="#9333ea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              
-              <!-- Interactive Dots -->
-              <% points.each_with_index do |p, i| %>
-                <g class="group/dot cursor-pointer">
-                  <circle cx="<%= p[0] %>" cy="<%= p[1] %>" r="5" fill="#ffffff" stroke="#9333ea" stroke-width="2" class="transition-all duration-200 group-hover/dot:r-7 group-hover/dot:stroke-width-3" />
-                  <title><%= chart_days[i][:date].strftime("%a, %b %d") %>: <%= chart_days[i][:count] %> visits</title>
-                </g>
-              <% end %>
-            </svg>
-            
-            <!-- X-axis Labels -->
-            <div class="flex justify-between mt-2 px-3 text-[10px] font-bold text-slate-400">
-              <% chart_days.each do |day| %>
-                <span><%= day[:date].strftime("%a") %></span>
-              <% end %>
-            </div>
-          </div>
-
-          <!-- Daily Details List -->
-          <div class="divide-y divide-slate-100 border-t border-slate-100 pt-2">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 mt-1">Daily unique visits</p>
-            <% @daily_visits_7_days.each do |day| %>
-              <div class="flex items-center justify-between py-2.5 hover:bg-slate-50/50 rounded-lg px-2 -mx-2 transition-colors">
-                <div class="flex items-center gap-2">
-                  <span class="text-[11px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded <%= day[:date] == @reporting_today ? 'bg-purple-100 text-purple-800 font-bold' : 'bg-slate-100 text-slate-600 font-medium' %>">
-                    <%= day[:date].strftime("%a, %b %d") %>
-                  </span>
-                  <% if day[:date] == @reporting_today %>
-                    <span class="text-[10px] uppercase font-bold tracking-wider text-purple-600 animate-pulse">Live</span>
-                  <% end %>
-                </div>
-                <div class="flex items-center gap-1 shrink-0">
-                  <span class="font-extrabold text-slate-800 text-xs sm:text-sm"><%= day[:count] %></span>
-                  <span class="text-[10px] sm:text-xs text-slate-400 font-medium">visits</span>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- 30-Day Snapshot (more stats) -->
-          <div class="mt-4 pt-4 border-t border-slate-100">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">30-day snapshot</p>
-            <div class="grid grid-cols-3 gap-3 text-center">
-              <div>
-                <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 truncate" title="Avg / day">Avg / day</div>
-                <div class="text-lg sm:text-xl font-extrabold text-slate-900"><%= @avg_daily_visits_30d %></div>
-              </div>
-              <div>
-                <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 truncate" title="Peak day">Peak day</div>
-                <div class="text-lg sm:text-xl font-extrabold text-slate-900"><%= @peak_daily_visits_30d %></div>
-              </div>
-              <div>
-                <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 truncate" title="Unique (30d)">Unique (30d)</div>
-                <div class="text-lg sm:text-xl font-extrabold text-slate-900"><%= @unique_visitors_30d %></div>
-              </div>
-            </div>
-            <p class="mt-2 text-[10px] text-slate-400">
-              Total retained: <span class="font-semibold text-slate-600"><%= @total_retained_visitors %></span> visitors
-              (data older than ~90 days is pruned automatically)
-            </p>
-          </div>
-        </div>
-      </div>
+      <%= render "admin/shared/visitor_traffic_chart",
+          daily_visits: @daily_visits_7_days,
+          reporting_timezone: @reporting_timezone,
+          reporting_timezone_abbr: @reporting_timezone_abbr,
+          reporting_today: @reporting_today,
+          period_days: 7,
+          title: "Visitor Traffic (7 Days)",
+          snapshot_label: "30-day snapshot",
+          avg_daily_visits: @avg_daily_visits_30d,
+          peak_daily_visits: @peak_daily_visits_30d,
+          unique_visitors_in_period: @unique_visitors_30d,
+          total_retained_visitors: @total_retained_visitors,
+          gradient_id: "dashboard-chart-gradient" %>
     </div>
   </div>
 </section>
