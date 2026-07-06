@@ -62,7 +62,11 @@ class ApplicationController < ActionController::Base
     fingerprint = visitor_fingerprint
     return if fingerprint.blank?
 
-    UniqueVisit.track!(fingerprint: fingerprint, country: visitor_country_code)
+    UniqueVisit.track!(
+      fingerprint: fingerprint,
+      country: visitor_country_code,
+      referrer: request.referer
+    )
     track_traffic_page_view(fingerprint)
   rescue => e
     logger.error "Failed to track unique visit: #{e.message}"

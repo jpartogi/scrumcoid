@@ -60,7 +60,7 @@
       total_retained_visitors: @report.total_retained_visitors,
       gradient_id: "traffic-chart-gradient" %>
 
-  <div class="grid gap-8 xl:grid-cols-2">
+  <div class="grid gap-8 lg:grid-cols-3">
     <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
       <div class="border-b border-slate-100 px-6 py-4">
         <h2 class="text-lg font-bold text-slate-900">Top Pages</h2>
@@ -73,15 +73,16 @@
             <thead>
               <tr class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-400">
                 <th class="px-6 py-3.5" scope="col">Page</th>
-                <th class="px-6 py-3.5" scope="col">Path</th>
                 <th class="px-6 py-3.5 text-right" scope="col">Visitors</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               <% @report.top_pages.each do |row| %>
                 <tr class="hover:bg-indigo-50/30 transition-colors">
-                  <td class="px-6 py-4 font-semibold text-slate-900"><%= row.label %></td>
-                  <td class="px-6 py-4 font-mono text-xs text-slate-500"><%= row.path %></td>
+                  <td class="px-6 py-4 font-semibold text-slate-900">
+                    <p class="truncate max-w-[200px]" title="<%= row.label %>"><%= row.label %></p>
+                    <p class="font-mono text-[10px] text-slate-400 mt-0.5 truncate max-w-[200px]" title="<%= row.path %>"><%= row.path %></p>
+                  </td>
                   <td class="px-6 py-4 text-right">
                     <span class="inline-flex items-center rounded-md bg-purple-50 px-2.5 py-1 text-xs font-bold text-purple-700 ring-1 ring-inset ring-purple-600/10">
                       <%= row.unique_views %>
@@ -103,7 +104,7 @@
     <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
       <div class="border-b border-slate-100 px-6 py-4">
         <h2 class="text-lg font-bold text-slate-900">Visitors by Country</h2>
-        <p class="text-sm text-slate-500 mt-0.5">Unique visitors grouped by detected country</p>
+        <p class="text-sm text-slate-500 mt-0.5">Unique visitors grouped by country</p>
       </div>
 
       <% if @report.top_countries.any? %>
@@ -112,15 +113,22 @@
             <thead>
               <tr class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-400">
                 <th class="px-6 py-3.5" scope="col">Country</th>
-                <th class="px-6 py-3.5" scope="col">Code</th>
                 <th class="px-6 py-3.5 text-right" scope="col">Visitors</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               <% @report.top_countries.each do |row| %>
                 <tr class="hover:bg-indigo-50/30 transition-colors">
-                  <td class="px-6 py-4 font-semibold text-slate-900"><%= row.country_name %></td>
-                  <td class="px-6 py-4 font-mono text-xs text-slate-500"><%= row.country_code %></td>
+                  <td class="px-6 py-4 font-semibold text-slate-900">
+                    <div class="flex items-center gap-2">
+                      <% flag = country_flag_emoji(row.country_code) %>
+                      <% if flag.present? %>
+                        <span class="text-base shrink-0" aria-hidden="true"><%= flag %></span>
+                      <% end %>
+                      <span class="truncate max-w-[150px]" title="<%= row.country_name %>"><%= row.country_name %></span>
+                      <span class="font-mono text-[10px] text-slate-400 uppercase shrink-0">(<%= row.country_code %>)</span>
+                    </div>
+                  </td>
                   <td class="px-6 py-4 text-right">
                     <span class="inline-flex items-center rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/10">
                       <%= row.unique_visitors %>
@@ -135,6 +143,73 @@
         <div class="px-6 py-16 text-center">
           <p class="text-base font-bold text-slate-700">No country data yet</p>
           <p class="mt-1 text-sm text-slate-400">Country is detected from CDN headers such as CF-IPCountry.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+      <div class="border-b border-slate-100 px-6 py-4">
+        <h2 class="text-lg font-bold text-slate-900">Traffic Sources</h2>
+        <p class="text-sm text-slate-500 mt-0.5">Top referrer sources for unique visitors</p>
+      </div>
+
+      <% if @report.top_referrers.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <th class="px-6 py-3.5" scope="col">Source / Referrer</th>
+                <th class="px-6 py-3.5 text-right" scope="col">Visitors</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @report.top_referrers.each do |row| %>
+                <tr class="hover:bg-indigo-50/30 transition-colors">
+                  <td class="px-6 py-4 font-semibold text-slate-900">
+                    <div class="flex items-center gap-2">
+                      <% icon_color = "text-slate-400" %>
+                      <% svg_path = "" %>
+                      <% case row.category %>
+                      <% when :direct %>
+                        <% icon_color = "text-slate-400" %>
+                        <% svg_path = "M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" %>
+                      <% when :google %>
+                        <% icon_color = "text-blue-500" %>
+                        <% svg_path = "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" %>
+                      <% when :scrum_org %>
+                        <% icon_color = "text-indigo-600" %>
+                        <% svg_path = "M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.9c2.79 0 5.437-.472 7.896-1.333.393-2.079.525-4.218.396-6.346l-6.282-3.141a1 1 0 0 0-.818 0l-6.282 3.141Z" %>
+                      <% when :social_media %>
+                        <% icon_color = "text-emerald-500" %>
+                        <% svg_path = "M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M12 18.75A6.75 6.75 0 1 0 5.25 12 6.75 6.75 0 0 0 12 18.75Z" %>
+                      <% when :search_engines %>
+                        <% icon_color = "text-cyan-500" %>
+                        <% svg_path = "M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 0a9.003 9.003 0 0 1 8.716 6.747M12 3a9.003 9.003 0 0 0-8.716 6.747M3.75 12h16.5" %>
+                      <% else %>
+                        <% icon_color = "text-violet-500" %>
+                        <% svg_path = "M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 0a9.003 9.003 0 0 1 8.716 6.747M12 3a9.003 9.003 0 0 0-8.716 6.747M3.75 12h16.5" %>
+                      <% end %>
+                      
+                      <svg class="h-4 w-4 <%= icon_color %> shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="<%= svg_path %>" />
+                      </svg>
+                      <span class="truncate max-w-[180px]" title="<%= row.label %>"><%= row.label %></span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <span class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/10">
+                      <%= row.unique_visitors %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="px-6 py-16 text-center">
+          <p class="text-base font-bold text-slate-700">No referrer data yet</p>
+          <p class="mt-1 text-sm text-slate-400">Referrer sources will appear once traffic is tracked.</p>
         </div>
       <% end %>
     </div>
