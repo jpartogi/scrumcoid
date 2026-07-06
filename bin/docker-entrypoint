@@ -5,11 +5,12 @@ if [[ -n "${ACTIVE_STORAGE_ROOT:-}" ]]; then
   mkdir -p "${ACTIVE_STORAGE_ROOT}"
 fi
 
-# If we are starting the web server, run db:prepare first.
-# This works with the Thruster-wrapped `rails server` command.
+# If we are starting the web server, run pending migrations before boot.
+# Railway runs ./bin/rails db:migrate via preDeployCommand before each deploy;
+# this is a fallback for local Docker and non-Railway environments.
 # Set SKIP_DB_PREPARE=true when restoring a database dump before first boot.
 if [[ "${SKIP_DB_PREPARE:-}" != "true" ]] && [[ "${@}" == *"rails server"* ]]; then
-  ./bin/rails db:prepare
+  ./bin/rails db:migrate
 fi
 
 exec "${@}"
