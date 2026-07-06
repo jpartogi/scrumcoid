@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+# Ensure the Active Storage directory exists before Rails boots (Railway volume mount).
+if [[ -n "${ACTIVE_STORAGE_ROOT:-}" ]]; then
+  mkdir -p "${ACTIVE_STORAGE_ROOT}"
+fi
+
 # If we are starting the web server, run db:prepare first.
 # This works with the Thruster-wrapped `rails server` command.
 # Set SKIP_DB_PREPARE=true when restoring a database dump before first boot.

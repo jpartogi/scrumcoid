@@ -34,7 +34,6 @@ Gemfile.lock text eol=lf
 config/master.key binary
 config/credentials/*.key binary
 
-# Fly and deployment files
-fly.toml text eol=lf
+# Deployment files
 Dockerfile text eol=lf
 .dockerignore text eol=lf

@@ -46,6 +46,6 @@
 # Ignore development files
 /.devcontainer
 
-# Ignore Docker-related files (keep Dockerfile for Fly.io and other builders)
+# Ignore Docker-related files (keep Dockerfile for container builders)
 # /.dockerignore
 # /Dockerfile*

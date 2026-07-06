@@ -23,27 +23,30 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   #
-  # Recommended for Fly.io:
-  #   - :local     → uses persistent volume (current default, simple)
-  #   - :tigris    → Fly's native S3-compatible storage (best for most Fly apps)
+  # Storage backends (see config/storage.yml):
+  #   - :local     → disk storage (set ACTIVE_STORAGE_ROOT=/rails/storage on Railway)
   #   - :r2        → Cloudflare R2
   config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
   
   # Ensure local storage directory exists (only needed when using disk storage)
   if config.active_storage.service == :local
     config.after_initialize do
-      storage_path = Rails.root.join("storage")
-      FileUtils.mkdir_p(storage_path) unless Dir.exist?(storage_path)
+      storage_path = ENV.fetch("ACTIVE_STORAGE_ROOT") { Rails.root.join("storage").to_s }
+      next if Dir.exist?(storage_path)
+
+      FileUtils.mkdir_p(storage_path)
+    rescue Errno::EROFS, Errno::EACCES, Errno::ENOENT => error
+      Rails.logger.warn("Could not create Active Storage directory at #{storage_path}: #{error.message}")
     end
   end
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy (Fly.io does this).
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  # Trust the proxies we run behind (Fly/Thruster internal IPs + standard privates + localhost).
+  # Trust the proxies we run behind (Thruster/Railway internal IPs + standard privates + localhost).
   # This improves request.remote_ip (used as fallback in our client_ip helper) and other Rails
   # IP-dependent behavior. Our visit tracking prefers explicit headers (CF-Connecting-IP etc.)
   # so this is defense-in-depth.
@@ -81,18 +84,18 @@ Rails.application.configure do
   config.solid_queue.preserve_finished_jobs = false
   config.solid_queue.clear_finished_jobs_after = 1.week
 
-  # Mailer configuration for Fly.io + Brevo
+  # Mailer configuration for Brevo SMTP
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
 
-  app_host = ENV.fetch("APP_HOST", "scrumcoid.fly.dev")
+  app_host = ENV.fetch("APP_HOST", "scrum.co.id")
 
   config.action_mailer.default_url_options = {
     host: app_host,
     protocol: "https"
   }
 
-  # Brevo SMTP (set BREVO_USERNAME + BREVO_PASSWORD via `fly secrets set`)
+  # Brevo SMTP (set BREVO_USERNAME + BREVO_PASSWORD in Railway variables)
   if ENV["BREVO_USERNAME"].present?
     config.action_mailer.smtp_settings = {
       address: ENV.fetch("BREVO_HOST", "smtp-relay.brevo.com"),

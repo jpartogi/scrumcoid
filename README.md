@@ -20,6 +20,6 @@ Things you may want to cover:
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
-  * See [FLY_DEPLOY.md](./FLY_DEPLOY.md) for Fly.io (legacy Postgres + Brevo) deployment.
+  * Deploy to Railway from the `jpartogi/scrumcoid` GitHub repo. See [.env.railway.example](./.env.railway.example) for required environment variables.
 
 * ...

@@ -3,7 +3,6 @@ set -euo pipefail
 
 # Thruster listens on HTTP_PORT and proxies to Puma on PORT.
 #
-# Fly.io sets both explicitly in fly.toml (HTTP_PORT=8080, PORT=3000).
 # Railway injects PORT for the public listener — map it to HTTP_PORT and use
 # a separate internal port for Puma.
 if [[ -z "${HTTP_PORT:-}" ]]; then

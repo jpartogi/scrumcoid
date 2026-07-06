@@ -12,7 +12,6 @@
 .env.*
 !.env.example
 !.env.*.example
-!.env.fly.example
 
 # Ignore all default key files.
 /config/master.key
@@ -40,8 +39,7 @@
 !/app/assets/builds/.keep
 /public/assets
 
-# Ignore local Fly / Kamal state
-/.fly
+# Ignore local Kamal state
 /.kamal
 
 # Ignore development files

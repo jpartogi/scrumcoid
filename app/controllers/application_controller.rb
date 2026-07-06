@@ -98,9 +98,8 @@ class ApplicationController < ActionController::Base
 
   def client_ip
     # Proxy headers in decreasing order of trust/specificity.
-    # These are set by Cloudflare, Fly.io/Thruster, and other common reverse proxies/CDNs.
+    # These are set by Cloudflare, Thruster, and other common reverse proxies/CDNs.
     request.headers["CF-Connecting-IP"].presence ||
-      request.headers["Fly-Client-IP"].presence ||
       request.headers["True-Client-IP"].presence ||
       request.headers["X-Real-IP"].presence ||
       # X-Forwarded-For is "client, proxy1, proxy2, ..."; leftmost is the original client.
