@@ -62,9 +62,20 @@ class ApplicationController < ActionController::Base
     fingerprint = visitor_fingerprint
     return if fingerprint.blank?
 
-    UniqueVisit.track!(fingerprint: fingerprint)
+    UniqueVisit.track!(fingerprint: fingerprint, country: visitor_country_code)
+    track_traffic_page_view(fingerprint)
   rescue => e
     logger.error "Failed to track unique visit: #{e.message}"
+  end
+
+  def track_traffic_page_view(fingerprint)
+    TrafficPageView.track!(
+      path: request.path,
+      fingerprint: fingerprint,
+      viewed_on: UniqueVisit.reporting_today
+    )
+  rescue => e
+    logger.error "Failed to track traffic page view: #{e.message}"
   end
 
   def track_page_view(viewable)
@@ -94,6 +105,10 @@ class ApplicationController < ActionController::Base
 
     identifier = visitor_id.presence || client_ip.to_s
     Digest::SHA256.hexdigest(identifier)
+  end
+
+  def visitor_country_code
+    CountryResolver.new(request).normalized_country_code
   end
 
   def client_ip

@@ -16,12 +16,17 @@ class UniqueVisit < ApplicationRecord
       reporting_today - 1
     end
 
-    def track!(fingerprint:)
+    def track!(fingerprint:, country: nil)
       range = utc_range_for_reporting_date(reporting_today)
       visit = find_by(fingerprint: fingerprint, visited_at: range)
       return visit if visit
 
-      create!(fingerprint: fingerprint, visited_at: Time.current, timezone: REPORTING_TIMEZONE)
+      create!(
+        fingerprint: fingerprint,
+        visited_at: Time.current,
+        timezone: REPORTING_TIMEZONE,
+        country: country
+      )
     end
 
     def today_count

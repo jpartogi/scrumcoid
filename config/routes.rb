@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "dashboard#show"
+    resource :traffic, only: [:show], controller: "traffic"
     resources :courses do
       member do
         patch :publish

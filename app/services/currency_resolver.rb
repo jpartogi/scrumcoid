@@ -20,30 +20,20 @@ class CurrencyResolver
   end
 
   def currency
-    currency_for_country(country_code) || DEFAULT_CURRENCY
+    currency_for_country(country_resolver.normalized_country_code) || DEFAULT_CURRENCY
   end
 
   private
 
   attr_reader :request
 
-  def country_code
-    [
-      request.headers["CF-IPCountry"],
-      request.headers["X-Country-Code"],
-      request.headers["X-AppEngine-Country"],
-      request_location_country_code
-    ].compact_blank.first.to_s.upcase
-  end
-
-  def request_location_country_code
-    request.location&.country_code if request.respond_to?(:location)
-  rescue StandardError
-    nil
+  def country_resolver
+    @country_resolver ||= CountryResolver.new(request)
   end
 
   def currency_for_country(country)
-    return if country.blank? || country == "XX"
+    return if country.blank?
+
     return "EUR" if EURO_COUNTRIES.include?(country)
 
     COUNTRY_CURRENCIES[country]

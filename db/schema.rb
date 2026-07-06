@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_28_012901) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_06_031702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -419,12 +419,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_28_012901) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "traffic_page_views", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "fingerprint", null: false
+    t.string "path", null: false
+    t.datetime "updated_at", null: false
+    t.date "viewed_on", null: false
+    t.index ["path", "fingerprint", "viewed_on"], name: "index_traffic_page_views_on_path_fingerprint_and_day", unique: true
+    t.index ["viewed_on"], name: "index_traffic_page_views_on_viewed_on"
+  end
+
   create_table "unique_visits", force: :cascade do |t|
+    t.string "country"
     t.datetime "created_at", null: false
     t.string "fingerprint", null: false
     t.string "timezone", default: "Australia/Brisbane", null: false
     t.datetime "updated_at", null: false
     t.datetime "visited_at", null: false
+    t.index ["country"], name: "index_unique_visits_on_country"
     t.index ["fingerprint", "visited_at"], name: "index_unique_visits_on_fingerprint_and_visited_at"
     t.index ["visited_at"], name: "index_unique_visits_on_visited_at"
   end

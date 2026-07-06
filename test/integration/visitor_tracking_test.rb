@@ -5,6 +5,29 @@ class VisitorTrackingTest < ActionDispatch::IntegrationTest
     UniqueVisit.destroy_all
   end
 
+  test "visitor-facing visits store country and page path traffic" do
+    brisbane = Time.find_zone("Australia/Brisbane")
+    real_ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+    travel_to brisbane.local(2026, 6, 14, 10, 0, 0) do
+      assert_difference -> { UniqueVisit.count }, 1 do
+        assert_difference -> { TrafficPageView.count }, 1 do
+          get root_path, headers: { "User-Agent" => real_ua, "CF-IPCountry" => "AU" }
+        end
+      end
+
+      visit = UniqueVisit.last
+      assert_equal "AU", visit.country
+      assert_equal "/", TrafficPageView.last.path
+
+      assert_no_difference -> { UniqueVisit.count } do
+        assert_difference -> { TrafficPageView.count }, 1 do
+          get courses_path, headers: { "User-Agent" => real_ua, "CF-IPCountry" => "AU" }
+        end
+      end
+    end
+  end
+
   test "visitor-facing visits are tracked uniquely by cookie visitor ID (preferred over IP)" do
     brisbane = Time.find_zone("Australia/Brisbane")
     travel_to brisbane.local(2026, 6, 14, 10, 0, 0) do
