@@ -62,6 +62,45 @@ class ContactMessagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "rejects submission when honeypot field is filled" do
+    assert_no_difference -> { ContactMessage.count } do
+      assert_no_enqueued_emails do
+        post contact_path, params: {
+          contact_message: {
+            name: "Spam Bot",
+            email: "spam@example.com",
+            company: "Spam Inc",
+            subject: "Buy now",
+            message: "Click this link",
+            website: "https://spam.example"
+          }
+        }
+      end
+    end
+
+    assert_redirected_to new_contact_path
+    assert_equal "Terima kasih atas pesan Anda. Kami akan segera menghubungi Anda kembali.", flash[:notice]
+  end
+
+  test "creates contact message when honeypot field is left empty" do
+    assert_difference -> { ContactMessage.count }, 1 do
+      assert_enqueued_emails 1 do
+        post contact_path, params: {
+          contact_message: {
+            name: "Pat Customer",
+            email: "pat@example.com",
+            company: "Customer Co",
+            subject: "Training enquiry",
+            message: "Can we discuss a private class?",
+            website: ""
+          }
+        }
+      end
+    end
+
+    assert_redirected_to new_contact_path
+  end
+
   test "new action parses fallback subject query param correctly" do
     get new_contact_path(subject: "Pendaftaran Grup: Scrum.org AI Essentials")
 

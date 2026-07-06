@@ -35,6 +35,11 @@ class ContactMessagesController < ApplicationController
   end
 
   def create
+    if honeypot_filled?
+      redirect_to new_contact_path, notice: "Terima kasih atas pesan Anda. Kami akan segera menghubungi Anda kembali."
+      return
+    end
+
     @contact_message = ContactMessage.new(contact_message_params)
 
     if @contact_message.save
@@ -50,5 +55,9 @@ class ContactMessagesController < ApplicationController
 
   def contact_message_params
     params.require(:contact_message).permit(:name, :email, :company, :subject, :jenis_inkuiri, :pelatihan, :message)
+  end
+
+  def honeypot_filled?
+    params.dig(:contact_message, :website).present?
   end
 end

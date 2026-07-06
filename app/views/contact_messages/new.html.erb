@@ -72,6 +72,11 @@
             <%= form.text_area :message, rows: 6, class: "mt-2 block w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 focus:border-indigo-500 focus:ring-indigo-500 text-sm shadow-sm transition-colors" %>
           </div>
 
+          <div class="absolute -left-[10000px] h-px w-px overflow-hidden opacity-0 pointer-events-none" aria-hidden="true">
+            <%= form.label :website, "Website" %>
+            <%= form.text_field :website, tabindex: -1, autocomplete: "off" %>
+          </div>
+
           <div>
             <%= form.submit "Kirim Pesan", class: "w-full sm:w-auto inline-flex justify-center items-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4.5 text-sm font-bold text-white hover:shadow-lg hover:shadow-indigo-500/15 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer" %>
           </div>
