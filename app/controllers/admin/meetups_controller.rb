@@ -4,7 +4,11 @@ class Admin::MeetupsController < ApplicationController
   before_action :set_meetup, only: [:show, :edit, :update, :destroy, :publish, :unpublish]
 
   def index
-    @meetups = Meetup.order(:starts_at)
+    @showing_past = params[:past].present?
+
+    @meetups = @showing_past ? Meetup.past : Meetup.upcoming
+    @upcoming_meetups_count = Meetup.upcoming.count
+    @past_meetups_count = Meetup.past.count
     @page_view_counts = PageView.unique_view_counts_for("Meetup", @meetups.map(&:id))
   end
 

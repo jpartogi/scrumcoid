@@ -23,6 +23,7 @@ class Meetup < ApplicationRecord
   validate :single_day_event
 
   scope :upcoming, -> { where("starts_at >= ?", Time.current).order(:starts_at) }
+  scope :past, -> { where("starts_at < ?", Time.current).order(starts_at: :desc) }
   scope :available, -> { published.upcoming.where("registration_deadline >= ?", Time.current) }
 
   def to_param

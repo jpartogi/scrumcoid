@@ -14,11 +14,27 @@ class Admin::MeetupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
   end
 
-  test "index lists meetups for admin" do
+  test "index shows only upcoming meetups by default" do
+    past_meetup = meetups(:ended_meetup)
+
     get admin_meetups_path
 
     assert_response :success
     assert_match @meetup.slug, response.body
+    assert_no_match past_meetup.slug, response.body
+    assert_select "a[href=?]", admin_meetups_path(past: 1), text: /Past Meetups/
+  end
+
+  test "index with past param shows only past meetups" do
+    past_meetup = meetups(:ended_meetup)
+
+    get admin_meetups_path(past: 1)
+
+    assert_response :success
+    assert_select "h1", text: "Past Meetups"
+    assert_match past_meetup.slug, response.body
+    assert_no_match @meetup.slug, response.body
+    assert_select "a[href=?]", admin_meetups_path, text: /Upcoming Meetups/
   end
 
   test "show displays meetup details" do
