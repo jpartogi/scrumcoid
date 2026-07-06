@@ -17,7 +17,7 @@
 <div class="space-y-4">
   <div>
     <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-      <svg class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
       </svg>
       <%= title %>
@@ -59,21 +59,29 @@
       <svg viewBox="0 0 <%= width %> <%= height %>" class="w-full h-24 sm:h-32 overflow-visible" preserveAspectRatio="none">
         <defs>
           <linearGradient id="<%= gradient_id %>" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#c084fc" stop-opacity="0.4" />
-            <stop offset="100%" stop-color="#c084fc" stop-opacity="0.0" />
+            <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0" />
           </linearGradient>
+          <filter id="chart-shadow" x="-5%" y="-5%" width="110%" height="115%">
+            <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#4f46e5" flood-opacity="0.18" />
+          </filter>
         </defs>
 
-        <line x1="<%= padding_x %>" y1="<%= padding_y %>" x2="<%= width - padding_x %>" y2="<%= padding_y %>" stroke="#f1f5f9" stroke-width="1" />
-        <line x1="<%= padding_x %>" y1="<%= height / 2 %>" x2="<%= width - padding_x %>" y2="<%= height / 2 %>" stroke="#f1f5f9" stroke-width="1" />
+        <!-- Dashed Grid Lines -->
+        <line x1="<%= padding_x %>" y1="<%= padding_y %>" x2="<%= width - padding_x %>" y2="<%= padding_y %>" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3" />
+        <line x1="<%= padding_x %>" y1="<%= height / 2 %>" x2="<%= width - padding_x %>" y2="<%= height / 2 %>" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3" />
         <line x1="<%= padding_x %>" y1="<%= height - padding_y %>" x2="<%= width - padding_x %>" y2="<%= height - padding_y %>" stroke="#e2e8f0" stroke-width="1" />
 
+        <!-- Area Fill -->
         <path d="<%= area_path %>" fill="url(#<%= gradient_id %>)" />
-        <path d="<%= line_path %>" fill="none" stroke="#9333ea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        
+        <!-- Glow Line and Main Stroke -->
+        <path d="<%= line_path %>" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#chart-shadow)" />
 
+        <!-- Dots -->
         <% points.each_with_index do |p, i| %>
           <g class="group/dot cursor-pointer">
-            <circle cx="<%= p[0] %>" cy="<%= p[1] %>" r="5" fill="#ffffff" stroke="#9333ea" stroke-width="2" class="transition-all duration-200 group-hover/dot:r-7 group-hover/dot:stroke-width-3" />
+            <circle cx="<%= p[0] %>" cy="<%= p[1] %>" r="3.5" fill="#ffffff" stroke="#4f46e5" stroke-width="2" class="transition-all duration-200 group-hover/dot:r-5 group-hover/dot:stroke-width-3 group-hover/dot:fill="#4f46e5" group-hover/dot:stroke="#ffffff" />
             <title><%= chart_days[i][:date].strftime("%a, %b %d") %>: <%= chart_days[i][:count] %> <%= count_label %></title>
           </g>
         <% end %>
@@ -95,11 +103,11 @@
       <% daily_visits.each do |day| %>
         <div class="flex items-center justify-between py-2.5 hover:bg-slate-50/50 rounded-lg px-2 -mx-2 transition-colors">
           <div class="flex items-center gap-2">
-            <span class="text-[11px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded <%= day[:date] == reporting_today ? 'bg-purple-100 text-purple-800 font-bold' : 'bg-slate-100 text-slate-600 font-medium' %>">
+            <span class="text-[11px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded <%= day[:date] == reporting_today ? 'bg-indigo-50 text-indigo-700 font-bold ring-1 ring-inset ring-indigo-700/10' : 'bg-slate-100 text-slate-600 font-medium' %>">
               <%= day[:date].strftime("%a, %b %d") %>
             </span>
             <% if day[:date] == reporting_today %>
-              <span class="text-[10px] uppercase font-bold tracking-wider text-purple-600 animate-pulse">Live</span>
+              <span class="text-[10px] uppercase font-bold tracking-wider text-indigo-600 animate-pulse">Live</span>
             <% end %>
           </div>
           <div class="flex items-center gap-1 shrink-0">
@@ -113,17 +121,17 @@
     <div class="mt-4 pt-4 border-t border-slate-100">
       <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"><%= snapshot_label %></p>
       <div class="grid grid-cols-3 gap-3 text-center">
-        <div>
+        <div class="bg-slate-50/40 border border-slate-100 rounded-xl p-3 shadow-inner">
           <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 truncate" title="Avg / day">Avg / day</div>
-          <div class="text-lg sm:text-xl font-extrabold text-slate-900"><%= avg_daily_visits %></div>
+          <div class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1"><%= avg_daily_visits %></div>
         </div>
-        <div>
+        <div class="bg-slate-50/40 border border-slate-100 rounded-xl p-3 shadow-inner">
           <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 truncate" title="Peak day">Peak day</div>
-          <div class="text-lg sm:text-xl font-extrabold text-slate-900"><%= peak_daily_visits %></div>
+          <div class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1"><%= peak_daily_visits %></div>
         </div>
-        <div>
+        <div class="bg-slate-50/40 border border-slate-100 rounded-xl p-3 shadow-inner">
           <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-400 truncate" title="Unique (<%= period_days %>d)">Unique (<%= period_days %>d)</div>
-          <div class="text-lg sm:text-xl font-extrabold text-slate-900"><%= unique_visitors_in_period %></div>
+          <div class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1"><%= unique_visitors_in_period %></div>
         </div>
       </div>
       <% if total_retained_visitors.present? %>
