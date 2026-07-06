@@ -62,7 +62,7 @@
             <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25" />
             <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0" />
           </linearGradient>
-          <filter id="chart-shadow" x="-5%" y="-5%" width="110%" height="115%">
+          <filter id="chart-shadow" filterUnits="userSpaceOnUse" x="-50" y="-50" width="600" height="220">
             <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#4f46e5" flood-opacity="0.18" />
           </filter>
         </defs>
@@ -80,10 +80,12 @@
 
         <!-- Dots -->
         <% points.each_with_index do |p, i| %>
-          <g class="group/dot cursor-pointer">
-            <circle cx="<%= p[0] %>" cy="<%= p[1] %>" r="3.5" fill="#ffffff" stroke="#4f46e5" stroke-width="2" class="transition-all duration-200 group-hover/dot:r-5 group-hover/dot:stroke-width-3 group-hover/dot:fill="#4f46e5" group-hover/dot:stroke="#ffffff" />
-            <title><%= chart_days[i][:date].strftime("%a, %b %d") %>: <%= chart_days[i][:count] %> <%= count_label %></title>
-          </g>
+          <svg x="<%= p[0] - 10 %>" y="<%= p[1] - 10 %>" width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet" class="overflow-visible cursor-pointer">
+            <g class="group/dot">
+              <circle cx="10" cy="10" r="3.5" fill="#ffffff" stroke="#4f46e5" stroke-width="2" class="transition-all duration-200 group-hover/dot:r-5 group-hover/dot:stroke-width-3 group-hover/dot:fill="#4f46e5" group-hover/dot:stroke="#ffffff" />
+              <title><%= chart_days[i][:date].strftime("%a, %b %d") %>: <%= chart_days[i][:count] %> <%= count_label %></title>
+            </g>
+          </svg>
         <% end %>
       </svg>
 
