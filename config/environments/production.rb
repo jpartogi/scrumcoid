@@ -95,17 +95,18 @@ Rails.application.configure do
     protocol: "https"
   }
 
-  # Brevo SMTP (set BREVO_USERNAME + BREVO_PASSWORD in Railway variables)
-  if ENV["BREVO_USERNAME"].present?
+  if mailer_delivery_method == :smtp
+    smtp_port = ENV.fetch("SMTP_PORT", "587").to_i
     config.action_mailer.smtp_settings = {
-      address: ENV.fetch("BREVO_HOST", "smtp-relay.brevo.com"),
-      port: ENV.fetch("BREVO_PORT", 587).to_i,
-      domain: app_host.split(":").first, # strip port if present
-      user_name: ENV["BREVO_USERNAME"],
-      password: ENV["BREVO_PASSWORD"],
-      authentication: :plain,
-      enable_starttls_auto: true
-    }
+      address:              ENV.fetch("SMTP_ADDRESS", "smtp.resend.com"),
+      port:                 smtp_port,
+      domain:               ENV.fetch("SMTP_DOMAIN", ENV.fetch("APP_HOST", "leaderswithai.pro")),
+      user_name:            ENV.fetch("SMTP_USERNAME", "resend"),
+      password:             ENV.fetch("RESEND_API_KEY", ""),
+      authentication:       :plain
+    }.merge(
+      smtp_port == 465 ? { tls: true } : { enable_starttls_auto: true }
+    )
   end
 
   # Optional: Set a nice from address with name for better email presentation
